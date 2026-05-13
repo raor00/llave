@@ -88,6 +88,12 @@ Friendly Latin American woman in her early 30s, warm natural smile, shoulder-len
 Cinematic 3/4 isometric illustration of a stylized cozy colonial-modern apartment building in warm cream and terracotta with deep terracotta door, balconies with tropical plants and colonial archway windows. To the right of the building, a giant terracota key floating diagonally — the key's bow is a hollow oval orchid petal (no inner dot, no sun), the teeth are three little pitched-roof houses stepping down in size, sitting on a horizontal key spine. The houses match the architecture of the building below. Subtle distant mountain silhouette abstracted enough to read as "any warm city". Soft late-afternoon light, depth of field, only terracota-toned organic blobs in the bokeh (no warm yellow). No text, no watermark, no flag. Style between Pixar UI and Apple "It Just Works" illustration.
 ```
 
+### Banner README / GitHub social preview (1280x640)
+
+```
+Wide hero banner 1280x640 for the README of an open repo called "Llave", a Venezuelan rental marketplace. Background: warm cream #faf8f3 with two soft organic blurred blobs — light terracotta #f7d9cb in the top-left and pale terracotta #fbeee5 in the bottom-right. On the left side, a 180x180 px rounded-square badge in deep terracotta #8a3722 (corner radius 36 px). Centered inside the badge, the Llave monogram-key in cream: hollow oval orchid-petal bow tilted -10° (no inner dot, no sun), vertical shaft, horizontal spine at the bottom, three pitched-roof tiny houses stepping down in size sitting on the spine. To the right of the badge, the wordmark "Llave" in deep terracotta #8a3722, Plus Jakarta Sans Bold 800, 56 px, letter-spacing -1.5. Below the wordmark, a two-line headline: "Alquilar sin" in near-black #0b1f1c and "meses adelantados." in a horizontal gradient from #4a1e13 to #8a3722 to #c4513a, 92 px bold 900, letter-spacing -2. Bottom of the banner: two rounded-pill chips reading "0 meses adelantados" and "1 mes depósito" with terracotta text #8a3722 on pale background #fbeee5. Footer line in muted gray: "Con Llavero IA · construido en Venezuela". No watermarks, no other accent colors, no sun, no green anywhere. Style: warm fintech-meets-Caribbean documentary. Premium, minimal, ownable.
+```
+
 ### Foto interior de inmueble (1200x900)
 
 ```

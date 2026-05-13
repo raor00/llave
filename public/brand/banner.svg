@@ -1,0 +1,59 @@
+<svg viewBox="0 0 1280 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Llave — Alquilar sin meses adelantados">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#4a1e13"/>
+      <stop offset="60%" stop-color="#8a3722"/>
+      <stop offset="100%" stop-color="#c4513a"/>
+    </linearGradient>
+    <radialGradient id="g2" cx="20%" cy="30%" r="40%">
+      <stop offset="0%" stop-color="#f7d9cb" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#faf8f3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g3" cx="90%" cy="80%" r="50%">
+      <stop offset="0%" stop-color="#fbeee5" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#faf8f3" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1280" height="320" fill="#faf8f3"/>
+  <rect width="1280" height="320" fill="url(#g2)"/>
+  <rect width="1280" height="320" fill="url(#g3)"/>
+
+  <!-- Logo badge -->
+  <g transform="translate(80,90)">
+    <rect width="140" height="140" rx="28" fill="#8a3722"/>
+    <g transform="translate(35,28) scale(2.6)" stroke="#faf8f3" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <ellipse cx="12" cy="9" rx="5.2" ry="6" transform="rotate(-10 12 9)"/>
+      <path d="M12 15 V31"/>
+      <path d="M12 31 H31"/>
+      <path d="M15.5 31 V26.2 L17.4 24 L19.3 26.2 V31" stroke-width="1.9"/>
+      <path d="M21.4 31 V27.4 L22.9 25.6 L24.4 27.4 V31" stroke-width="1.9"/>
+      <path d="M26.5 31 V28.3 L27.7 26.9 L28.9 28.3 V31" stroke-width="1.9"/>
+    </g>
+  </g>
+
+  <!-- Wordmark + headline -->
+  <g transform="translate(260,0)" font-family="'Plus Jakarta Sans', 'Inter', system-ui, sans-serif">
+    <text x="0" y="115" font-size="48" font-weight="800" fill="#8a3722" letter-spacing="-1.5">Llave</text>
+    <text x="0" y="190" font-size="72" font-weight="900" fill="#0b1f1c" letter-spacing="-2">Alquilar sin</text>
+    <text x="0" y="262" font-size="72" font-weight="900" fill="url(#g1)" letter-spacing="-2">meses adelantados.</text>
+  </g>
+
+  <!-- Chips -->
+  <g transform="translate(820,250)" font-family="'Plus Jakarta Sans', system-ui" font-weight="600" font-size="18">
+    <g transform="translate(0,0)">
+      <rect width="170" height="44" rx="22" fill="#fbeee5"/>
+      <text x="85" y="29" text-anchor="middle" fill="#8a3722">0 meses adelantados</text>
+    </g>
+    <g transform="translate(190,0)">
+      <rect width="160" height="44" rx="22" fill="#fbeee5"/>
+      <text x="80" y="29" text-anchor="middle" fill="#8a3722">1 mes depósito</text>
+    </g>
+  </g>
+
+  <!-- Footer line -->
+  <text x="80" y="305" font-family="'Inter', system-ui" font-size="16" fill="#4a5b58">
+    Con Llavero IA · construido en Venezuela · llave-ruby.vercel.app
+  </text>
+</svg>

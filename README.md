@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./public/brand/banner.svg" alt="Llave — Alquilar sin meses adelantados" width="100%" />
+</p>
+
 # Llave — Alquilar sin meses adelantados
 
 Plataforma venezolana de alquileres con `Llavero`, un agente de IA que rompe la fricción del modelo tradicional (meses adelantados + depósito + administrativo + comisión). Construida en el **Platanus Hackathon Build Night** de Anthropic (mayo 2026).

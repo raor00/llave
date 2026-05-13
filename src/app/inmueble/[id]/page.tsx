@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getPropertyById, getOwnerProfile } from "@/lib/db/queries";
 import { formatPropertyType, formatUSD } from "@/lib/format";
 import { Gallery } from "@/components/marketplace/gallery";
+import { Tour3D } from "@/components/marketplace/tour-3d";
 
 export default async function PropertyDetailPage({
   params,
@@ -33,6 +34,13 @@ export default async function PropertyDetailPage({
       <div className="mt-4 grid lg:grid-cols-[1.4fr_1fr] gap-10">
         <div>
           <Gallery images={gallery} title={property.title} />
+
+          {property.tour_3d_url && (
+            <div className="mt-6">
+              <h2 className="font-display text-xl font-semibold mb-3">Tour 3D</h2>
+              <Tour3D url={property.tour_3d_url} title={property.title} />
+            </div>
+          )}
 
           <div className="mt-8">
             <div className="flex flex-wrap gap-2 mb-3">

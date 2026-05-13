@@ -11,6 +11,10 @@ Bienvenido. Llave es un marketplace venezolano de alquileres construido alrededo
 | [agent-llavero.md](./agent-llavero.md) | System prompt, tools, intent flow, mock offline |
 | [data-model.md](./data-model.md) | Schema Postgres, RLS, estrategia de seed |
 | [branding.md](./branding.md) | Logo, paleta, tipografía, prompts de imagen |
+| [logo-anatomy.md](./logo-anatomy.md) | Lectura oficial parte por parte del monograma |
+| [brand-strategy.md](./brand-strategy.md) | Psicología de marca aplicada a Llave |
+| [testing-flow.md](./testing-flow.md) | Smoke + flujo manual + guion de demo 90s |
+| [handoff-prompt.md](./handoff-prompt.md) | Prompt copiar/pegar para retomar Llave en otra sesión |
 | [development.md](./development.md) | Setup local, scripts, convenciones |
 | [testing.md](./testing.md) | Suite Vitest, alcance |
 | [deployment.md](./deployment.md) | Deploy a Vercel, env vars, rollback |
