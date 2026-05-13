@@ -39,6 +39,7 @@ function p(over: Partial<Property> & { title: string; price_usd: number; city: s
     gallery_urls: [over.cover_url],
     spline_scene_url: null,
     tour_3d_url: null,
+    splat_url: null,
     status: "disponible",
     created_at: now,
     ...over,
@@ -68,6 +69,8 @@ export const DEMO_PROPERTIES: Property[] = [
       "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200",
       "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1200",
     ],
+    // public Gaussian Splat demo so the 3D walkthrough feature is testable
+    splat_url: "https://huggingface.co/cakewalk/splat-data/resolve/main/nike.splat",
   }),
   p({
     title: "Llave: Casa familiar en El Hatillo",

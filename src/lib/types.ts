@@ -44,6 +44,7 @@ export type Property = {
   gallery_urls: string[];
   spline_scene_url: string | null;
   tour_3d_url: string | null;
+  splat_url: string | null;
   created_at: string;
 };
 

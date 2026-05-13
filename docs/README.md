@@ -14,6 +14,7 @@ Bienvenido. Llave es un marketplace venezolano de alquileres construido alrededo
 | [logo-anatomy.md](./logo-anatomy.md) | Lectura oficial parte por parte del monograma |
 | [brand-strategy.md](./brand-strategy.md) | Psicología de marca aplicada a Llave |
 | [testing-flow.md](./testing-flow.md) | Smoke + flujo manual + guion de demo 90s |
+| [3d-capture-workflow.md](./3d-capture-workflow.md) | Workflow de captura 3D (Gaussian Splat, USDZ, GLB) |
 | [handoff-prompt.md](./handoff-prompt.md) | Prompt copiar/pegar para retomar Llave en otra sesión |
 | [development.md](./development.md) | Setup local, scripts, convenciones |
 | [testing.md](./testing.md) | Suite Vitest, alcance |

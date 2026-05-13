@@ -4,6 +4,7 @@ import { getPropertyById, getOwnerProfile } from "@/lib/db/queries";
 import { formatPropertyType, formatUSD } from "@/lib/format";
 import { Gallery } from "@/components/marketplace/gallery";
 import { Tour3D } from "@/components/marketplace/tour-3d";
+import { SplatViewer } from "@/components/marketplace/splat-viewer";
 
 export default async function PropertyDetailPage({
   params,
@@ -35,7 +36,17 @@ export default async function PropertyDetailPage({
         <div>
           <Gallery images={gallery} title={property.title} />
 
-          {property.tour_3d_url && (
+          {property.splat_url && (
+            <div className="mt-6">
+              <div className="flex items-baseline justify-between mb-3">
+                <h2 className="font-display text-xl font-semibold">Tour 3D · Gaussian Splat</h2>
+                <span className="chip">Recorré el ambiente</span>
+              </div>
+              <SplatViewer url={property.splat_url} title={property.title} />
+            </div>
+          )}
+
+          {property.tour_3d_url && !property.splat_url && (
             <div className="mt-6">
               <h2 className="font-display text-xl font-semibold mb-3">Tour 3D</h2>
               <Tour3D url={property.tour_3d_url} title={property.title} />

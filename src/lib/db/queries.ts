@@ -197,6 +197,7 @@ export async function insertProperty(p: Partial<Property> & { owner_id: string; 
       gallery_urls: p.gallery_urls ?? [],
       spline_scene_url: null,
       tour_3d_url: null,
+      splat_url: null,
       created_at: new Date().toISOString(),
     };
     DEMO_PROPERTIES.unshift(created);

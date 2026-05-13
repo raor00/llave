@@ -186,19 +186,19 @@ export function CaptacionForm() {
             <div>
               <h2 className="font-display text-xl font-semibold">Tour 3D (opcional)</h2>
               <p className="text-sm text-[color:var(--color-fg-muted)] mt-1 max-w-xl">
-                Si capturaste el espacio con una app de LiDAR (Polycam, Reality Composer, Scaniverse, RoomPlan),
-                subí el archivo USDZ o GLB. Llave lo va a embeber en el detalle del inmueble para que
-                el inquilino lo recorra desde el navegador.
+                Llave acepta tres formatos: <strong>Gaussian Splat</strong> (.splat, .ply — el más realista,
+                tipo SuperSplat / Luma AI), <strong>USDZ</strong> y <strong>GLB</strong>. Lo embebemos en el
+                detalle del inmueble para que el inquilino recorra el ambiente desde el navegador.
               </p>
             </div>
             <span className={`chip ${hasLidar ? "" : "chip-muted"}`}>
-              {hasLidar ? "LiDAR posible" : "Sin LiDAR detectado"}
+              {hasLidar ? "LiDAR + Splat posibles" : "Splat siempre disponible"}
             </span>
           </div>
           <input
             ref={tourInputRef}
             type="file"
-            accept=".usdz,.glb,.gltf,model/vnd.usdz+zip,model/gltf-binary,model/gltf+json"
+            accept=".splat,.ply,.usdz,.glb,.gltf,model/vnd.usdz+zip,model/gltf-binary,model/gltf+json"
             className="hidden"
             onChange={(e) => {
               const f = e.target.files?.[0];
@@ -220,12 +220,14 @@ export function CaptacionForm() {
               onClick={() => tourInputRef.current?.click()}
               className="btn btn-outline"
             >
-              Subir USDZ / GLB
+              Subir .splat / .ply / USDZ / GLB
             </button>
           )}
           <p className="text-xs text-[color:var(--color-fg-soft)] mt-3">
-            ¿Cómo capturarlo? Abrí <strong>Polycam</strong> o <strong>Scaniverse</strong> en un iPhone Pro / iPad Pro,
-            escaneá el ambiente y exportá como USDZ. También sirven archivos GLB generados con RoomPlan o Reality Composer.
+            ¿Cómo capturar? Para Gaussian Splat: <strong>Scaniverse</strong>, <strong>Polycam</strong>,
+            <strong>Luma AI</strong> o <strong>Postshot</strong> en cualquier teléfono (no hace falta LiDAR).
+            Para USDZ con LiDAR: <strong>Polycam</strong> o <strong>Reality Composer</strong> en iPhone Pro / iPad Pro.
+            Para GLB: <strong>RoomPlan</strong>.
           </p>
         </section>
 
