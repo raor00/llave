@@ -218,12 +218,22 @@ drop policy if exists "properties_owner_write" on public.properties;
 create policy "properties_owner_write" on public.properties
 for all using (owner_id = auth.uid()) with check (owner_id = auth.uid());
 
-drop policy if exists "properties_asesor_write" on public.properties;
-create policy "properties_asesor_write" on public.properties
+-- Asesor can INSERT new properties only as their own owner_id.
+-- For UPDATE/DELETE/SELECT-restricted on others' properties, ownership is enforced
+-- by properties_owner_write; admins can do anything.
+drop policy if exists "properties_asesor_insert" on public.properties;
+create policy "properties_asesor_insert" on public.properties
+for insert with check (
+  owner_id = auth.uid()
+  and exists (select 1 from public.profiles p where p.id = auth.uid() and p.role in ('asesor','admin'))
+);
+
+drop policy if exists "properties_admin_all" on public.properties;
+create policy "properties_admin_all" on public.properties
 for all using (
-  exists (select 1 from public.profiles p where p.id = auth.uid() and p.role in ('asesor','admin'))
+  exists (select 1 from public.profiles p where p.id = auth.uid() and p.role = 'admin')
 ) with check (
-  exists (select 1 from public.profiles p where p.id = auth.uid() and p.role in ('asesor','admin'))
+  exists (select 1 from public.profiles p where p.id = auth.uid() and p.role = 'admin')
 );
 
 -- leads: inquilino sees own; property owner/asesor sees leads on their properties
