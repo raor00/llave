@@ -15,7 +15,7 @@ export default async function OG() {
           display: "flex",
           flexDirection: "column",
           background:
-            "radial-gradient(1200px 600px at 20% 20%, #c8ecd6 0%, transparent 60%), radial-gradient(900px 500px at 90% 80%, #f4c95d33 0%, transparent 60%), #faf8f3",
+            "radial-gradient(1200px 600px at 20% 20%, #f7d9cb 0%, transparent 60%), radial-gradient(900px 500px at 90% 80%, #fbeee5 0%, transparent 60%), #faf8f3",
           padding: 64,
           fontFamily: "Inter, sans-serif",
         }}
@@ -26,7 +26,7 @@ export default async function OG() {
               width: 60,
               height: 60,
               borderRadius: 14,
-              background: "#0a563a",
+              background: "#8a3722",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -71,7 +71,7 @@ export default async function OG() {
               />
             </svg>
           </div>
-          <div style={{ fontSize: 38, fontWeight: 800, color: "#0a563a", letterSpacing: -0.5 }}>
+          <div style={{ fontSize: 38, fontWeight: 800, color: "#8a3722", letterSpacing: -0.5 }}>
             Llave
           </div>
         </div>
@@ -91,7 +91,7 @@ export default async function OG() {
           <span
             style={{
               background:
-                "linear-gradient(90deg, #0a563a 0%, #128c5d 60%, #f4c95d 100%)",
+                "linear-gradient(90deg, #4a1e13 0%, #8a3722 50%, #c4513a 100%)",
               backgroundClip: "text",
               color: "transparent",
             }}
@@ -104,18 +104,18 @@ export default async function OG() {
             marginTop: 36,
             display: "flex",
             gap: 14,
-            color: "#0a563a",
+            color: "#8a3722",
             fontSize: 26,
             fontWeight: 600,
           }}
         >
-          <div style={{ padding: "12px 22px", background: "#e8f7ef", borderRadius: 999 }}>
+          <div style={{ padding: "12px 22px", background: "#fbeee5", borderRadius: 999 }}>
             0 meses adelantados
           </div>
-          <div style={{ padding: "12px 22px", background: "#e8f7ef", borderRadius: 999 }}>
+          <div style={{ padding: "12px 22px", background: "#fbeee5", borderRadius: 999 }}>
             1 mes depósito
           </div>
-          <div style={{ padding: "12px 22px", background: "#e8f7ef", borderRadius: 999 }}>
+          <div style={{ padding: "12px 22px", background: "#fbeee5", borderRadius: 999 }}>
             100% reembolsable
           </div>
         </div>
@@ -130,7 +130,7 @@ export default async function OG() {
           }}
         >
           <div>Con Llavero IA · construido en Venezuela</div>
-          <div style={{ fontWeight: 700, color: "#0a563a" }}>llave.app</div>
+          <div style={{ fontWeight: 700, color: "#8a3722" }}>llave.app</div>
         </div>
       </div>
     ),

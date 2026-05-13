@@ -78,7 +78,7 @@ export function LlaveLogo({ className }: { className?: string }) {
 // Coloreable variant — used by next/og where currentColor is not available.
 export function LlaveLogoMark({
   className,
-  ink = "#0a563a",
+  ink = "#8a3722",
 }: {
   className?: string;
   ink?: string;

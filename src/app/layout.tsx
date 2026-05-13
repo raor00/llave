@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -31,6 +33,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main>{children}</main>
         <SiteFooter />
         <Toaster richColors position="top-center" />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
