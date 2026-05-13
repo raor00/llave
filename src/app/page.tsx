@@ -25,7 +25,7 @@ export default async function LandingPage() {
               Hecho para Venezuela
             </span>
             <h1 className="font-display text-5xl md:text-7xl font-extrabold leading-[1.02] tracking-tight">
-              Alquilar sin <span className="gradient-text">meses adelantados</span>.
+              Alquilá hoy. <span className="gradient-text">Sin meses adelantados</span>.
             </h1>
             <p className="mt-6 text-lg md:text-xl text-[color:var(--color-fg-muted)] max-w-xl leading-relaxed">
               Llave conecta a inquilinos con propietarios reales y elimina la fricción del modelo tradicional.
@@ -40,7 +40,8 @@ export default async function LandingPage() {
                 Ver inmuebles
               </Link>
             </div>
-            <div className="mt-10 grid grid-cols-3 gap-6 max-w-md">
+            <div className="mt-10 grid grid-cols-4 gap-5 max-w-xl">
+              <Stat number="Hoy" label="te mudás" />
               <Stat number="0" label="meses adelantados" />
               <Stat number="1" label="depósito máx." />
               <Stat number="100%" label="reembolsable" />
