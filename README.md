@@ -36,11 +36,13 @@ pnpm dev
 
 | Variable | Requerido | Cómo obtenerla |
 |----------|-----------|----------------|
-| `AI_GATEWAY_API_KEY` | sí (o `ANTHROPIC_API_KEY`) | vercel.com → AI Gateway → Create Token |
+| `ANTHROPIC_API_KEY` | sí (preferido) | console.anthropic.com → API Keys |
+| `AI_GATEWAY_API_KEY` | alt | vercel.com → AI Gateway → Create Token (requiere tarjeta) |
+| `LLAVE_OFFLINE` | opcional | `1` fuerza el mock local (demo sin internet) |
 | `NEXT_PUBLIC_SUPABASE_URL` | opcional | vercel.com → Marketplace → Supabase |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | opcional | mismo lugar |
 
-Sin Supabase, la app funciona con seed JSON en memoria.
+Sin Supabase, la app funciona con seed JSON en memoria. Sin key de IA (y `LLAVE_OFFLINE=1` o cualquier valor por defecto), Llavero usa un parser local de intents que llama las tools reales — sirve para demo offline.
 
 ### Migraciones Supabase
 
@@ -51,11 +53,21 @@ supabase/migrations/0001_init.sql
 supabase/migrations/0002_seed.sql
 ```
 
+## Tests
+
+```bash
+pnpm test          # one-shot Vitest
+pnpm test:watch    # watch mode
+pnpm typecheck     # tsc --noEmit
+```
+
+Cubrimos: extracción de entidades + intents del mock local, schemas Zod de las 7 tools de Llavero, y los filtros del marketplace contra el seed.
+
 ## Deploy
 
 ```bash
 vercel link
-vercel env add AI_GATEWAY_API_KEY production
+vercel env add ANTHROPIC_API_KEY production
 vercel deploy --prod
 ```
 
