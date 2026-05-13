@@ -34,23 +34,39 @@ export default async function OG() {
           >
             <svg viewBox="0 0 40 40" width="44" height="44" xmlns="http://www.w3.org/2000/svg">
               <ellipse
-                cx="12.5"
+                cx="12"
                 cy="9"
                 rx="5.2"
                 ry="6"
                 stroke="#faf8f3"
                 strokeWidth="3"
                 fill="none"
-                transform="rotate(-10 12.5 9)"
+                transform="rotate(-10 12 9)"
               />
-              <circle cx="12.5" cy="9" r="1.6" fill="#f4c95d" />
-              <path d="M12.5 15.5 V31" stroke="#faf8f3" strokeWidth="3" strokeLinecap="round" />
+              <path d="M12 15 V31" stroke="#faf8f3" strokeWidth="3" strokeLinecap="round" />
+              <path d="M12 31 H31" stroke="#faf8f3" strokeWidth="3" strokeLinecap="round" />
               <path
-                d="M12.5 31 Q15 31 16 29 Q17 27 18 29 Q19 31 21 31 Q23 31 24 29 Q25 27 26 29 Q27 31 29 31 L31 31"
+                d="M15.5 31 V26.2 L17.4 24 L19.3 26.2 V31"
                 stroke="#faf8f3"
-                strokeWidth="3"
-                strokeLinecap="round"
+                strokeWidth="2.2"
                 strokeLinejoin="round"
+                strokeLinecap="round"
+                fill="none"
+              />
+              <path
+                d="M21.4 31 V27.4 L22.9 25.6 L24.4 27.4 V31"
+                stroke="#faf8f3"
+                strokeWidth="2.2"
+                strokeLinejoin="round"
+                strokeLinecap="round"
+                fill="none"
+              />
+              <path
+                d="M26.5 31 V28.3 L27.7 26.9 L28.9 28.3 V31"
+                stroke="#faf8f3"
+                strokeWidth="2.2"
+                strokeLinejoin="round"
+                strokeLinecap="round"
                 fill="none"
               />
             </svg>

@@ -1,10 +1,9 @@
-// Llave logo — "L" monogram fused with a key.
-// Venezuelan warmth → global scalability:
-//  - Bow: oval (orchid-petal hint, not generic circle)
-//  - Shaft: vertical stroke of the letter L
-//  - Teeth: 3 soft rounded arches (colonial-Caribbean architecture cue),
-//    not generic square notches
-//  - Inner accent dot: warm gold (sun)
+// Llave logo — "L" monogram fused with a key whose teeth are tiny houses.
+//   Bow:    elegant oval (orchid petal hint), single tint, no inner dot.
+//   Shaft:  vertical stroke (the L vertical, also the key shaft).
+//   Spine:  horizontal stroke at the bottom (key spine).
+//   Teeth:  three pitched-roof houses stepping down in size, sitting on the spine.
+// One ink only (deep emerald) for total coherence.
 
 export function LlaveLogo({ className }: { className?: string }) {
   return (
@@ -15,52 +14,74 @@ export function LlaveLogo({ className }: { className?: string }) {
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden
     >
-      {/* Orchid-petal bow */}
+      {/* Bow — orchid-petal oval, tilted slightly */}
       <ellipse
-        cx="12.5"
+        cx="12"
         cy="9"
         rx="5.2"
         ry="6"
         stroke="currentColor"
         strokeWidth="2.6"
         fill="none"
-        transform="rotate(-10 12.5 9)"
+        transform="rotate(-10 12 9)"
       />
-      <circle cx="12.5" cy="9" r="1.5" fill="currentColor" />
 
-      {/* Shaft (vertical of L) */}
+      {/* Shaft */}
       <path
-        d="M12.5 15.5 V31"
+        d="M12 15 V31"
         stroke="currentColor"
         strokeWidth="2.6"
         strokeLinecap="round"
       />
 
-      {/* Teeth: 3 soft arches descending (colonial archway feel) */}
+      {/* Spine (key body) */}
       <path
-        d="M12.5 31
-           Q15 31 16 29 Q17 27 18 29 Q19 31 21 31
-           Q23 31 24 29 Q25 27 26 29 Q27 31 29 31
-           L31 31"
+        d="M12 31 H31"
         stroke="currentColor"
         strokeWidth="2.6"
         strokeLinecap="round"
+      />
+
+      {/* House 1 — tallest */}
+      <path
+        d="M15.5 31 V26.2 L17.4 24 L19.3 26.2 V31"
+        stroke="currentColor"
+        strokeWidth="1.9"
         strokeLinejoin="round"
+        strokeLinecap="round"
+        fill="none"
+      />
+
+      {/* House 2 — medium */}
+      <path
+        d="M21.4 31 V27.4 L22.9 25.6 L24.4 27.4 V31"
+        stroke="currentColor"
+        strokeWidth="1.9"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        fill="none"
+      />
+
+      {/* House 3 — smallest */}
+      <path
+        d="M26.5 31 V28.3 L27.7 26.9 L28.9 28.3 V31"
+        stroke="currentColor"
+        strokeWidth="1.9"
+        strokeLinejoin="round"
+        strokeLinecap="round"
         fill="none"
       />
     </svg>
   );
 }
 
-// Same shape rendered with explicit colors — used for OG image & favicon.
+// Coloreable variant — used by next/og where currentColor is not available.
 export function LlaveLogoMark({
   className,
-  primary = "#faf8f3",
-  accent = "#f4c95d",
+  ink = "#0a563a",
 }: {
   className?: string;
-  primary?: string;
-  accent?: string;
+  ink?: string;
 }) {
   return (
     <svg
@@ -70,31 +91,39 @@ export function LlaveLogoMark({
       aria-hidden
     >
       <ellipse
-        cx="12.5"
+        cx="12"
         cy="9"
         rx="5.2"
         ry="6"
-        stroke={primary}
+        stroke={ink}
         strokeWidth="2.6"
         fill="none"
-        transform="rotate(-10 12.5 9)"
+        transform="rotate(-10 12 9)"
       />
-      <circle cx="12.5" cy="9" r="1.5" fill={accent} />
+      <path d="M12 15 V31" stroke={ink} strokeWidth="2.6" strokeLinecap="round" />
+      <path d="M12 31 H31" stroke={ink} strokeWidth="2.6" strokeLinecap="round" />
       <path
-        d="M12.5 15.5 V31"
-        stroke={primary}
-        strokeWidth="2.6"
-        strokeLinecap="round"
-      />
-      <path
-        d="M12.5 31
-           Q15 31 16 29 Q17 27 18 29 Q19 31 21 31
-           Q23 31 24 29 Q25 27 26 29 Q27 31 29 31
-           L31 31"
-        stroke={primary}
-        strokeWidth="2.6"
-        strokeLinecap="round"
+        d="M15.5 31 V26.2 L17.4 24 L19.3 26.2 V31"
+        stroke={ink}
+        strokeWidth="1.9"
         strokeLinejoin="round"
+        strokeLinecap="round"
+        fill="none"
+      />
+      <path
+        d="M21.4 31 V27.4 L22.9 25.6 L24.4 27.4 V31"
+        stroke={ink}
+        strokeWidth="1.9"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        fill="none"
+      />
+      <path
+        d="M26.5 31 V28.3 L27.7 26.9 L28.9 28.3 V31"
+        stroke={ink}
+        strokeWidth="1.9"
+        strokeLinejoin="round"
+        strokeLinecap="round"
         fill="none"
       />
     </svg>

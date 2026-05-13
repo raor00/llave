@@ -10,14 +10,14 @@ Español venezolano, cálido, anti-fricción. Le habla con franqueza a gente can
 
 ## Logo
 
-Un monograma **L** que se lee como **llave**:
+Un monograma **L** que es una **llave cuyos dientes son casas**:
 
-- **Bow** (paletón): óvalo inclinado -10°, sugiere pétalo de orquídea (flor nacional venezolana) pero a nivel global lee como geometría elegante.
-- **Acento central**: punto dorado cálido — el sol.
-- **Caña**: trazo vertical de la L, que es también la caña de la llave.
-- **Dientes**: tres arcos suaves al pie — arcadas coloniales caribeñas, NO muescas cuadradas.
+- **Bow** (paletón): óvalo inclinado -10°, hueco — sugiere pétalo de orquídea sin caer en simbología explícita. Sin punto interno: el óvalo es solo el contorno.
+- **Caña**: trazo vertical de la L, también la caña de la llave.
+- **Espina**: trazo horizontal al pie (el cuerpo de la llave).
+- **Dientes**: tres casitas con techo a dos aguas, decrecientes de izquierda a derecha, apoyadas sobre la espina. El dibujo se vuelve literal: "una llave que abre puertas, y las muescas son las casas".
 
-Por qué esta composición: cero competencia con el cubo-y-cerradura de Quarto, calidez orgánica sin encerrarse en iconografía hiper-venezolana, legible a 16x16 px.
+Una sola tinta — esmeralda profundo `#0a563a`. Sin amarillo, sin sol, sin acentos secundarios. Más coherente, más fuerte, lee a 16x16 px.
 
 Implementación: `src/components/llave-logo.tsx` (`LlaveLogo` + el coloreable `LlaveLogoMark`). Reusado dentro del favicon dinámico (`src/app/icon.tsx`) y la imagen OG (`src/app/opengraph-image.tsx`).
 
@@ -58,19 +58,19 @@ Estos son los prompts canónicos. Pegalos tal cual; no improvises el tono.
 ### Logo mark (1024x1024, transparente)
 
 ```
-Minimal vector logo mark for "Llave", a rental marketplace. The mark is a stylized monogram "L" that simultaneously reads as a key. Composition: at the top, an oval bow shaped like a soft orchid petal tilted -10° (representing Venezuelan orchid, the national flower, but read globally as elegant geometry); inside the bow, a small warm gold dot like a tropical sun. Below the bow, a single clean vertical stroke (key shaft, also the vertical of the letter L). The base extends right as three soft rounded arches, evoking colonial Caribbean balcony archways — NOT square key notches. Two-color palette: deep emerald green #0a563a for the linework, warm golden yellow #f4c95d for the inner sun accent. Flat vector, no gradient, no shadow, crisp 5px strokes, generous margin, centered on transparent background. Feels warm, Latin, premium, globally scalable. Style reference: Linear meets Carto meets Stripe.
+Minimal flat vector logo mark for "Llave", a rental marketplace. The mark is a stylized monogram "L" that reads as a key whose teeth ARE tiny houses. Composition: TOP — an elegant oval bow shaped like a soft orchid petal, tilted -10°, drawn as a hollow ring (no inner dot, no fill, no sun, completely empty inside). CENTER — a single clean vertical stroke descending from the bow (the key shaft / vertical of the letter L). BOTTOM — a horizontal stroke (the key spine) extending right from the base of the shaft, and SITTING ON TOP of that horizontal spine, three little pitched-roof house silhouettes step down in size from left to right (tallest closest to the shaft, smallest at the far right). Each house is a simple outline: two diagonal roof lines meeting at a peak, and two short verticals dropping to the spine — like a child's drawing of a house, but precise. NO doors, NO windows, NO chimney, NO sun, NO secondary color. Single ink: deep emerald green #0a563a, on a transparent background. Crisp 5–6 px strokes, rounded line caps, generous margin, centered. Feels warm, urban, Latin, premium. Style reference: Linear / Stripe minimal marks. Absolutely no gradients, shadows, watermarks, glows, or accent dots.
 ```
 
 ### Favicon (1024x1024, fondo esmeralda redondeado)
 
 ```
-App icon 1024x1024 with rounded-square background in solid Llave emerald #128c5d (corner radius 220px). Centered icon: same monogram described as a stylized "L" key — top oval orchid-petal bow tilted -10° (cream stroke #faf8f3), small warm gold dot #f4c95d inside the bow, vertical shaft, three soft rounded colonial-arch teeth extending right at the bottom. Strokes 12% of canvas width, no gradient, no shadow, crisp edges. Designed to read clearly at 16x16 px.
+App icon 1024x1024 with rounded-square background in solid deep emerald #0a563a (corner radius 220px). Centered icon: the Llave monogram-key, drawn entirely in cream #faf8f3. Composition: hollow oval bow at the top (orchid-petal silhouette, tilted -10°, no inner dot, no sun, empty inside); vertical shaft descending; horizontal spine at the bottom; on top of the spine, three little pitched-roof house outlines stepping down in size from left to right. Strokes 12% of canvas width, rounded caps, no gradient, no shadow, no extra color. Reads clearly at 16x16 px.
 ```
 
 ### Banner Open Graph (1200x630)
 
 ```
-Wide marketing banner 1200x630 for "Llave — Alquilar sin meses adelantados". Background: warm cream #faf8f3 with two soft organic blurred blobs (one emerald #c8ecd6 top-left, one warm gold #f4c95d33 bottom-right). Top-left corner: rounded square emerald badge with the Llave monogram-key mark (oval orchid bow tilted -10°, gold sun dot, vertical shaft, three soft colonial-arch teeth). Beside it the wordmark "Llave" in deep emerald #0a563a, Plus Jakarta Sans Bold 800, letter-spacing -1px. Main headline two lines: "Alquilar sin" in near-black, "meses adelantados." in a horizontal gradient from #0a563a to #128c5d to #f4c95d. Bold, 92px, letter-spacing -2px. Below the headline: three rounded-pill chips reading "0 meses adelantados", "1 mes depósito", "100% reembolsable" — emerald text on pale green #e8f7ef pill. Bottom row: "Con Llavero IA · construido en Venezuela" left, "llave.app" right in emerald bold. No watermarks. Premium fintech-meets-warm-Caribbean aesthetic.
+Wide marketing banner 1200x630 for "Llave — Alquilar sin meses adelantados". Background: warm cream #faf8f3 with one soft organic blurred emerald blob #c8ecd6 in the top-left corner only (no warm/gold blob anywhere). Top-left header: rounded square emerald #0a563a badge containing the Llave monogram-key mark in cream — hollow oval orchid bow (no inner dot, no sun), vertical shaft, horizontal spine at the base with three pitched-roof tiny houses sitting on the spine, stepping down in size from left to right. Beside the badge, the wordmark "Llave" in deep emerald #0a563a, Plus Jakarta Sans Bold 800, letter-spacing -1px. Main headline two lines: "Alquilar sin" in near-black, "meses adelantados." in a horizontal gradient from #0a563a to #128c5d (emerald only, NO gold). Bold, 92px, letter-spacing -2px. Below: three rounded-pill chips "0 meses adelantados", "1 mes depósito", "100% reembolsable" — emerald text on pale green #e8f7ef. Bottom row: "Con Llavero IA · construido en Venezuela" left, "llave.app" right in emerald bold. No watermarks, no gold accent anywhere, no sun.
 ```
 
 ### María — Avatar de asesora (512x512)
@@ -82,7 +82,7 @@ Friendly Latin American woman in her early 30s, warm natural smile, shoulder-len
 ### Ilustración hero alternativa (1600x1200)
 
 ```
-Cinematic 3/4 isometric illustration of a stylized cozy colonial-modern apartment building in warm cream and terracotta with emerald-green door, balconies with tropical plants (palms, orchids in pots) and gentle colonial archway windows. To the right of the building, a giant glowing softly-golden key floating diagonally — the key's bow is an oval orchid petal, the teeth are three soft arches matching the architecture below. Subtle Avila-mountain-like silhouette far in the background but abstracted enough to read as "any warm city". Soft sunset light, depth of field, pastel emerald and gold organic gradient blobs in the bokeh. No text, no watermark, no flag. Style between Pixar UI and Apple "It Just Works" illustration.
+Cinematic 3/4 isometric illustration of a stylized cozy colonial-modern apartment building in warm cream and terracotta with deep emerald door, balconies with tropical plants and colonial archway windows. To the right of the building, a giant emerald key floating diagonally — the key's bow is a hollow oval orchid petal (no inner dot, no sun), the teeth are three little pitched-roof houses stepping down in size, sitting on a horizontal key spine. The houses match the architecture of the building below. Subtle distant mountain silhouette abstracted enough to read as "any warm city". Soft late-afternoon light, depth of field, only emerald-toned organic blobs in the bokeh (no warm yellow). No text, no watermark, no flag. Style between Pixar UI and Apple "It Just Works" illustration.
 ```
 
 ### Foto interior de inmueble (1200x900)
