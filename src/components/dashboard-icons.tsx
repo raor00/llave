@@ -274,3 +274,29 @@ export function IconPrint(props: IconProps) {
     </S>
   );
 }
+
+export function IconMessage(props: IconProps) {
+  return (
+    <S {...props}>
+      <path d="M4 5 H20 A1 1 0 0 1 21 6 V15 A1 1 0 0 1 20 16 H9 L5 20 V16 H4 A1 1 0 0 1 3 15 V6 A1 1 0 0 1 4 5 Z" />
+      <path d="M7.5 9 H16.5" />
+      <path d="M7.5 12 H13" />
+    </S>
+  );
+}
+
+export function IconHeart(props: IconProps) {
+  return (
+    <S {...props}>
+      <path d="M12 20 C12 20 4 14.5 4 9 A4 4 0 0 1 12 7 A4 4 0 0 1 20 9 C20 14.5 12 20 12 20 Z" />
+    </S>
+  );
+}
+
+export function IconComment(props: IconProps) {
+  return (
+    <S {...props}>
+      <path d="M4 6 A1 1 0 0 1 5 5 H19 A1 1 0 0 1 20 6 V15 A1 1 0 0 1 19 16 H10 L6 20 V16 H5 A1 1 0 0 1 4 15 Z" />
+    </S>
+  );
+}

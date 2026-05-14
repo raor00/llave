@@ -47,7 +47,7 @@ const ROLE_NAV: Record<Role, Array<{ href: string; label: string }>> = {
     { href: "/inquilino", label: "Mi Llave" },
     { href: "/buscar", label: "Inmuebles" },
     { href: "/chat", label: "Llavero" },
-    { href: "/#diaspora", label: "Diáspora" },
+    { href: "/inquilino/mensajes", label: "Mensajes" },
   ],
   asesor: [
     { href: "/asesor", label: "Dashboard" },

@@ -18,6 +18,7 @@ import {
   IconSettings,
   IconCollapse,
   IconExpand,
+  IconMessage,
 } from "@/components/dashboard-icons";
 
 type NavItem = {
@@ -34,6 +35,7 @@ const NAV: NavItem[] = [
   { href: "/asesor/leads", label: "Leads", icon: IconLeads, group: "Operación" },
   { href: "/asesor/contactos", label: "Contactos", icon: IconContacts, group: "Operación" },
   { href: "/asesor/visitas", label: "Visitas", icon: IconCalendar, group: "Operación", badge: "Nuevo" },
+  { href: "/asesor/mensajes", label: "Mensajes", icon: IconMessage, group: "Operación" },
   // Cartera
   { href: "/asesor/inmuebles", label: "Inmuebles", icon: IconProperties, group: "Cartera" },
   { href: "/asesor/captacion", label: "Captación", icon: IconCapture, group: "Cartera" },

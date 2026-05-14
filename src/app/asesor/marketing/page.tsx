@@ -9,6 +9,11 @@
 
 import Link from "next/link";
 import { listCampaigns, listPosts, listSuggestions } from "@/lib/db/marketing";
+import {
+  listPosts as listSocialPosts,
+  listComments,
+} from "@/lib/db/social-feed";
+import { DEMO_PROPERTIES } from "@/lib/db/seed-data";
 import { getOwnerProfile, listAllProperties, listLeadsForOwner } from "@/lib/db/queries";
 import { getViewsByProperty } from "@/lib/db/views";
 import { buildAsesorAnalytics } from "@/lib/db/asesor-analytics";
@@ -22,7 +27,14 @@ import {
   IconX,
   IconMeta,
 } from "@/components/social-icons";
-import { IconMegaphone, IconSparkle } from "@/components/dashboard-icons";
+import {
+  IconMegaphone,
+  IconSparkle,
+  IconHeart,
+  IconComment,
+} from "@/components/dashboard-icons";
+import { CreatePostForm } from "@/components/asesor/create-post-form";
+import { CommentThread } from "@/components/asesor/comment-thread";
 
 export const dynamic = "force-dynamic";
 
@@ -74,6 +86,14 @@ export default async function MarketingPage() {
   const campaigns = listCampaigns();
   const posts = listPosts();
   const suggestions = listSuggestions();
+  const socialPosts = listSocialPosts();
+  const commentsByPost = new Map(
+    socialPosts.map((p) => [p.id, listComments(p.id)] as const)
+  );
+  const propertyOptions = DEMO_PROPERTIES.map((p) => ({
+    id: p.id,
+    title: p.title.replace(/^Llave:\s*/, ""),
+  }));
   const greeting = getGreeting(owner.full_name);
 
   const totalSpend = campaigns.reduce((a, c) => a + c.spend, 0);
@@ -202,7 +222,7 @@ export default async function MarketingPage() {
           <ul className="space-y-3">
             {suggestions.map((s) => (
               <li key={s.id} className="rounded-md bg-white/5 p-3 border border-white/10">
-                <h3 className="text-sm font-semibold">{s.title}</h3>
+                <h3 className="text-sm font-semibold text-white">{s.title}</h3>
                 <p className="text-xs text-white/80 mt-1 leading-relaxed">{s.body}</p>
                 <div className="flex items-center justify-between mt-2">
                   <span className="text-[10px] text-[color:var(--color-accent)] font-semibold">{s.reward}</span>
@@ -216,6 +236,71 @@ export default async function MarketingPage() {
               </li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      {/* Crear publicación */}
+      <CreatePostForm properties={propertyOptions} />
+
+      {/* Tus publicaciones y comentarios */}
+      <section>
+        <div className="flex items-baseline justify-between mb-3">
+          <h2 className="font-display text-lg font-semibold">
+            Tus publicaciones y comentarios
+          </h2>
+          <span className="text-xs text-[color:var(--color-fg-soft)]">
+            {socialPosts.length} publicaciones
+          </span>
+        </div>
+        <div className="space-y-4">
+          {socialPosts.map((p) => {
+            const Icon = PLATFORM_ICON[p.platform];
+            const tint = PLATFORM_TINT[p.platform] ?? "text-[color:var(--color-fg)]";
+            const comments = commentsByPost.get(p.id) ?? [];
+            return (
+              <article key={p.id} className="card p-5">
+                <div className="flex items-start gap-3">
+                  <span
+                    className={`size-9 rounded-md bg-[color:var(--color-bg)] border border-[color:var(--color-border)] grid place-items-center shrink-0 ${tint}`}
+                  >
+                    <Icon size={16} />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm leading-snug">{p.copy}</p>
+                    {p.property_id && p.property_title && (
+                      <Link
+                        href={`/inmueble/${p.property_id}`}
+                        className="text-[11px] text-[color:var(--color-brand-700)] hover:underline line-clamp-1 block mt-1"
+                      >
+                        → {p.property_title}
+                      </Link>
+                    )}
+                    <div className="flex items-center gap-4 mt-2 text-[11px] text-[color:var(--color-fg-soft)]">
+                      <span className="flex items-center gap-1">
+                        <IconHeart size={13} /> {p.likes.toLocaleString("es-VE")}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <IconMegaphone size={13} /> {p.shares.toLocaleString("es-VE")}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <IconComment size={13} /> {comments.length}
+                      </span>
+                      <span className="chip-muted text-[10px]">{formatDate(p.created_at)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <details className="mt-3 group">
+                  <summary className="cursor-pointer text-xs font-semibold text-[color:var(--color-brand-700)] hover:underline list-none">
+                    Ver comentarios ({comments.length})
+                  </summary>
+                  <div className="mt-2 border-t border-[color:var(--color-border)] pt-1">
+                    <CommentThread comments={comments} />
+                  </div>
+                </details>
+              </article>
+            );
+          })}
         </div>
       </section>
     </div>
