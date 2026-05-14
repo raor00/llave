@@ -54,6 +54,28 @@ export default function LoginForm() {
     }
   }
 
+  async function handleForgotPassword() {
+    const supa = createSupabaseBrowserClient();
+    if (!supa) {
+      toast.error("Supabase no está configurado.");
+      return;
+    }
+    if (!email) {
+      toast.error("Ingresa primero tu correo arriba.");
+      return;
+    }
+    setBusy(true);
+    const { error } = await supa.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/update-password`,
+    });
+    setBusy(false);
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Te enviamos un enlace para crear una contraseña nueva.");
+    }
+  }
+
   async function handleVerifyOtp(e: React.FormEvent) {
     e.preventDefault();
     const supa = createSupabaseBrowserClient();
@@ -142,16 +164,23 @@ export default function LoginForm() {
             >
               {busy ? "Entrando…" : "Iniciar sesión"}
             </button>
-            <p className="text-xs text-[color:var(--color-fg-soft)] mt-4">
-              ¿No tienes contraseña?{" "}
+            <div className="flex items-center justify-between gap-4 mt-4 text-xs text-[color:var(--color-fg-soft)]">
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                disabled={busy}
+                className="text-[color:var(--color-brand-700)] hover:underline font-medium disabled:opacity-50"
+              >
+                ¿Olvidaste tu contraseña?
+              </button>
               <button
                 type="button"
                 onClick={() => setMode("signup")}
-                className="text-[color:var(--color-brand-700)] underline"
+                className="text-[color:var(--color-fg-soft)] hover:text-[color:var(--color-brand-700)] hover:underline"
               >
-                Crear cuenta con magic link
+                Crear cuenta nueva →
               </button>
-            </p>
+            </div>
           </form>
         ) : (
           <>
