@@ -41,14 +41,18 @@ export default function LoginPage() {
     const supa = createSupabaseBrowserClient();
     if (!supa) return;
     setVerifying(true);
-    const { error } = await supa.auth.verifyOtp({
-      email,
-      token: otp.trim(),
-      type: "email",
-    });
+    const code = otp.trim();
+    // Supabase verifyOtp expects "email" for newer codes and "magiclink" for older flows.
+    // Try both so admin-generated tokens and signInWithOtp-issued tokens both work.
+    let res = await supa.auth.verifyOtp({ email, token: code, type: "email" });
+    if (res.error) {
+      const retry = await supa.auth.verifyOtp({ email, token: code, type: "magiclink" });
+      if (retry.error) res = retry;
+      else res = retry;
+    }
     setVerifying(false);
-    if (error) {
-      toast.error(error.message);
+    if (res.error) {
+      toast.error(res.error.message);
     } else {
       toast.success("Sesión iniciada");
       router.push("/onboarding");

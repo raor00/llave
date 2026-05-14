@@ -5,6 +5,7 @@ import { PropertyCard } from "@/components/marketplace/property-card";
 import { FadeIn, FadeInChild, FadeInStagger } from "@/components/landing/fade-in";
 import { CrmMockup } from "@/components/landing/crm-mockup";
 import { ScrollProgress } from "@/components/landing/scroll-progress";
+import { DiasporaMap } from "@/components/landing/diaspora-map";
 
 export const revalidate = 60;
 
@@ -229,12 +230,12 @@ export default async function LandingPage() {
               Recorre antes de mudarte.
             </h2>
             <p className="mt-5 text-lg text-[color:var(--color-fg-muted)]">
-              7 a 8 millones de venezolanos viven fuera. Muchos vuelven, otros alquilan para familia.
-              Con Llave recorres el inmueble en 3D — paredes, baños, vista al Ávila — sin tomar un vuelo.
+              7 a 8 millones de venezolanos viven fuera. Muchos vuelven, otros alquilan para su familia.
+              Con Llave recorres el inmueble en 3D, ves paredes, baños y la vista al Ávila sin tomar un vuelo.
               Llavero negocia, agenda y firma desde la app.
             </p>
             <ul className="mt-6 space-y-2 text-[color:var(--color-fg)]">
-              <Bullet positive>Tour 3D Gaussian Splat — recorrido inmersivo</Bullet>
+              <Bullet positive>Tour 3D Gaussian Splat con recorrido inmersivo</Bullet>
               <Bullet positive>Llavero coordina la visita con un asesor local</Bullet>
               <Bullet positive>Firma de contrato remota</Bullet>
               <Bullet positive>Tu cédula vale igual desde el exterior</Bullet>
@@ -246,34 +247,7 @@ export default async function LandingPage() {
             </div>
           </FadeIn>
           <FadeIn delay={0.15}>
-            <div className="card p-2 overflow-hidden">
-              <div className="rounded-[var(--radius-lg)] bg-[color:var(--color-fg)] aspect-[4/3] grid place-items-center text-white relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-[color:var(--color-brand-700)]/40 to-[color:var(--color-brand-900)]" />
-                <div className="relative text-center px-6">
-                  <div className="text-5xl mb-3">🌎</div>
-                  <div className="font-display text-2xl font-bold">7-8M venezolanos</div>
-                  <div className="text-white/70 text-sm mt-1">fuera del país pueden alquilar acá</div>
-                  <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-xs">
-                    <span className="size-2 rounded-full bg-[color:var(--color-accent)] animate-pulse" />
-                    Tour 3D disponible en cada inmueble
-                  </div>
-                </div>
-              </div>
-              <div className="p-5 grid grid-cols-3 gap-3 text-center text-xs">
-                <div>
-                  <div className="font-display text-2xl font-bold text-[color:var(--color-brand-700)]">2.5M</div>
-                  <div className="text-[color:var(--color-fg-soft)]">Colombia</div>
-                </div>
-                <div>
-                  <div className="font-display text-2xl font-bold text-[color:var(--color-brand-700)]">800k</div>
-                  <div className="text-[color:var(--color-fg-soft)]">Estados Unidos</div>
-                </div>
-                <div>
-                  <div className="font-display text-2xl font-bold text-[color:var(--color-brand-700)]">500k</div>
-                  <div className="text-[color:var(--color-fg-soft)]">España</div>
-                </div>
-              </div>
-            </div>
+            <DiasporaMap />
           </FadeIn>
         </div>
       </section>
