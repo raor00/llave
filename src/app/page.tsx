@@ -162,8 +162,8 @@ export default async function LandingPage() {
                   <span>Llave responde por daños</span><strong>Incluido</strong>
                 </li>
               </ul>
-              <div className="mt-4 rounded-lg bg-white border border-[color:var(--color-brand-300)] p-3 text-xs text-[color:var(--color-brand-700)]">
-                <strong>Ahorras $560 al mudarte</strong> respecto al modelo tradicional con &quot;cero meses adelantados&quot;.
+              <div className="mt-4 rounded-lg bg-white border border-[color:var(--color-brand-300)] p-3 text-xs leading-relaxed text-[color:var(--color-brand-700)]">
+                <strong>Ahorras $560 al mudarte</strong>{" "}respecto al modelo tradicional con &quot;cero meses adelantados&quot;.
               </div>
             </div>
           </FadeIn>
