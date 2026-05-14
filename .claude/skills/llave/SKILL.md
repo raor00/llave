@@ -14,7 +14,9 @@ metadata:
 
 ## What Llave is
 
-Llave is a Venezuelan rental marketplace that **eliminates the upfront-friction cost** of traditional rentals (advance month + deposit + admin fee + commission ≈ $1000+ before moving in). Tenants pay **one month to enter**, deposit is reduced (max 1 month) and fully refundable. Llave covers covered damages so the owner is protected.
+Llave is a Venezuelan rental marketplace that **eliminates the upfront-friction cost** of traditional rentals (advance month + deposit + admin fee + commission ≈ $1000+ before moving in). Tenants pay **one month to enter**, **deposit is zero** (Garantía Llave 360° covers the owner from Llave's own fund — not retained from the tenant). Llave covers covered damages so the owner is protected.
+
+**Differentiation vs `quartoapp.com`**: Quarto demands RIF, constancia de trabajo, bank statements, 5 cosigners at 2.5× income and charges commission + guarantee (1 month rent + 1 month commission + 1 month guarantee = ~$840 upfront). Llave: solo cédula, 24–48h, $280 upfront for the same listing, zero commission to tenant, Trust Score that grows over time and replaces the constancia.
 
 The differentiator is **Llavero**, an AI agent built on Claude that:
 - Talks to tenants conversationally, calls real DB tools (no hallucination), suggests honest matches.
@@ -31,12 +33,14 @@ Built initially for **Platanus Hackathon Build Night** (Anthropic, May 2026). Bu
 | Language | TypeScript strict | `tsc --noEmit --skipLibCheck` must pass on every change |
 | AI | Vercel AI SDK **v6** + AI Gateway → `anthropic/claude-sonnet-4-6` (fallback: direct via `@ai-sdk/anthropic` + `ANTHROPIC_API_KEY`) | Mock fallback `LLAVE_OFFLINE=1` for offline demos |
 | DB | Supabase (Postgres + SSR auth + RLS) | In-memory seed fallback when env missing |
-| Styling | Tailwind v4 + custom theme tokens in `globals.css` | Brand emerald `#128c5d`, warm gold `#f4c95d`, cream `#faf8f3`. Use `var(--color-brand-500)` etc. |
+| Styling | Tailwind v4 + custom theme tokens in `globals.css` | Brand terracotta `#c4513a` scale (pivoted away from emerald to avoid colliding with Quarto), warm gold `#f4c95d`, cream `#faf8f3`. Use `var(--color-brand-500)` etc. |
 | Forms | react-hook-form + zod | Server input validation lives in tools too |
-| 3D | React Three Fiber + drei | Lazy-load via `dynamic(..., { ssr: false })` |
-| Maps | Maplibre GL + Carto Positron tiles (no API key) | Lazy-loaded the same way |
+| 3D | React Three Fiber + drei + `<model-viewer>` + gsplat | Three viewers: `SplatViewer` (gsplat for .splat/Gaussian .ply), `MeshViewer` (three.js `PLYLoader` for triangle-mesh .ply), `Tour3D` (Google `<model-viewer>` web component for .usdz/.glb — USDZ is iOS-Safari-only). The property detail picks the right one by file extension. |
+| Maps | `react-simple-maps` + Natural Earth topojson | Diáspora map on landing — Caracas + 10 cities (Madrid, Bogotá, BA, Miami, Lima, Santiago, Panamá, Houston, Quito, CDMX) with animated dashed terracotta arcs |
 | Voice | Web Speech API (browser-native, no deps) | Feature-detected, never required |
+| Notifications | In-app feed via `notifications` table + Notification Bell client component | Browser `Notification.requestPermission()` for desktop push. Real Web Push (SW + VAPID) lives in the roadmap. |
 | Deploy | Vercel (Fluid Compute, Node.js runtime) | Project: `raor00s-projects/llave`, alias `llave-ruby.vercel.app` |
+| Remotes | dual remote | `origin` → `platanus-build-night/platanus-build-night-26-ve-raor00` (private official). `mirror` → `raor00/llave` (public). Push to both. |
 
 **Never add a provider package just because it's familiar.** Default to AI Gateway via `'provider/model'` string.
 
@@ -56,34 +60,47 @@ src/
     icon.tsx                  → dynamic favicon (edge)
     layout.tsx, globals.css   → root shell + theme tokens
   components/
-    landing/                  → hero-3d.tsx, hero-3d-wrapper.tsx
+    landing/                  → hero-3d, crm-mockup, diaspora-map, guarantee-card
     marketplace/              → property-card, filters, gallery, property-map,
-                                 compare-store, compare-drawer, results-view
-    chat/                     → chat-window, tool-result, use-voice
-    site-header.tsx, site-footer.tsx, llave-logo.tsx
+                                 compare-store, compare-drawer, results-view,
+                                 tour-3d, splat-viewer, mesh-viewer
+    chat/                     → chat-window, tool-result, use-voice, markdown-text
+    notifications/            → notification-bell (server), notification-bell-shell (client)
+    asesor/                   → captacion-form (con LiDAR demo showcase)
+    site-header.tsx, site-footer.tsx, llave-logo.tsx, llave-icons.tsx,
+    social-icons.tsx, user-menu.tsx, user-menu-actions.ts, mobile-nav.tsx
   lib/
     ai/
-      system-prompt.ts        → Llavero persona + manifesto
-      tools.ts                → 7 Zod-typed tools
+      system-prompt.ts        → Llavero persona + manifesto (tuteo venezolano)
+      tools.ts                → 8 Zod-typed tools (incl. setupMyProfile)
       local-mock-model.ts     → offline / no-key fallback (MockLanguageModelV3)
     db/
       queries.ts              → Supabase + seed fallback
-      seed-data.ts            → 17 properties + demo owner
+      seed-data.ts            → 17 properties + demo owner Rafael Oviedo
+      views.ts                → property view counter + 7-day timeseries
+      contracts.ts            → active lease + countdown for inquilino
+    notifications/
+      seed.ts                 → role-tailored in-memory feed
+      queries.ts              → Supabase-aware reader + unread count
     supabase/
       server.ts, client.ts, middleware.ts, env.ts
     format.ts, types.ts, utils.ts
   middleware.ts               → Supabase session refresh
 supabase/migrations/
-  0001_init.sql               → schema + RLS
+  0001_init.sql               → core schema + RLS
   0002_seed.sql               → demo owner + 17 properties
+  0003_stats_contracts_notifications.sql
+                              → property_views, contracts, notifications
+                                + properties.view_count / favorite_count
 ```
 
 ## Llavero agent contract
 
 **System prompt** lives in `src/lib/ai/system-prompt.ts`. Anyone editing it must keep:
-- Spanish venezolano natural, warm but not slangy.
-- Manifesto bullets (sin meses adelantados, comisión justa, garantía al propietario, reputación que vale).
-- Hard rules: never invent properties, never request abusive requirements, always use tools for real data, do NOT dump full property details in text (the UI renders cards from tool output).
+- Spanish venezolano (tuteo) natural, warm but not slangy. **Voseo argentino prohibido** — if a phrase reads "vos/sos/tenés/podés/querés", rewrite it as "tú/eres/tienes/puedes/quieres".
+- Manifesto bullets (sin meses adelantados, **cero depósito · Llave responde**, sin comisión al inquilino, reputación que vale, 24–48h, Garantía 360°).
+- Hard rules: never invent properties, never request abusive requirements, **never ask deposit**, always use tools for real data, do NOT dump full property details in text (the UI renders cards from tool output).
+- Boost the hackathon property: when the user asks for "el mejor / icónico / del hackathon / el de Fina", call `getPropertyDetail` (or `searchProperties` with `query="Loft Hackathon"`) and let the card render.
 
 **Tools** in `src/lib/ai/tools.ts` — every tool MUST:
 - Be Zod-typed (`inputSchema: z.object({...})`).
@@ -100,8 +117,41 @@ supabase/migrations/
 | `scheduleVisit` | Creates lead (needs name + phone OR email) | success card → /asesor/leads |
 | `createPropertyDraft` | Asesor-only publish flow | success card → /inmueble/[id] |
 | `suggestPrice` | Comparables-based price range | range card + comp list |
+| `setupMyProfile` | Conversational onboarding (role + name + phone) | success card → role dashboard |
 
 When adding a new tool: add it to `llaveroTools`, add a render branch in `tool-result.tsx`, and update this skill's table above.
+
+## Role system + role switcher (demo)
+
+Three roles live in `profiles.role` and a cookie `llave_role` (set by the server action `switchRoleAction`). The cookie wins on read so the header chip and nav refresh instantly when the demo user flips roles via the avatar dropdown.
+
+| Role | Home | Nav | Dashboard highlights |
+|------|------|-----|---------------------|
+| `inquilino` | `/inquilino` | Mi Llave / Inmuebles / Llavero / Diáspora | Trust Score, **contrato activo con meses restantes**, sugerencias predichas por Llavero |
+| `asesor` | `/asesor` | Dashboard / Captación / Leads / Publicar IA | Stats, **gráfico de demanda 7 días**, top inmuebles por views, tabla con views por inmueble |
+| `propietario` | `/propietario` | Mis inmuebles / Mercado / Llavero / Publicar | Stats, **vistas reales por inmueble**, ocupación, garantía, delegar a asesor |
+
+Switch flow:
+1. Avatar dropdown → role button → optimistic UI flip (chip + active button).
+2. `switchRoleAction(role)` upserts `profiles.role`, sets the `llave_role` cookie and `revalidatePath('/', 'layout')`.
+3. Client calls `router.push(ROLE_HOME[role])` + `router.refresh()` — no full reload.
+
+## Garantía Llave 360°
+
+5-step protocol displayed on landing `#garantia` and reiterated on the inmueble detail and inquilino dashboard:
+1. Verificación previa (cédula + Trust Score)
+2. Protocolo firmado (contrato digital LRCAV)
+3. Fondo Llave (Llave assume deposit risk; tenant pays $0 retained)
+4. Gestión SUNAVI (paperwork when required)
+5. Supervisión continua (Llavero monitors)
+
+Copy must never imply the tenant retains a deposit. The differentiating line is "Cero depósito · Llave responde".
+
+## Notifications
+
+Role-tailored feed seeded in `src/lib/notifications/seed.ts`. The `NotificationBell` server component fetches the count and items, then hands them to the client shell that handles the dropdown and the browser-push permission prompt (`Notification.requestPermission()`). Web Push real (service worker + VAPID + subscription) lives in the roadmap and is wired in the SKILL's "Out of scope" section.
+
+Add new kinds via `NotificationKind` in `seed.ts`. Per-role tints live in `notification-bell-shell.tsx`.
 
 ## Conventions
 
@@ -138,10 +188,11 @@ Production today runs on AI Gateway + seed fallback. Supabase env can be added v
 
 ## What is OUT of scope (roadmap, do NOT build here)
 
-- LiDAR / 3D scan via iPhone (post-MVP)
+- **LiDAR / 3D scan via iPhone in-app** (App Clip + RoomPlan). Documented in `docs/lidar-roadmap.md`. The captación form shows a DEMO showcase only — no upload UI.
+- **Real Web Push** (service worker + VAPID + push subscription). Today the bell handles `Notification.requestPermission()` for desktop alerts; the SW pipeline ships post-MVP.
 - Generated PDF rental contracts (post-MVP)
-- Meta Ads + social-network integration (post-MVP)
-- Tenant credit profile useful for banks (post-MVP)
+- Meta Ads + social-network integration are surfaced visually (Instagram, Facebook, TikTok, WhatsApp, X, Meta icons on landing CRM mockup + user-menu). Real API integration is post-MVP.
+- Tenant credit profile exported to banks (Trust Score → verifiable credential)
 - Real rate-limiting on `scheduleVisit` (use Upstash Ratelimit when needed)
 - Pagination on the asesor dashboard (only matters past ~1k rows)
 

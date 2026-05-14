@@ -1,7 +1,10 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { SUPABASE_ENABLED } from "@/lib/supabase/env";
 import { UserMenu } from "./user-menu";
+import { NotificationBell } from "./notifications/notification-bell";
+import { MobileNav } from "./mobile-nav";
 
 type Role = "inquilino" | "asesor" | "propietario";
 
@@ -16,8 +19,16 @@ async function getViewer() {
     .select("full_name, role")
     .eq("id", user.id)
     .maybeSingle();
-  const role: Role = (profile?.role as Role) ?? "inquilino";
+  // Cookie wins for the demo switcher: avoids a full profile re-read race
+  // after switchRoleAction. Falls back to the stored profile role.
+  const jar = await cookies();
+  const cookieRole = jar.get("llave_role")?.value as Role | undefined;
+  const role: Role =
+    cookieRole && ["inquilino", "asesor", "propietario"].includes(cookieRole)
+      ? cookieRole
+      : ((profile?.role as Role) ?? "inquilino");
   return {
+    id: user.id,
     email: user.email ?? "",
     fullName: (profile?.full_name as string | null) ?? null,
     role,
@@ -64,32 +75,38 @@ export async function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 glass border-b">
-      <div className="container-x flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 font-display text-xl font-bold">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/logo.png" alt="Llave" className="size-8" />
-          <span>Llave</span>
-          {viewer && (
-            <span className="ml-1 hidden sm:inline text-[10px] uppercase tracking-wider text-[color:var(--color-brand-700)] font-semibold px-1.5 py-0.5 rounded bg-[color:var(--color-brand-100)]">
-              {ROLE_LABEL[viewer.role]}
-            </span>
-          )}
-        </Link>
+      <div className="container-x flex h-16 items-center justify-between gap-3">
+        <div className="flex items-center gap-2 min-w-0">
+          <MobileNav items={nav} />
+          <Link href="/" className="flex items-center gap-2 font-display text-lg sm:text-xl font-bold min-w-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/logo.png" alt="Llave" className="size-7 sm:size-8 shrink-0" />
+            <span className="truncate">Llave</span>
+            {viewer && (
+              <span className="ml-1 hidden sm:inline text-[10px] uppercase tracking-wider text-[color:var(--color-brand-700)] font-semibold px-1.5 py-0.5 rounded bg-[color:var(--color-brand-100)]">
+                {ROLE_LABEL[viewer.role]}
+              </span>
+            )}
+          </Link>
+        </div>
 
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-[color:var(--color-fg-muted)]">
+        <nav className="hidden md:flex items-center gap-5 lg:gap-6 text-sm font-medium text-[color:var(--color-fg-muted)]">
           {nav.map((item) => (
-            <Link key={item.href} href={item.href} className="hover:text-[color:var(--color-fg)] transition">
+            <Link key={item.href} href={item.href} className="hover:text-[color:var(--color-fg)] transition whitespace-nowrap">
               {item.label}
             </Link>
           ))}
         </nav>
 
         {viewer ? (
-          <UserMenu fullName={viewer.fullName} email={viewer.email} role={viewer.role} />
+          <div className="flex items-center gap-2 shrink-0">
+            <NotificationBell userId={viewer.id} role={viewer.role} />
+            <UserMenu fullName={viewer.fullName} email={viewer.email} role={viewer.role} />
+          </div>
         ) : (
-          <div className="flex items-center gap-2">
-            <Link href="/login" className="btn btn-ghost">Mi Llave</Link>
-            <Link href="/buscar" className="btn btn-primary">Ver Llave</Link>
+          <div className="flex items-center gap-2 shrink-0">
+            <Link href="/login" className="btn btn-ghost text-sm !px-3">Mi Llave</Link>
+            <Link href="/buscar" className="btn btn-primary text-sm !px-3 hidden sm:inline-flex">Ver Llave</Link>
           </div>
         )}
       </div>

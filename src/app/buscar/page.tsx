@@ -52,7 +52,7 @@ export default async function BuscarPage({
               <div className="text-4xl mb-3">🔍</div>
               <h3 className="font-display text-xl font-semibold">Sin resultados con esos filtros</h3>
               <p className="text-[color:var(--color-fg-muted)] mt-1">
-                Probá ampliar el presupuesto o cambiar la ciudad. O dejá que Llavero te ayude.
+                Prueba ampliar el presupuesto o cambiar la ciudad. O deja que Llavero te ayude.
               </p>
               <Link href="/chat" className="btn btn-primary mt-4">Hablar con Llavero</Link>
             </div>

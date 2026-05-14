@@ -50,10 +50,10 @@ export function DiasporaMap() {
         <span className="chip">10 ciudades</span>
       </div>
 
-      <div className="relative aspect-[16/9] rounded-lg overflow-hidden bg-gradient-to-br from-[color:var(--color-brand-50)] to-[color:var(--color-bg)]">
+      <div className="relative aspect-[4/3] sm:aspect-[16/10] lg:aspect-[16/9] rounded-lg overflow-hidden bg-gradient-to-br from-[color:var(--color-brand-50)] to-[color:var(--color-bg)] min-h-[420px] sm:min-h-[480px] lg:min-h-[560px]">
         <ComposableMap
           projection="geoNaturalEarth1"
-          projectionConfig={{ scale: 140 }}
+          projectionConfig={{ scale: 200, center: [-50, 5] }}
           style={{ width: "100%", height: "100%" }}
         >
           <Geographies geography={GEO_URL}>
@@ -82,10 +82,10 @@ export function DiasporaMap() {
               from={CARACAS}
               to={c.coords}
               stroke="#c4513a"
-              strokeWidth={0.7}
-              strokeOpacity={0.35}
+              strokeWidth={1}
+              strokeOpacity={0.4}
               strokeLinecap="round"
-              strokeDasharray="2,2"
+              strokeDasharray="3,3"
               style={{
                 animation: `dash-flow 12s linear infinite`,
                 animationDelay: `${i * 0.5}s`,
@@ -100,18 +100,18 @@ export function DiasporaMap() {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <circle r={9} fill="#c4513a" fillOpacity={0.15}>
-                <animate attributeName="r" values="9;16;9" dur="2.4s" repeatCount="indefinite" />
+              <circle r={11} fill="#c4513a" fillOpacity={0.15}>
+                <animate attributeName="r" values="11;22;11" dur="2.4s" repeatCount="indefinite" />
                 <animate attributeName="fill-opacity" values="0.4;0;0.4" dur="2.4s" repeatCount="indefinite" />
               </circle>
-              <circle r={5} fill="#8a3722" stroke="#faf8f3" strokeWidth={1.5} />
+              <circle r={6} fill="#8a3722" stroke="#faf8f3" strokeWidth={1.8} />
               <text
-                x={9}
-                y={3}
-                fontSize={9}
-                fontWeight={700}
+                x={11}
+                y={4}
+                fontSize={12}
+                fontWeight={800}
                 fill="#0b1f1c"
-                style={{ pointerEvents: "none", fontFamily: "Plus Jakarta Sans, system-ui" }}
+                style={{ pointerEvents: "none", fontFamily: "Plus Jakarta Sans, system-ui", paintOrder: "stroke", stroke: "#faf8f3", strokeWidth: 3 }}
               >
                 Caracas
               </text>
@@ -127,20 +127,30 @@ export function DiasporaMap() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.4 + i * 0.08, ease: "backOut" }}
               >
-                <circle r={6} fill="#e0856e" fillOpacity={0.25}>
-                  <animate attributeName="r" values="6;10;6" dur="3s" repeatCount="indefinite" begin={`${i * 0.3}s`} />
+                <circle r={8} fill="#e0856e" fillOpacity={0.25}>
+                  <animate attributeName="r" values="8;14;8" dur="3s" repeatCount="indefinite" begin={`${i * 0.3}s`} />
                   <animate attributeName="fill-opacity" values="0.45;0;0.45" dur="3s" repeatCount="indefinite" begin={`${i * 0.3}s`} />
                 </circle>
-                <circle r={3.2} fill="#c4513a" stroke="#faf8f3" strokeWidth={1.2} />
+                <circle r={4.2} fill="#c4513a" stroke="#faf8f3" strokeWidth={1.5} />
                 <text
-                  x={6}
-                  y={2}
-                  fontSize={7.5}
-                  fontWeight={600}
+                  x={7}
+                  y={3}
+                  fontSize={10}
+                  fontWeight={700}
                   fill="#0b1f1c"
-                  style={{ pointerEvents: "none", fontFamily: "Plus Jakarta Sans, system-ui" }}
+                  style={{ pointerEvents: "none", fontFamily: "Plus Jakarta Sans, system-ui", paintOrder: "stroke", stroke: "#faf8f3", strokeWidth: 2.5 }}
                 >
                   {c.name}
+                </text>
+                <text
+                  x={7}
+                  y={14}
+                  fontSize={8.5}
+                  fontWeight={600}
+                  fill="#8a3722"
+                  style={{ pointerEvents: "none", fontFamily: "Plus Jakarta Sans, system-ui", paintOrder: "stroke", stroke: "#faf8f3", strokeWidth: 2.5 }}
+                >
+                  {c.diaspora}
                 </text>
               </motion.g>
             </Marker>

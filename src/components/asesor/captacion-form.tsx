@@ -17,17 +17,12 @@ type Preview = { id: string; url: string; name: string; size: number };
 export function CaptacionForm() {
   const router = useRouter();
   const [photos, setPhotos] = useState<Preview[]>([]);
-  const [tour3d, setTour3d] = useState<{ name: string; size: number } | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [amenities, setAmenities] = useState<Set<string>>(new Set());
   const photoInputRef = useRef<HTMLInputElement>(null);
-  const tourInputRef = useRef<HTMLInputElement>(null);
   const [hasLidar, setHasLidar] = useState(false);
 
   useEffect(() => {
-    // rough LiDAR hint: only iPad Pro and iPhone Pro/Pro Max from 2020+ have it.
-    // We cannot detect LiDAR directly from the browser, so we use the user-agent
-    // as a proxy and surface the capability cue rather than an assertion.
     if (typeof navigator !== "undefined") {
       const ua = navigator.userAgent;
       setHasLidar(/iPhone|iPad/.test(ua) && /OS 1[5-9]_/.test(ua));
@@ -95,7 +90,7 @@ export function CaptacionForm() {
     const fd = new FormData(e.currentTarget);
     fd.set("amenities", JSON.stringify([...amenities]));
     fd.set("photo_count", String(photos.length));
-    fd.set("has_3d", tour3d ? "1" : "0");
+    fd.set("has_3d", "0");
     const res = await capturarInmueble(fd);
     setSubmitting(false);
     if (res.ok) {
@@ -180,113 +175,65 @@ export function CaptacionForm() {
           )}
         </section>
 
-        {/* TOUR 3D */}
-        <section className="card p-6">
+        {/* TOUR 3D DEMO — la captura nativa vive en el roadmap; aquí explicamos el flujo. */}
+        <section className="card p-6 bg-gradient-to-br from-[color:var(--color-brand-50)] to-white border-[color:var(--color-brand-100)]">
           <div className="flex items-start justify-between gap-3 mb-4">
             <div>
-              <h2 className="font-display text-xl font-semibold">Tour 3D (opcional)</h2>
-              <p className="text-sm text-[color:var(--color-fg-muted)] mt-1 max-w-xl">
-                Llave acepta tres formatos: <strong>Gaussian Splat</strong> (.splat, .ply — el más realista,
-                tipo SuperSplat / Luma AI), <strong>USDZ</strong> y <strong>GLB</strong>. Lo embebemos en el
-                detalle del inmueble para que el inquilino recorra el ambiente desde el navegador.
+              <span className="chip mb-2">Demo · Captura LiDAR Llave</span>
+              <h2 className="font-display text-xl font-semibold">Escaneo 3D del inmueble</h2>
+              <p className="text-sm text-[color:var(--color-fg-muted)] mt-1 max-w-2xl">
+                Con un dispositivo que tenga sensor <strong>LiDAR</strong> (iPhone Pro, iPad Pro) escaneas
+                cada ambiente, Llave lo procesa en la nube y lo embebe como tour 3D en la publicación.
+                El inquilino recorre el inmueble desde el navegador antes de visitarlo.
               </p>
             </div>
-            <span className={`chip ${hasLidar ? "" : "chip-muted"}`}>
-              {hasLidar ? "iPhone Pro / LiDAR detectado" : "Splat siempre disponible"}
+            <span className={`chip ${hasLidar ? "" : "chip-muted"} shrink-0`}>
+              {hasLidar ? "Tu dispositivo es compatible" : "Demo informativa"}
             </span>
           </div>
 
-          {hasLidar && (
-            <div className="rounded-lg bg-[color:var(--color-brand-50)] border border-[color:var(--color-brand-100)] p-4 mb-4">
-              <div className="flex items-start gap-3">
-                <span className="text-2xl">📱</span>
-                <div className="flex-1">
-                  <div className="font-semibold text-sm text-[color:var(--color-brand-700)]">Captura LiDAR desde tu iPhone Pro</div>
-                  <p className="text-xs text-[color:var(--color-fg-muted)] mt-1 leading-relaxed">
-                    iOS Safari no expone el sensor LiDAR a páginas web (no existe API). Usa Polycam (Universal Link
-                    abre la app si la tienes instalada) → exporta como <strong>.splat</strong> → vuelve aquí y suelta
-                    el archivo en la zona de Tour 3D.
-                  </p>
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    <a
-                      href="https://poly.cam"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="btn btn-primary text-xs !py-1.5 !px-3"
-                    >
-                      Abrir Polycam (LiDAR + Splat)
-                    </a>
-                    <a
-                      href="https://apps.apple.com/app/polycam-lidar-3d-scanner/id1532482376"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="btn btn-outline text-xs !py-1.5 !px-3"
-                    >
-                      Instalar Polycam
-                    </a>
-                    <a
-                      href="https://apps.apple.com/app/scaniverse-3d-scanner/id1541433223"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="btn btn-outline text-xs !py-1.5 !px-3"
-                    >
-                      Scaniverse
-                    </a>
-                    <a
-                      href="https://apps.apple.com/app/luma-ai/id6444919889"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="btn btn-outline text-xs !py-1.5 !px-3"
-                    >
-                      Luma AI
-                    </a>
-                  </div>
-                  <details className="mt-3 text-xs">
-                    <summary className="cursor-pointer text-[color:var(--color-fg-soft)] hover:text-[color:var(--color-fg)]">
-                      Próximamente: escaneo nativo Llave (App Clip + RoomPlan)
-                    </summary>
-                    <p className="mt-2 text-[color:var(--color-fg-muted)] leading-relaxed">
-                      Estamos construyendo un App Clip de Llave (10 MB, sin install) que abre con NFC o QR pegado al
-                      inmueble, escanea con LiDAR via Apple RoomPlan y vuelve directo a tu publicación. Sin terceros.
-                    </p>
-                  </details>
-                </div>
-              </div>
+          <div className="grid sm:grid-cols-4 gap-3 mt-2">
+            <StepCard
+              n={1}
+              title="Escaneo LiDAR"
+              body="Apuntas cada ambiente; el sensor mide profundidad real."
+            />
+            <StepCard
+              n={2}
+              title="Procesado Llave"
+              body="La nube genera mesh + Gaussian Splat optimizado para web."
+            />
+            <StepCard
+              n={3}
+              title="Storage seguro"
+              body="El tour se guarda como .ply / .splat en tu cuenta."
+            />
+            <StepCard
+              n={4}
+              title="Render embebido"
+              body="El inquilino recorre el inmueble desde el detalle, sin instalar nada."
+            />
+          </div>
+
+          <div className="mt-5 rounded-lg bg-white border border-[color:var(--color-border)] p-4 text-sm">
+            <div className="font-semibold text-[color:var(--color-fg)] mb-1">¿Por qué no se sube acá?</div>
+            <p className="text-[color:var(--color-fg-muted)] leading-relaxed">
+              iOS Safari no expone el sensor LiDAR a la web — no existe API. La captura requiere una app
+              nativa o un <strong>App Clip de Llave</strong> (10 MB, sin instalación, abre con QR o NFC pegado
+              al inmueble). Estamos integrando Apple RoomPlan para que el escaneo vuelva directo a tu
+              publicación sin terceros.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2 text-xs">
+              <span className="chip chip-muted">Apple RoomPlan</span>
+              <span className="chip chip-muted">Gaussian Splatting</span>
+              <span className="chip chip-muted">Apple App Clip</span>
+              <span className="chip chip-muted">Three.js + gsplat</span>
             </div>
-          )}
-          <input
-            ref={tourInputRef}
-            type="file"
-            accept=".splat,.ply,.usdz,.glb,.gltf,model/vnd.usdz+zip,model/gltf-binary,model/gltf+json"
-            className="hidden"
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) setTour3d({ name: f.name, size: f.size });
-              e.target.value = "";
-            }}
-          />
-          {tour3d ? (
-            <div className="flex items-center justify-between gap-3 p-3 rounded-lg bg-[color:var(--color-brand-50)] border border-[color:var(--color-brand-300)]">
-              <div>
-                <div className="font-medium text-sm">{tour3d.name}</div>
-                <div className="text-xs text-[color:var(--color-fg-muted)]">{(tour3d.size / 1024 / 1024).toFixed(1)} MB</div>
-              </div>
-              <button type="button" onClick={() => setTour3d(null)} className="btn btn-outline text-xs">Quitar</button>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => tourInputRef.current?.click()}
-              className="btn btn-outline"
-            >
-              Subir .splat / .ply / USDZ / GLB
-            </button>
-          )}
-          <p className="text-xs text-[color:var(--color-fg-soft)] mt-3">
-            ¿Cómo capturar? Para Gaussian Splat: <strong>Scaniverse</strong>, <strong>Polycam</strong>,
-            <strong>Luma AI</strong> o <strong>Postshot</strong> en cualquier teléfono (no hace falta LiDAR).
-            Para USDZ con LiDAR: <strong>Polycam</strong> o <strong>Reality Composer</strong> en iPhone Pro / iPad Pro.
-            Para GLB: <strong>RoomPlan</strong>.
+          </div>
+
+          <p className="text-[11px] text-[color:var(--color-fg-soft)] mt-4">
+            Inmuebles publicados ahora se publican sin tour 3D. Los tours del Loft Hackathon y el penthouse de
+            Altamira son ejemplos reales capturados con Polycam para mostrar el resultado final.
           </p>
         </section>
 
@@ -382,7 +329,6 @@ export function CaptacionForm() {
           <h3 className="font-display text-lg font-semibold mb-2">Checklist de captación</h3>
           <ul className="space-y-2 text-sm">
             <CheckItem ok={photos.length >= 3}>3+ fotos del inmueble</CheckItem>
-            <CheckItem ok={!!tour3d}>Tour 3D cargado</CheckItem>
             <CheckItem ok={amenities.size >= 2}>2+ amenities marcados</CheckItem>
             <CheckItem ok={true}>Datos completos del formulario</CheckItem>
           </ul>
@@ -416,5 +362,17 @@ function CheckItem({ ok, children }: { ok: boolean; children: React.ReactNode })
       </span>
       <span className={ok ? "" : "text-[color:var(--color-fg-soft)]"}>{children}</span>
     </li>
+  );
+}
+
+function StepCard({ n, title, body }: { n: number; title: string; body: string }) {
+  return (
+    <div className="rounded-lg bg-white border border-[color:var(--color-border)] p-3">
+      <div className="size-7 rounded-full bg-[color:var(--color-brand-500)] text-white text-xs font-bold grid place-items-center mb-2">
+        {n}
+      </div>
+      <div className="font-semibold text-sm leading-tight">{title}</div>
+      <div className="text-xs text-[color:var(--color-fg-muted)] mt-1 leading-relaxed">{body}</div>
+    </div>
   );
 }

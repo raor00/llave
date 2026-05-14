@@ -1,6 +1,15 @@
 "use client";
 
 import { motion } from "motion/react";
+import {
+  IconInstagram,
+  IconFacebook,
+  IconTikTok,
+  IconMeta,
+  IconAdsCampaign,
+  IconWhatsapp,
+  IconX,
+} from "@/components/social-icons";
 
 // Static CRM mockup used on the landing to show the asesor experience as a
 // complete platform: chat, leads, stats, social-network connections, ads.
@@ -38,8 +47,8 @@ export function CrmMockup() {
           <NavIcon icon="◉" label="Captación" />
           <NavIcon icon="✦" label="Publicar IA" />
           <NavIcon icon="◎" label="Leads" />
-          <NavIcon icon="📣" label="Ads" />
-          <NavIcon icon="📱" label="Redes" />
+          <NavIcon glyph={<IconMeta />} label="Ads" />
+          <NavIcon glyph={<IconInstagram />} label="Redes" />
           <div className="flex-1" />
           <NavIcon icon="⌘" label="Cmd+K" muted />
         </div>
@@ -93,9 +102,11 @@ export function CrmMockup() {
             <div className="rounded-lg bg-white/5 border border-white/5 p-3">
               <div className="text-[10px] uppercase tracking-wider text-white/40 mb-2">Redes conectadas</div>
               <ul className="space-y-1.5 text-[11px]">
-                <Social icon="◆" name="Instagram" reach="12.4k" />
-                <Social icon="◼" name="Facebook" reach="8.2k" />
-                <Social icon="●" name="TikTok" reach="3.1k" />
+                <Social glyph={<IconInstagram size={11} />} tint="text-[#f48fb1]" name="Instagram" reach="12.4k" />
+                <Social glyph={<IconFacebook size={11} />} tint="text-[#7eb6ff]" name="Facebook" reach="8.2k" />
+                <Social glyph={<IconTikTok size={11} />} tint="text-white" name="TikTok" reach="3.1k" />
+                <Social glyph={<IconWhatsapp size={11} />} tint="text-[#25d366]" name="WhatsApp" reach="1.9k" />
+                <Social glyph={<IconX size={10} />} tint="text-white/70" name="X" reach="630" />
               </ul>
             </div>
           </div>
@@ -103,12 +114,17 @@ export function CrmMockup() {
           {/* Ads */}
           <div className="rounded-lg bg-white/5 border border-white/5 p-3">
             <div className="flex items-center justify-between mb-2">
-              <div className="text-[10px] uppercase tracking-wider text-white/40">Campañas Meta Ads</div>
+              <div className="flex items-center gap-2">
+                <span className="size-5 rounded grid place-items-center bg-[#1877f2]/15 text-[#7eb6ff]">
+                  <IconMeta size={12} />
+                </span>
+                <span className="text-[10px] uppercase tracking-wider text-white/60">Campañas Meta Ads</span>
+              </div>
               <span className="text-[10px] text-[color:var(--color-accent)]">2 activas</span>
             </div>
             <ul className="space-y-1.5 text-[11px]">
-              <Campaign name="Penthouse Altamira" spend="$24" clicks="142" />
-              <Campaign name="Casa El Hatillo" spend="$11" clicks="67" />
+              <Campaign name="Penthouse Altamira" platform="instagram" spend="$24" clicks="142" />
+              <Campaign name="Casa El Hatillo" platform="facebook" spend="$11" clicks="67" />
             </ul>
           </div>
 
@@ -128,7 +144,19 @@ export function CrmMockup() {
   );
 }
 
-function NavIcon({ icon, label, active, muted }: { icon: string; label: string; active?: boolean; muted?: boolean }) {
+function NavIcon({
+  icon,
+  glyph,
+  label,
+  active,
+  muted,
+}: {
+  icon?: string;
+  glyph?: React.ReactNode;
+  label: string;
+  active?: boolean;
+  muted?: boolean;
+}) {
   return (
     <div
       className={`size-9 rounded-lg flex items-center justify-center text-base ${
@@ -140,7 +168,7 @@ function NavIcon({ icon, label, active, muted }: { icon: string; label: string; 
       }`}
       title={label}
     >
-      {icon}
+      {glyph ?? icon}
     </div>
   );
 }
@@ -172,11 +200,21 @@ function Lead({ name, status, tone }: { name: string; status: string; tone: "bra
   );
 }
 
-function Social({ icon, name, reach }: { icon: string; name: string; reach: string }) {
+function Social({
+  glyph,
+  tint,
+  name,
+  reach,
+}: {
+  glyph: React.ReactNode;
+  tint: string;
+  name: string;
+  reach: string;
+}) {
   return (
     <li className="flex items-center justify-between gap-2">
       <span className="flex items-center gap-2">
-        <span className="size-4 rounded grid place-items-center text-white/70 text-[10px] bg-white/10">{icon}</span>
+        <span className={`size-5 rounded grid place-items-center bg-white/10 ${tint}`}>{glyph}</span>
         <span className="text-white/90">{name}</span>
       </span>
       <span className="text-white/40 text-[10px]">{reach}</span>
@@ -184,11 +222,31 @@ function Social({ icon, name, reach }: { icon: string; name: string; reach: stri
   );
 }
 
-function Campaign({ name, spend, clicks }: { name: string; spend: string; clicks: string }) {
+function Campaign({
+  name,
+  platform,
+  spend,
+  clicks,
+}: {
+  name: string;
+  platform: "instagram" | "facebook";
+  spend: string;
+  clicks: string;
+}) {
+  const Icon = platform === "instagram" ? IconInstagram : IconFacebook;
+  const tint = platform === "instagram" ? "text-[#f48fb1]" : "text-[#7eb6ff]";
   return (
     <li className="flex items-center justify-between gap-2">
-      <span className="text-white/90 truncate">▣ {name}</span>
-      <span className="text-white/40 text-[10px] shrink-0">{spend} · {clicks} clicks</span>
+      <span className="flex items-center gap-2 min-w-0">
+        <span className={`size-5 rounded grid place-items-center bg-white/10 ${tint}`}>
+          <Icon size={11} />
+        </span>
+        <span className="text-white/90 truncate">{name}</span>
+      </span>
+      <span className="text-white/40 text-[10px] shrink-0 flex items-center gap-1">
+        <IconAdsCampaign size={10} />
+        {spend} · {clicks}
+      </span>
     </li>
   );
 }

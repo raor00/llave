@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "Llave — Alquilá hoy, sin meses adelantados";
+export const alt = "Llave — Alquila hoy, sin meses adelantados";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -92,7 +92,7 @@ export default async function OG() {
             letterSpacing: -2,
           }}
         >
-          <span>Alquilá hoy. Sin</span>
+          <span>Alquila hoy. Sin</span>
           <span
             style={{
               background:
@@ -116,7 +116,7 @@ export default async function OG() {
         >
           <div style={{ padding: "12px 22px", background: "#8a3722", color: "#faf8f3", borderRadius: 999, display: "flex", alignItems: "center", gap: 8 }}>
             <span>⚡</span>
-            <span>Alquilá hoy</span>
+            <span>Alquila hoy</span>
           </div>
           <div style={{ padding: "12px 22px", background: "#fbeee5", color: "#8a3722", borderRadius: 999, border: "1px solid #f7d9cb" }}>
             0 meses adelantados

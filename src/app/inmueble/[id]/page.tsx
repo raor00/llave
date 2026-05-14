@@ -1,10 +1,14 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getPropertyById, getOwnerProfile } from "@/lib/db/queries";
+import { recordPropertyView } from "@/lib/db/views";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { SUPABASE_ENABLED } from "@/lib/supabase/env";
 import { formatPropertyType, formatUSD } from "@/lib/format";
 import { Gallery } from "@/components/marketplace/gallery";
 import { Tour3D } from "@/components/marketplace/tour-3d";
 import { SplatViewer } from "@/components/marketplace/splat-viewer";
+import { MeshViewer } from "@/components/marketplace/mesh-viewer";
 
 export default async function PropertyDetailPage({
   params,
@@ -15,6 +19,24 @@ export default async function PropertyDetailPage({
   const property = await getPropertyById(id);
   if (!property) return notFound();
   const owner = await getOwnerProfile();
+
+  // Track the visit so propietario/asesor dashboards reflect demand and so
+  // Llavero can learn the inquilino's preferences over time.
+  let viewerId: string | null = null;
+  if (SUPABASE_ENABLED) {
+    const supa = await createSupabaseServerClient();
+    if (supa) {
+      const { data: { user } } = await supa.auth.getUser();
+      viewerId = user?.id ?? null;
+    }
+  }
+  void recordPropertyView({
+    propertyId: property.id,
+    viewerId,
+    city: property.city,
+    type: property.type,
+    priceUsd: property.price_usd,
+  });
 
   const gallery = property.gallery_urls.length
     ? property.gallery_urls
@@ -34,26 +56,33 @@ export default async function PropertyDetailPage({
 
       <div className="mt-4 grid lg:grid-cols-[1.4fr_1fr] gap-10">
         <div>
-          {/* Tour 3D primero — es el diferenciador de Llave */}
-          {property.splat_url && (
-            <div className="mb-6">
-              <div className="flex items-baseline justify-between mb-3">
-                <h2 className="font-display text-xl font-semibold">Tour 3D · Gaussian Splat</h2>
-                <span className="chip">Recorre el ambiente</span>
+          {(() => {
+            const tourUrl = property.splat_url ?? property.tour_3d_url;
+            if (!tourUrl) return null;
+            const lower = tourUrl.toLowerCase();
+            const isSplat = lower.endsWith(".splat");
+            const isPly = lower.endsWith(".ply");
+            const label = isSplat
+              ? "Tour 3D · Gaussian Splat"
+              : isPly
+                ? "Tour 3D · Mesh fotogramétrico"
+                : "Tour 3D";
+            return (
+              <div className="mb-6">
+                <div className="flex items-baseline justify-between mb-3">
+                  <h2 className="font-display text-xl font-semibold">{label}</h2>
+                  <span className="chip">Recorre el ambiente</span>
+                </div>
+                {isSplat ? (
+                  <SplatViewer url={tourUrl} title={property.title} />
+                ) : isPly ? (
+                  <MeshViewer url={tourUrl} title={property.title} />
+                ) : (
+                  <Tour3D url={tourUrl} title={property.title} />
+                )}
               </div>
-              <SplatViewer url={property.splat_url} title={property.title} />
-            </div>
-          )}
-
-          {property.tour_3d_url && !property.splat_url && (
-            <div className="mb-6">
-              <div className="flex items-baseline justify-between mb-3">
-                <h2 className="font-display text-xl font-semibold">Tour 3D</h2>
-                <span className="chip">Recorre el ambiente</span>
-              </div>
-              <Tour3D url={property.tour_3d_url} title={property.title} />
-            </div>
-          )}
+            );
+          })()}
 
           <Gallery images={gallery} title={property.title} />
 
