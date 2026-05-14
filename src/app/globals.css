@@ -79,7 +79,9 @@ html, body {
 .btn-outline { background: white; color: var(--color-fg); border-color: var(--color-border-strong); }
 .btn-outline:hover { background: var(--color-brand-50); border-color: var(--color-brand-300); }
 
-.card {
+/* `:where()` keeps specificity at 0 so Tailwind utilities like
+   `bg-[color:var(--color-brand-900)]` can override per-instance. */
+:where(.card) {
   background: var(--color-bg-elev);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);

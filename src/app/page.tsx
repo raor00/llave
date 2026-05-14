@@ -393,7 +393,10 @@ export default async function LandingPage() {
                 <li className="flex gap-2"><span className="text-[color:var(--color-brand-500)]">✓</span> Inspección periódica con reporte digital</li>
               </ul>
             </div>
-            <div className="card p-6 bg-[color:var(--color-brand-900)] text-white border-[color:var(--color-brand-900)]">
+            <div
+              className="rounded-[var(--radius-lg)] border border-[color:var(--color-brand-900)] shadow-[var(--shadow-card)] overflow-hidden p-6 text-white"
+              style={{ background: "var(--color-brand-900)" }}
+            >
               <div className="text-xs uppercase tracking-wider text-[color:var(--color-accent)] font-semibold mb-2">Para el inquilino</div>
               <h3 className="font-display text-lg font-semibold mb-2">Cero depósito retenido. Tu plata se queda contigo.</h3>
               <ul className="space-y-2 text-sm text-white/80">
