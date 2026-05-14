@@ -3,6 +3,7 @@ import { listAllProperties, listLeadsForOwner, getOwnerProfile } from "@/lib/db/
 import { getViewsByProperty } from "@/lib/db/views";
 import { buildAsesorAnalytics } from "@/lib/db/asesor-analytics";
 import { formatUSD, formatPropertyType } from "@/lib/format";
+import { PropertyRowActions } from "@/components/inmuebles/property-row-actions";
 
 export const dynamic = "force-dynamic";
 
@@ -68,7 +69,7 @@ export default async function AsesorInmueblesPage() {
               <th className="px-4 py-3 font-semibold">Conv.</th>
               <th className="px-4 py-3 font-semibold">Interés</th>
               <th className="px-4 py-3 font-semibold">Estado</th>
-              <th className="px-4 py-3"></th>
+              <th className="px-4 py-3 font-semibold">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -103,9 +104,7 @@ export default async function AsesorInmueblesPage() {
                   </td>
                   <td className="px-4 py-3"><span className="chip">{p.status}</span></td>
                   <td className="px-4 py-3 text-right">
-                    <Link href={`/inmueble/${p.id}`} className="text-[color:var(--color-brand-700)] hover:underline text-xs whitespace-nowrap">
-                      Ver →
-                    </Link>
+                    <PropertyRowActions propertyId={p.id} status={p.status} />
                   </td>
                 </tr>
               );

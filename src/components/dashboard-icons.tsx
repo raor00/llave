@@ -300,3 +300,39 @@ export function IconComment(props: IconProps) {
     </S>
   );
 }
+
+export function IconEdit(props: IconProps) {
+  return (
+    <S {...props}>
+      <path d="M4 20 H8 L18.5 9.5 A2.1 2.1 0 0 0 15.5 6.5 L5 17 Z" />
+      <path d="M13.5 8.5 L16.5 11.5" />
+    </S>
+  );
+}
+
+export function IconEye(props: IconProps) {
+  return (
+    <S {...props}>
+      <path d="M2.5 12 C5 7 8.5 5 12 5 C15.5 5 19 7 21.5 12 C19 17 15.5 19 12 19 C8.5 19 5 17 2.5 12 Z" />
+      <circle cx="12" cy="12" r="3" />
+    </S>
+  );
+}
+
+export function IconCheck(props: IconProps) {
+  return (
+    <S {...props}>
+      <path d="M5 12.5 L10 17.5 L19 6.5" />
+    </S>
+  );
+}
+
+export function IconDots(props: IconProps) {
+  return (
+    <S {...props}>
+      <circle cx="5" cy="12" r="1.4" fill="currentColor" />
+      <circle cx="12" cy="12" r="1.4" fill="currentColor" />
+      <circle cx="19" cy="12" r="1.4" fill="currentColor" />
+    </S>
+  );
+}

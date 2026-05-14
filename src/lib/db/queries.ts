@@ -208,6 +208,66 @@ export async function insertProperty(p: Partial<Property> & { owner_id: string; 
   return data as Property;
 }
 
+export async function updatePropertyStatus(
+  id: string,
+  status: Property["status"]
+): Promise<Property | null> {
+  const supa = await createSupabaseServerClient();
+  if (!supa || !SUPABASE_ENABLED) {
+    const found = DEMO_PROPERTIES.find((p) => p.id === id);
+    if (!found) return null;
+    found.status = status;
+    return found;
+  }
+  const { data, error } = await supa
+    .from("properties")
+    .update({ status })
+    .eq("id", id)
+    .select()
+    .single();
+  if (error || !data) return null;
+  return data as Property;
+}
+
+export async function updateProperty(
+  id: string,
+  patch: Partial<
+    Pick<
+      Property,
+      | "title"
+      | "description"
+      | "type"
+      | "price_usd"
+      | "city"
+      | "state"
+      | "address"
+      | "rooms"
+      | "bathrooms"
+      | "area_m2"
+      | "parking_spots"
+      | "amenities"
+      | "rules"
+      | "status"
+    >
+  >
+): Promise<Property | null> {
+  const supa = await createSupabaseServerClient();
+  if (!supa || !SUPABASE_ENABLED) {
+    const found = DEMO_PROPERTIES.find((p) => p.id === id);
+    if (!found) return null;
+    Object.assign(found, patch);
+    return found;
+  }
+  const { data, error } = await supa
+    .from("properties")
+    .update(patch)
+    .eq("id", id)
+    .select()
+    .single();
+  if (error || !data) return null;
+  return data as Property;
+}
+
 export async function getStatsForOwner() {
   const props = await listAllProperties();
   const leads = await listLeadsForOwner();
