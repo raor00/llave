@@ -144,15 +144,17 @@ export function CrmMockup() {
             </div>
             <div className="flex items-end justify-between gap-1.5 h-14">
               {TREND.map((h, i) => (
-                <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                  <motion.span
-                    initial={{ scaleY: 0, opacity: 0 }}
-                    whileInView={{ scaleY: 1, opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.5 + i * 0.07, duration: 0.5, ease: "easeOut" }}
-                    className="w-full origin-bottom rounded-sm bg-gradient-to-t from-[color:var(--color-brand-700)] to-[color:var(--color-accent)]"
-                    style={{ height: `${(h / 88) * 100}%` }}
-                  />
+                <div key={i} className="flex-1 flex flex-col items-center gap-1 h-full">
+                  <div className="flex-1 w-full flex items-end">
+                    <motion.span
+                      initial={{ scaleY: 0, opacity: 0 }}
+                      whileInView={{ scaleY: 1, opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.5 + i * 0.07, duration: 0.5, ease: "easeOut" }}
+                      className="w-full origin-bottom rounded-sm bg-gradient-to-t from-[color:var(--color-brand-700)] to-[color:var(--color-accent)]"
+                      style={{ height: `${(h / 88) * 100}%` }}
+                    />
+                  </div>
                   <span className="text-[8px] text-white/35">{TREND_DAYS[i]}</span>
                 </div>
               ))}
@@ -175,8 +177,8 @@ export function CrmMockup() {
             </div>
             <div className="flex items-end justify-between gap-2 h-20">
               {PERF.map((p, i) => (
-                <div key={p.m} className="flex-1 flex flex-col items-center gap-1">
-                  <div className="w-full flex items-end justify-center gap-0.5 h-full">
+                <div key={p.m} className="flex-1 flex flex-col items-center gap-1 h-full">
+                  <div className="flex-1 w-full flex items-end justify-center gap-0.5">
                     <motion.span
                       initial={{ scaleY: 0 }}
                       whileInView={{ scaleY: 1 }}
