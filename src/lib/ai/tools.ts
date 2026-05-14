@@ -9,6 +9,27 @@ import {
 import { DEMO_OWNER } from "@/lib/db/seed-data";
 import type { PropertySummary } from "@/lib/types";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import {
+  appendContract,
+  CONTRACTS_STORE,
+  DEMO_TENANTS,
+  getContractProgress,
+  listContractsForAsesor,
+  listContractsForOwner,
+  listContractsForTenant,
+  type FullContract,
+} from "@/lib/db/contracts";
+import {
+  buildContractDraft,
+  type ContractParty,
+} from "@/lib/ai/lrcav";
+import {
+  getBalanceForContract,
+  getBalanceForOwner,
+  listPaymentsForContract,
+  recordPayment as recordPaymentDb,
+  periodForCurrentMonth,
+} from "@/lib/db/payments";
 
 const propertyType = z.enum([
   "apartamento",
@@ -317,6 +338,223 @@ const setupMyProfileTool = tool({
   },
 });
 
+// ------------------------------------------------------------------
+// generateRentalContract — genera y persiste un contrato LRCAV
+// ------------------------------------------------------------------
+const generateRentalContractTool = tool({
+  description:
+    "Genera un contrato de arrendamiento bajo LRCAV venezolana para una propiedad existente, con las cláusulas legales base ya redactadas (sin inventar texto). Lo guarda en el store y devuelve el id + ruta del documento. Pide siempre cédula del inquilino y datos completos antes de llamar.",
+  inputSchema: z.object({
+    property_id: z.string().describe("UUID del inmueble"),
+    tenant_full_name: z.string().min(3).describe("Nombre completo del inquilino"),
+    tenant_cedula: z.string().min(5).describe("Cédula del inquilino (ej. V-18.234.567)"),
+    monthly_amount_usd: z
+      .number()
+      .optional()
+      .describe("Canon mensual en USD; si no se pasa usa el precio del inmueble"),
+    months_total: z.number().int().min(6).max(60).optional().default(12),
+    start_date: z
+      .string()
+      .optional()
+      .describe("Fecha de inicio ISO (YYYY-MM-DD). Por defecto hoy."),
+  }),
+  execute: async (args) => {
+    const property = await getPropertyById(args.property_id);
+    if (!property) {
+      return { ok: false, error: "No encontré ese inmueble en la base." };
+    }
+    const ownerParty: ContractParty = {
+      full_name: DEMO_OWNER.full_name ?? "Rafael Oviedo",
+      cedula: "V-12.345.678",
+      phone: DEMO_OWNER.phone ?? undefined,
+    };
+    const tenantParty: ContractParty = {
+      full_name: args.tenant_full_name,
+      cedula: args.tenant_cedula,
+    };
+    const monthly = args.monthly_amount_usd ?? property.price_usd;
+    const months = args.months_total ?? 12;
+    const startISO = args.start_date
+      ? new Date(args.start_date).toISOString()
+      : new Date().toISOString();
+
+    const draft = buildContractDraft({
+      owner: ownerParty,
+      tenant: tenantParty,
+      property,
+      monthlyAmount: monthly,
+      monthsTotal: months,
+      startDate: startISO,
+      depositMonths: 1,
+      currency: "USD",
+    });
+
+    const tenantId = `tenant-${draft.id.slice(-6)}`;
+    const contract: FullContract = {
+      id: draft.id,
+      property_id: property.id,
+      property,
+      tenant_id: tenantId,
+      owner_id: property.owner_id,
+      asesor_id: property.owner_id,
+      started_at: startISO,
+      months_total: months,
+      monthly_amount: monthly,
+      status: "activo",
+      tenant: tenantParty,
+      owner: ownerParty,
+      draft,
+    };
+    appendContract(contract);
+
+    return {
+      ok: true,
+      contract_id: contract.id,
+      parties_summary: `${ownerParty.full_name} → ${tenantParty.full_name}`,
+      property_title: property.title.replace(/^Llave:\s*/, ""),
+      monthly_amount: monthly,
+      months_total: months,
+      start_date: startISO,
+      end_date: draft.terms.end_date,
+      clauses_count: draft.clauses.length,
+      pdf_route: `/contrato/${contract.id}`,
+    };
+  },
+});
+
+// ------------------------------------------------------------------
+// listMyContracts — contratos visibles para un usuario+rol
+// ------------------------------------------------------------------
+const listMyContractsTool = tool({
+  description:
+    "Lista los contratos visibles para el usuario según su rol. El inquilino ve los propios; propietario y asesor ven los de su cartera. Devuelve resumen por contrato (inmueble, contraparte, mensual, estado, meses transcurridos/restantes, saldo).",
+  inputSchema: z.object({
+    role: z.enum(["tenant", "owner", "asesor"]),
+    user_id: z.string().optional().describe("Si no se pasa, usa el primer demo según rol"),
+  }),
+  execute: async ({ role, user_id }) => {
+    let contracts: FullContract[];
+    if (role === "tenant") {
+      const tid = user_id ?? DEMO_TENANTS[0].id;
+      contracts = listContractsForTenant(tid);
+      if (contracts.length === 0) contracts = CONTRACTS_STORE.filter((c) => c.tenant_id === DEMO_TENANTS[0].id);
+    } else if (role === "owner") {
+      const oid = user_id ?? DEMO_OWNER.id;
+      contracts = listContractsForOwner(oid);
+      if (contracts.length === 0) contracts = listContractsForOwner(DEMO_OWNER.id);
+    } else {
+      const aid = user_id ?? DEMO_OWNER.id;
+      contracts = listContractsForAsesor(aid);
+      if (contracts.length === 0) contracts = listContractsForAsesor(DEMO_OWNER.id);
+    }
+
+    const rows = contracts.map((c) => {
+      const progress = getContractProgress(c);
+      const balance = getBalanceForContract(c.id);
+      const counterpart =
+        role === "tenant" ? c.owner.full_name : c.tenant.full_name;
+      return {
+        id: c.id,
+        property_title: c.property?.title.replace(/^Llave:\s*/, "") ?? "Inmueble",
+        counterpart_name: counterpart,
+        monthly: c.monthly_amount,
+        status: c.status,
+        months_elapsed: progress.monthsElapsed,
+        months_remaining: progress.monthsRemaining,
+        months_total: c.months_total,
+        started_at: c.started_at,
+        pending_usd: balance.pending_usd,
+        pdf_route: `/contrato/${c.id}`,
+      };
+    });
+
+    return { count: rows.length, contracts: rows };
+  },
+});
+
+// ------------------------------------------------------------------
+// recordPayment — registra un pago en el contrato
+// ------------------------------------------------------------------
+const recordPaymentTool = tool({
+  description:
+    "Registra un pago de canon en un contrato. Útil para el inquilino que paga su mensualidad, o para el asesor/propietario que reconcilia un pago recibido por fuera. Devuelve nuevo saldo pendiente.",
+  inputSchema: z.object({
+    contract_id: z.string(),
+    amount_usd: z.number().positive(),
+    period: z
+      .string()
+      .regex(/^\d{4}-\d{2}$/, "Formato YYYY-MM")
+      .describe("Mes pagado, ej: 2026-05"),
+    method: z.enum([
+      "transferencia",
+      "pago_movil",
+      "zelle",
+      "efectivo",
+      "binance",
+    ]),
+  }),
+  execute: async (args) => {
+    const payment = recordPaymentDb({
+      contract_id: args.contract_id,
+      amount_usd: args.amount_usd,
+      period: args.period,
+      method: args.method,
+    });
+    if (!payment) {
+      return { ok: false, error: "No encontré ese contrato." };
+    }
+    const balance = getBalanceForContract(args.contract_id);
+    return {
+      ok: true,
+      payment_id: payment.id,
+      contract_id: args.contract_id,
+      status: payment.status,
+      method: payment.method,
+      period: payment.period,
+      new_balance_usd: balance.pending_usd,
+      months_paid: balance.months_paid,
+    };
+  },
+});
+
+// ------------------------------------------------------------------
+// getOwnerBalance — panel de cobros para propietario
+// ------------------------------------------------------------------
+const getOwnerBalanceTool = tool({
+  description:
+    "Trae el balance del propietario: total pendiente, total cobrado este año, y por contrato (inmueble, inquilino, mensual, pagado este mes, último pago, estado). Úsalo cuando el propietario pregunte por sus cobros.",
+  inputSchema: z.object({
+    owner_id: z.string().optional().describe("Si no se pasa, usa el DEMO_OWNER"),
+  }),
+  execute: async ({ owner_id }) => {
+    const oid = owner_id ?? DEMO_OWNER.id;
+    const totals = getBalanceForOwner(oid);
+    const contracts = listContractsForOwner(oid).map((c) => {
+      const balance = getBalanceForContract(c.id);
+      const period = periodForCurrentMonth();
+      const paidThisMonth = listPaymentsForContract(c.id)
+        .filter((p) => p.period === period)
+        .reduce((acc, p) => acc + p.amount_usd, 0);
+      return {
+        contract_id: c.id,
+        property_title: c.property?.title.replace(/^Llave:\s*/, "") ?? "Inmueble",
+        tenant_name: c.tenant.full_name,
+        monthly: c.monthly_amount,
+        paid_this_month: paidThisMonth,
+        last_payment_at: balance.last_payment_at,
+        pending_usd: balance.pending_usd,
+        status: balance.pending_usd > 0 ? "pendiente" : "al_dia",
+      };
+    });
+    return {
+      owner_id: oid,
+      total_pending_usd: totals.total_pending_usd,
+      total_paid_ytd_usd: totals.total_paid_ytd_usd,
+      contracts,
+    };
+  },
+});
+
 export const llaveroTools = {
   searchProperties: searchPropertiesTool,
   getPropertyDetail: getPropertyDetailTool,
@@ -326,6 +564,10 @@ export const llaveroTools = {
   createPropertyDraft: createPropertyDraftTool,
   suggestPrice: suggestPriceTool,
   setupMyProfile: setupMyProfileTool,
+  generateRentalContract: generateRentalContractTool,
+  listMyContracts: listMyContractsTool,
+  recordPayment: recordPaymentTool,
+  getOwnerBalance: getOwnerBalanceTool,
 };
 
 export type LlaveroToolName = keyof typeof llaveroTools;

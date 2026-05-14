@@ -241,3 +241,36 @@ export function IconDownload(props: IconProps) {
     </S>
   );
 }
+
+export function IconUpload(props: IconProps) {
+  return (
+    <S {...props}>
+      <path d="M12 17 V5" />
+      <path d="M7 9 L12 4 L17 9" />
+      <path d="M5 19 H19" />
+    </S>
+  );
+}
+
+export function IconFileText(props: IconProps) {
+  return (
+    <S {...props}>
+      <path d="M6 3 H14 L19 8 V21 H6 Z" />
+      <path d="M14 3 V8 H19" />
+      <path d="M9 12 H16" />
+      <path d="M9 16 H16" />
+      <path d="M9 8 H11" />
+    </S>
+  );
+}
+
+export function IconPrint(props: IconProps) {
+  return (
+    <S {...props}>
+      <path d="M7 9 V3 H17 V9" />
+      <rect x="4" y="9" width="16" height="8" rx="1.5" />
+      <rect x="7" y="14" width="10" height="6" />
+      <circle cx="17" cy="12" r="0.6" fill="currentColor" />
+    </S>
+  );
+}
