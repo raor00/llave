@@ -39,7 +39,7 @@ const NAV: NavItem[] = [
   { href: "/propietario/pagos", label: "Pagos", icon: IconCash, group: "Operación" },
   { href: "/propietario/contratos", label: "Contratos", icon: IconFileText, group: "Cartera" },
   { href: "/propietario/documentos", label: "Documentos", icon: IconDocument, group: "Cartera" },
-  { href: "/asesor/captacion", label: "Mis inmuebles", icon: IconProperties, group: "Cartera" },
+  { href: "/propietario/inmuebles", label: "Mis inmuebles", icon: IconProperties, group: "Cartera" },
   { href: "/propietario/reportes", label: "Reportes", icon: IconReport, group: "Cuenta" },
   { href: "/propietario/configuracion", label: "Configuración", icon: IconSettings, group: "Cuenta" },
 ];
