@@ -21,7 +21,30 @@ Good luck 🍌🚀
 
 # Llave — Alquila en 24 horas. Sin papeles que no tienes.
 
-Plataforma venezolana de alquileres con `Llavero`, un agente IA construido sobre Claude que acepta a quien el modelo tradicional excluye: trabajadores informales, freelancers, estudiantes y la diáspora venezolana.
+<p align="left">
+  <img alt="Platanus Build Night" src="https://img.shields.io/badge/Platanus%20Build%20Night-ft.%20Anthropic-c4513a?style=for-the-badge&labelColor=4a1e13&logo=anthropic&logoColor=white" />
+  <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=next.js&logoColor=white" />
+  <img alt="React 19" src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=000000" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
+  <br/>
+  <img alt="Claude Sonnet 4.5" src="https://img.shields.io/badge/Powered%20by-Claude%20Sonnet%204.5-D97757?style=for-the-badge&logo=anthropic&logoColor=white" />
+  <img alt="AI SDK v6" src="https://img.shields.io/badge/Vercel%20AI%20SDK-v6-000000?style=for-the-badge&logo=vercel&logoColor=white" />
+  <img alt="Tools" src="https://img.shields.io/badge/AI%20tools-8%20Zod--typed-8a3722?style=for-the-badge" />
+  <br/>
+  <img alt="Supabase" src="https://img.shields.io/badge/Database-Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white" />
+  <img alt="Tailwind v4" src="https://img.shields.io/badge/Tailwind-v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
+  <img alt="Vercel" src="https://img.shields.io/badge/Deploy-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" />
+  <br/>
+  <img alt="Tour 3D" src="https://img.shields.io/badge/Tour%203D-Gaussian%20Splat%20%2B%20USDZ-c4513a?style=for-the-badge" />
+  <img alt="Mapa Diáspora" src="https://img.shields.io/badge/Mapa-Di%C3%A1spora%20VE-8a3722?style=for-the-badge" />
+  <img alt="Garantía 360" src="https://img.shields.io/badge/Garant%C3%ADa-Llave%20360%C2%B0-c4513a?style=for-the-badge" />
+  <br/>
+  <img alt="Vitest" src="https://img.shields.io/badge/Vitest-29%20tests-6E9F18?style=for-the-badge&logo=vitest&logoColor=white" />
+  <img alt="MIT" src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
+  <img alt="Hecho en Venezuela" src="https://img.shields.io/badge/Hecho%20en-Venezuela%20%F0%9F%87%BB%F0%9F%87%AA-FCE300?style=for-the-badge&labelColor=CE1126" />
+</p>
+
+Plataforma venezolana de alquileres con **Llavero**, un agente IA construido sobre Claude Sonnet 4.5 que acepta a quien el modelo tradicional excluye: trabajadores informales, freelancers, estudiantes y la diáspora venezolana.
 
 🌐 **Demo en vivo**: <https://llave-ruby.vercel.app>
 
@@ -33,10 +56,14 @@ Otros prometen "sin meses adelantados" pero en la letra chica piden RIF, constan
 
 - **Solo cédula** para alquilar — sin RIF, sin constancia de trabajo, sin movimientos bancarios.
 - **24 a 48 horas** desde el primer chat hasta las llaves en mano (vs 1-2 semanas de la competencia).
+- **Cero depósito al inquilino · Garantía Llave 360°** — Llave asume la garantía con un sistema de 5 capas (verificación previa, protocolo firmado, fondo Llave, gestión SUNAVI, supervisión semestral). El propietario duerme tranquilo, el inquilino entra sin barreras.
 - **Trust Score progresivo** — tu reputación se construye pagando, no presentando papeles. Exportable como credencial verificable para banca futura.
-- **Tour 3D Gaussian Splat** — recorré el inmueble desde Madrid, Bogotá, Buenos Aires o Miami antes de tomar un vuelo.
-- **Llavero IA** — un agente que entiende contexto, no formularios.
-- **CRM unificado** para asesores — captación móvil con cámara, publicación con IA, leads pre-calificados, redes sociales y Meta Ads en un panel.
+- **Tour 3D Gaussian Splat + USDZ AR** — recorre el inmueble desde Madrid, Bogotá, Buenos Aires o Miami antes de tomar un vuelo. En iPhone, AR Quick Look directo.
+- **Llavero IA** — agente con 8 tools que entiende contexto, no formularios. Modo voz nativo. Onboarding conversacional.
+- **CRM unificado** para asesores — captación móvil con cámara, publicación con IA, leads pre-calificados, redes sociales y Meta Ads en un panel + comando Cmd+K.
+- **Mapa interactivo de la diáspora** — 10 ciudades con marcadores animados, líneas terracota desde Caracas.
+- **Login con contraseña o magic link + OTP** — el código del email funciona aunque tu browser haga prefetch del link.
+- **Role switcher demo** — desde el menú del usuario podes saltar entre vistas de inquilino, asesor y propietario con la misma cuenta.
 
 ## Documentación
 
@@ -47,7 +74,7 @@ Toda la documentación detallada vive en [`docs/`](./docs/README.md):
 - [Desarrollo](./docs/development.md) · [Testing](./docs/testing.md) · [Deployment](./docs/deployment.md)
 - [Seguridad](./docs/security.md) · [Roadmap](./docs/roadmap.md)
 - [Anatomía del logo](./docs/logo-anatomy.md) · [Estrategia de marca](./docs/brand-strategy.md)
-- [Workflow de captura 3D](./docs/3d-capture-workflow.md) · [Testing manual](./docs/testing-flow.md)
+- [Workflow de captura 3D](./docs/3d-capture-workflow.md) · [LiDAR roadmap](./docs/lidar-roadmap.md) · [Testing manual](./docs/testing-flow.md)
 - [Handoff prompt para retomar](./docs/handoff-prompt.md)
 
 Para contributors (humanos o agentes): `.claude/skills/llave/SKILL.md` se carga automáticamente y trae el contrato completo del proyecto. Además [`AGENTS.md`](./AGENTS.md) es el punto de entrada agnóstico para cualquier asistente IA (Claude Code, Codex, Cursor, Gemini CLI, OpenCode).
@@ -55,12 +82,14 @@ Para contributors (humanos o agentes): `.claude/skills/llave/SKILL.md` se carga 
 ## Stack
 
 - Next.js 16 App Router + Turbopack + React 19 + TypeScript strict
-- Vercel AI SDK v6 + `@ai-sdk/anthropic` (Claude Sonnet 4.5)
-- Supabase SSR (Postgres + RLS + Storage) con seed in-memory fallback
+- Vercel AI SDK v6 + `@ai-sdk/anthropic` (Claude Sonnet 4.5) con 8 tools Zod-tipadas
+- Supabase SSR (Auth + Postgres + RLS + Storage) con seed in-memory fallback
 - Tailwind v4 (terracota caribeño `#c4513a`)
 - React Three Fiber + drei (escenas 3D)
-- gsplat (Gaussian Splat viewer, tipo SuperSplat) + Maplibre (mapa) + `<model-viewer>` (USDZ/GLB)
+- gsplat (Gaussian Splat viewer, tipo SuperSplat) + `<model-viewer>` (USDZ/GLB) + three.js PLYLoader (mesh) + Maplibre (mapa)
+- react-simple-maps + Natural Earth topojson (mapa diáspora animado)
 - Motion (Framer Motion v12) — animaciones scroll-driven en la landing
+- react-markdown + remark-gfm — render de respuestas Llavero
 - Web Speech API — modo voz nativo en `/chat`
 - Vitest + happy-dom — 29 aserciones
 
