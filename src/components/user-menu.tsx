@@ -29,6 +29,12 @@ const ROLE_LABEL: Record<Role, string> = {
   propietario: "Propietario",
 };
 
+const ROLE_SHORT: Record<Role, string> = {
+  inquilino: "Inq",
+  asesor: "Ase",
+  propietario: "Pro",
+};
+
 const ROLE_HOME: Record<Role, string> = {
   inquilino: "/inquilino",
   asesor: "/asesor",
@@ -76,11 +82,11 @@ export function UserMenu({
 
   function handleSwitch(nextRole: Role) {
     if (nextRole === activeRole || pending) return;
-    setActiveRole(nextRole); // optimistic UI: chip + active button flip instantly
+    setActiveRole(nextRole);
     startTransition(async () => {
       const res = await switchRoleAction(nextRole);
       if (!res?.ok) {
-        setActiveRole(role); // rollback
+        setActiveRole(role);
         return;
       }
       router.push(res.home);
@@ -94,61 +100,57 @@ export function UserMenu({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-2 rounded-full pl-1 pr-3 py-1 hover:bg-[color:var(--color-bg)] transition border border-[color:var(--color-border)]"
+        className="flex items-center gap-2 rounded-full pl-1 pr-2.5 py-1 hover:bg-[color:var(--color-bg)] transition border border-[color:var(--color-border)]"
         aria-haspopup="menu"
         aria-expanded={open}
       >
-        <span className="size-8 rounded-full bg-[color:var(--color-brand-500)] text-white text-xs font-bold flex items-center justify-center">
+        <span className="size-7 rounded-full bg-[color:var(--color-brand-500)] text-white text-[11px] font-bold flex items-center justify-center">
           {initials || "L"}
         </span>
-        <span className="hidden md:block text-sm font-medium text-[color:var(--color-fg)]">
+        <span className="hidden md:block text-sm font-medium text-[color:var(--color-fg)] max-w-[7rem] truncate">
           {fullName?.split(" ")[0] ?? "Mi Llave"}
         </span>
-        <IconChevronDown size={14} className="text-[color:var(--color-fg-soft)]" />
+        <IconChevronDown size={12} className="text-[color:var(--color-fg-soft)]" />
       </button>
 
       {open && (
         <div
           role="menu"
-          className="absolute right-0 mt-2 w-72 rounded-[var(--radius-lg)] border border-[color:var(--color-border)] bg-white shadow-[var(--shadow-pop)] overflow-hidden z-50"
+          className="absolute right-0 mt-2 w-[18rem] rounded-[var(--radius-lg)] border border-[color:var(--color-border)] bg-white shadow-[var(--shadow-pop)] overflow-hidden z-50"
         >
-          {/* Identidad */}
-          <div className="px-4 py-3 border-b border-[color:var(--color-border)]">
-            <div className="text-sm font-semibold text-[color:var(--color-fg)] truncate">
-              {fullName ?? "Sin nombre"}
-            </div>
-            <div className="text-xs text-[color:var(--color-fg-soft)] truncate">{email}</div>
-            <div className="mt-2 inline-flex items-center gap-2 text-xs">
-              <span className="chip">{ROLE_LABEL[activeRole]}</span>
-              <span className="text-[color:var(--color-fg-soft)]">rol activo</span>
+          {/* Identidad compacta */}
+          <div className="px-3 py-3 flex items-center gap-3 border-b border-[color:var(--color-border)]">
+            <span className="size-10 rounded-full bg-[color:var(--color-brand-500)] text-white text-sm font-bold flex items-center justify-center shrink-0">
+              {initials || "L"}
+            </span>
+            <div className="min-w-0 flex-1">
+              <div className="text-sm font-semibold text-[color:var(--color-fg)] truncate leading-tight">
+                {fullName ?? "Sin nombre"}
+              </div>
+              <div className="text-[11px] text-[color:var(--color-fg-soft)] truncate leading-tight">{email}</div>
+              <span className="inline-flex items-center gap-1 mt-1 text-[10px] uppercase tracking-wider text-[color:var(--color-brand-700)] font-semibold px-1.5 py-0.5 rounded bg-[color:var(--color-brand-100)]">
+                {ROLE_LABEL[activeRole]}
+              </span>
             </div>
           </div>
 
-          {/* Atajos */}
-          <div className="py-1 text-sm">
-            <MenuLink href={ROLE_HOME[activeRole]} onClick={() => setOpen(false)} icon={<IconHome />}>
-              Ir a Mi Llave
-            </MenuLink>
-            <MenuLink href="/buscar" onClick={() => setOpen(false)} icon={<IconBuildings />}>
-              Ver inmuebles
-            </MenuLink>
-            <MenuLink href="/chat" onClick={() => setOpen(false)} icon={<IconKey />}>
-              Hablar con Llavero
-            </MenuLink>
-            <MenuLink href="/onboarding?edit=1" onClick={() => setOpen(false)} icon={<IconPencil />}>
-              Editar perfil
-            </MenuLink>
+          {/* Atajos en grid 2x2 */}
+          <div className="grid grid-cols-2 gap-1 p-2">
+            <ShortcutCell href={ROLE_HOME[activeRole]} onClick={() => setOpen(false)} icon={<IconHome size={16} />} label="Dashboard" />
+            <ShortcutCell href="/buscar" onClick={() => setOpen(false)} icon={<IconBuildings size={16} />} label="Inmuebles" />
+            <ShortcutCell href="/chat" onClick={() => setOpen(false)} icon={<IconKey size={16} />} label="Llavero" />
+            <ShortcutCell href="/onboarding?edit=1" onClick={() => setOpen(false)} icon={<IconPencil size={16} />} label="Editar perfil" />
           </div>
 
-          {/* Role switcher demo */}
-          <div className="border-t border-[color:var(--color-border)] px-4 py-3 bg-[color:var(--color-brand-50)]">
-            <div className="text-xs uppercase tracking-wider text-[color:var(--color-brand-700)] font-semibold mb-2">
-              Vista de demo
+          {/* Role switcher compacto */}
+          <div className="border-t border-[color:var(--color-border)] px-3 py-2 bg-[color:var(--color-brand-50)]">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[10px] uppercase tracking-wider text-[color:var(--color-brand-700)] font-semibold">
+                Vista demo
+              </span>
+              {pending && <span className="text-[9px] text-[color:var(--color-fg-soft)]">cambiando…</span>}
             </div>
-            <p className="text-[10px] text-[color:var(--color-fg-muted)] leading-snug mb-2">
-              Cambia entre roles para ver cada interfaz con la misma cuenta.
-            </p>
-            <div className="grid grid-cols-3 gap-1.5">
+            <div className="grid grid-cols-3 gap-1">
               {(["inquilino", "asesor", "propietario"] as Role[]).map((r) => {
                 const active = r === activeRole;
                 return (
@@ -158,35 +160,38 @@ export function UserMenu({
                     onClick={() => handleSwitch(r)}
                     disabled={active || pending}
                     aria-pressed={active}
-                    className={`w-full rounded-md px-2 py-1.5 text-[11px] font-semibold border transition ${
+                    title={ROLE_LABEL[r]}
+                    className={`rounded px-1.5 py-1 text-[10px] font-bold uppercase tracking-wider border transition ${
                       active
                         ? "bg-[color:var(--color-brand-500)] text-white border-[color:var(--color-brand-500)] cursor-default"
                         : "bg-white text-[color:var(--color-fg)] border-[color:var(--color-border-strong)] hover:border-[color:var(--color-brand-500)] hover:text-[color:var(--color-brand-700)]"
                     } ${pending && !active ? "opacity-60" : ""}`}
                   >
-                    {ROLE_LABEL[r]}
+                    <span className="sm:hidden">{ROLE_SHORT[r]}</span>
+                    <span className="hidden sm:inline">{ROLE_LABEL[r]}</span>
                   </button>
                 );
               })}
             </div>
           </div>
 
-          {/* Redes / Meta Ads del asesor — visible para todos los roles porque
-              en el demo cualquiera puede activar la vista asesor. */}
-          <div className="border-t border-[color:var(--color-border)] px-4 py-3">
-            <div className="text-xs uppercase tracking-wider text-[color:var(--color-fg-soft)] font-semibold mb-2">
-              Redes conectadas
+          {/* Redes en una línea */}
+          <div className="border-t border-[color:var(--color-border)] px-3 py-2 flex items-center justify-between">
+            <div className="flex items-center gap-1">
+              <SocialBtn label="Instagram" tint="text-[#e1306c]"><IconInstagram size={12} /></SocialBtn>
+              <SocialBtn label="Facebook" tint="text-[#1877f2]"><IconFacebook size={12} /></SocialBtn>
+              <SocialBtn label="TikTok" tint="text-[color:var(--color-fg)]"><IconTikTok size={12} /></SocialBtn>
+              <SocialBtn label="WhatsApp" tint="text-[#25d366]"><IconWhatsapp size={12} /></SocialBtn>
+              <SocialBtn label="X" tint="text-[color:var(--color-fg)]"><IconX size={11} /></SocialBtn>
+              <SocialBtn label="Meta Ads" tint="text-[#1877f2]"><IconMeta size={12} /></SocialBtn>
             </div>
-            <div className="flex items-center gap-2">
-              <SocialBtn label="Instagram" tint="text-[#e1306c]"><IconInstagram size={14} /></SocialBtn>
-              <SocialBtn label="Facebook" tint="text-[#1877f2]"><IconFacebook size={14} /></SocialBtn>
-              <SocialBtn label="TikTok" tint="text-[color:var(--color-fg)]"><IconTikTok size={14} /></SocialBtn>
-              <SocialBtn label="WhatsApp" tint="text-[#25d366]"><IconWhatsapp size={14} /></SocialBtn>
-              <SocialBtn label="X" tint="text-[color:var(--color-fg)]"><IconX size={12} /></SocialBtn>
-              <SocialBtn label="Meta Ads" tint="text-[#1877f2]"><IconMeta size={14} /></SocialBtn>
-            </div>
-            <Link href="/asesor" onClick={() => setOpen(false)} className="text-[11px] text-[color:var(--color-brand-700)] hover:underline mt-2 inline-block">
-              Configurar campañas →
+            <Link
+              href="/asesor"
+              onClick={() => setOpen(false)}
+              className="text-[10px] text-[color:var(--color-brand-700)] hover:underline font-semibold"
+              title="Configurar campañas"
+            >
+              Ads →
             </Link>
           </div>
 
@@ -194,9 +199,9 @@ export function UserMenu({
           <form action={signOutAction} className="border-t border-[color:var(--color-border)]">
             <button
               type="submit"
-              className="w-full text-left px-4 py-2.5 text-sm text-[color:var(--color-danger)] hover:bg-[color:var(--color-bg)] flex items-center gap-3"
+              className="w-full text-left px-3 py-2 text-xs font-semibold text-[color:var(--color-danger)] hover:bg-[color:var(--color-bg)] flex items-center gap-2"
             >
-              <IconLogout size={18} />
+              <IconLogout size={14} />
               Cerrar sesión
             </button>
           </form>
@@ -206,25 +211,27 @@ export function UserMenu({
   );
 }
 
-function MenuLink({
+function ShortcutCell({
   href,
   onClick,
   icon,
-  children,
+  label,
 }: {
   href: string;
   onClick: () => void;
   icon: React.ReactNode;
-  children: React.ReactNode;
+  label: string;
 }) {
   return (
     <Link
       href={href}
       onClick={onClick}
-      className="flex items-center gap-3 px-4 py-2 text-[color:var(--color-fg)] hover:bg-[color:var(--color-brand-50)] transition"
+      className="flex items-center gap-2 rounded-md px-2 py-2 text-xs font-medium text-[color:var(--color-fg)] hover:bg-[color:var(--color-brand-50)] transition border border-transparent hover:border-[color:var(--color-brand-100)]"
     >
-      <span className="size-5 text-[color:var(--color-brand-700)] grid place-items-center">{icon}</span>
-      <span>{children}</span>
+      <span className="size-6 rounded-md bg-[color:var(--color-brand-50)] text-[color:var(--color-brand-700)] grid place-items-center">
+        {icon}
+      </span>
+      <span className="truncate">{label}</span>
     </Link>
   );
 }
@@ -241,7 +248,7 @@ function SocialBtn({
   return (
     <span
       title={label}
-      className={`size-7 rounded-md grid place-items-center bg-[color:var(--color-bg)] border border-[color:var(--color-border)] ${tint}`}
+      className={`size-6 rounded grid place-items-center bg-[color:var(--color-bg)] border border-[color:var(--color-border)] ${tint}`}
     >
       {children}
     </span>
