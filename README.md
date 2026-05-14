@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./public/brand/banner.svg" alt="Llave — Alquilar sin meses adelantados" width="100%" />
+  <img src="./public/brand/banner.png" alt="Llave — Alquilar sin meses adelantados" width="100%" />
 </p>
 
 # Llave — Alquilar sin meses adelantados

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Hero3DWrapper } from "@/components/landing/hero-3d-wrapper";
+import Image from "next/image";
 import { listAllProperties } from "@/lib/db/queries";
 import { PropertyCard } from "@/components/marketplace/property-card";
 
@@ -16,39 +16,44 @@ export default async function LandingPage() {
         <div className="absolute inset-0 -z-10">
           <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--color-brand-50)] via-transparent to-transparent" />
           <div className="absolute -top-32 -right-24 size-[520px] rounded-full bg-[color:var(--color-brand-100)] blur-3xl opacity-50" />
-          <div className="absolute top-20 -left-20 size-[420px] rounded-full bg-[color:var(--color-accent)] blur-3xl opacity-20" />
         </div>
-        <div className="container-x grid lg:grid-cols-2 gap-10 items-center pt-16 pb-24 md:pt-24 md:pb-32 min-h-[88vh]">
-          <div>
-            <span className="chip mb-5">
-              <span className="size-1.5 rounded-full bg-[color:var(--color-brand-500)]" />
-              Hecho para Venezuela
-            </span>
-            <h1 className="font-display text-5xl md:text-7xl font-extrabold leading-[1.02] tracking-tight">
-              Alquilá hoy. <span className="gradient-text">Sin meses adelantados</span>.
-            </h1>
-            <p className="mt-6 text-lg md:text-xl text-[color:var(--color-fg-muted)] max-w-xl leading-relaxed">
-              Llave conecta a inquilinos con propietarios reales y elimina la fricción del modelo tradicional.
-              Pagás un solo mes para entrar, depósito reducido y reembolsable, y tenés a{" "}
-              <strong className="text-[color:var(--color-fg)]">Llavero</strong>, un agente IA, ayudándote a encontrar tu próxima casa.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/chat" className="btn btn-primary px-6 py-3 text-base">
-                Hablá con Llavero
-              </Link>
-              <Link href="/buscar" className="btn btn-outline px-6 py-3 text-base">
-                Ver inmuebles
-              </Link>
+        <div className="container-x pt-12 pb-20 md:pt-16 md:pb-28">
+          <div className="relative w-full overflow-hidden rounded-[var(--radius-2xl)] shadow-[var(--shadow-pop)] border border-[color:var(--color-border)] bg-[color:var(--color-bg-elev)]">
+            <Image
+              src="/brand/hero.png"
+              alt="Llave — Alquilá hoy, sin meses adelantados. Llavero IA te encuentra el inmueble ideal."
+              width={1774}
+              height={887}
+              priority
+              className="w-full h-auto"
+            />
+          </div>
+
+          <div className="mt-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="max-w-xl">
+              <p className="text-lg md:text-xl text-[color:var(--color-fg-muted)] leading-relaxed">
+                Llave conecta a inquilinos con propietarios reales y elimina la fricción del modelo tradicional.
+                Pagás un solo mes para entrar, depósito reducido y reembolsable, y tenés a{" "}
+                <strong className="text-[color:var(--color-fg)]">Llavero</strong>, un agente IA, ayudándote a encontrar tu próxima casa.
+              </p>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link href="/buscar" className="btn btn-primary px-6 py-3 text-base">
+                  Ver Llave
+                </Link>
+                <Link href="/login" className="btn btn-outline px-6 py-3 text-base">
+                  Mi Llave · CRM
+                </Link>
+                <Link href="/chat" className="btn btn-ghost px-6 py-3 text-base">
+                  Hablá con Llavero
+                </Link>
+              </div>
             </div>
-            <div className="mt-10 grid grid-cols-4 gap-5 max-w-xl">
+            <div className="grid grid-cols-4 gap-5 md:max-w-md flex-shrink-0">
               <Stat number="Hoy" label="te mudás" />
               <Stat number="0" label="meses adelantados" />
               <Stat number="1" label="depósito máx." />
               <Stat number="100%" label="reembolsable" />
             </div>
-          </div>
-          <div className="relative aspect-square w-full max-w-[560px] mx-auto">
-            <Hero3DWrapper />
           </div>
         </div>
       </section>
@@ -142,7 +147,7 @@ export default async function LandingPage() {
       </section>
 
       {/* AGENTE */}
-      <section className="section">
+      <section id="llavero" className="section">
         <div className="container-x grid md:grid-cols-2 gap-10 items-center">
           <div>
             <span className="chip mb-4">Llavero IA</span>
@@ -182,6 +187,60 @@ export default async function LandingPage() {
               <strong> Apto en Las Mercedes ($280)</strong> es más amplio (2 hab, 85m²) con seguridad 24/7. <strong>Catia ($150)</strong> si el presupuesto es justo.
               ¿Cuál te ronda?
             </ChatBubble>
+          </div>
+        </div>
+      </section>
+
+      {/* ASESORES */}
+      <section id="asesores" className="section bg-[color:var(--color-brand-900)] text-white">
+        <div className="container-x grid md:grid-cols-[1.2fr_1fr] gap-12 items-center">
+          <div>
+            <span className="chip bg-white/10 text-white border-white/20 mb-4">Para asesores y propietarios</span>
+            <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight">
+              Un CRM que <span className="text-[color:var(--color-accent)]">trabaja con vos</span>, no contra vos.
+            </h2>
+            <p className="mt-5 text-lg text-white/80 max-w-xl">
+              Captás un inmueble desde el teléfono con la cámara, lo publicás con ayuda de Llavero,
+              recibís leads pre-calificados y los gestionás desde un solo panel. Cmd+K para volar
+              entre secciones.
+            </p>
+            <ul className="mt-6 space-y-2 text-white/90">
+              <li className="flex items-center gap-2"><span className="text-[color:var(--color-accent)]">▣</span> Dashboard con stats reales</li>
+              <li className="flex items-center gap-2"><span className="text-[color:var(--color-accent)]">◉</span> Captación con cámara + tour 3D Gaussian Splat</li>
+              <li className="flex items-center gap-2"><span className="text-[color:var(--color-accent)]">✦</span> Publicación asistida por IA</li>
+              <li className="flex items-center gap-2"><span className="text-[color:var(--color-accent)]">◎</span> Leads con resumen del agente</li>
+            </ul>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link href="/login" className="btn btn-primary bg-[color:var(--color-accent)] !text-[color:var(--color-brand-900)] hover:opacity-90 px-6 py-3 text-base">
+                Mi Llave · Ingresar
+              </Link>
+              <Link href="/asesor" className="btn btn-outline border-white/40 text-white hover:bg-white/10 px-6 py-3 text-base">
+                Ver demo del CRM
+              </Link>
+            </div>
+          </div>
+          <div className="card p-5 bg-white/5 border-white/10 backdrop-blur">
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="rounded-lg bg-white/10 p-4">
+                <div className="text-white/60 text-xs uppercase tracking-wide">Inmuebles activos</div>
+                <div className="font-display text-2xl font-bold text-white mt-1">17</div>
+              </div>
+              <div className="rounded-lg bg-white/10 p-4">
+                <div className="text-white/60 text-xs uppercase tracking-wide">Leads del mes</div>
+                <div className="font-display text-2xl font-bold text-white mt-1">2</div>
+              </div>
+              <div className="rounded-lg bg-white/10 p-4">
+                <div className="text-white/60 text-xs uppercase tracking-wide">Tasa agendado</div>
+                <div className="font-display text-2xl font-bold text-white mt-1">50%</div>
+              </div>
+              <div className="rounded-lg bg-white/10 p-4">
+                <div className="text-white/60 text-xs uppercase tracking-wide">Portafolio</div>
+                <div className="font-display text-2xl font-bold text-white mt-1">$5.6k</div>
+              </div>
+            </div>
+            <div className="mt-4 rounded-lg bg-[color:var(--color-accent)]/10 border border-[color:var(--color-accent)]/30 p-3 text-xs text-white/90">
+              Datos en vivo desde el seed. Conectado a Supabase pasa a producción real.
+            </div>
           </div>
         </div>
       </section>

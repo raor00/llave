@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LlaveLogo } from "@/components/llave-logo";
 
 const NAV = [
   { href: "/asesor", label: "Dashboard", icon: "▣" },
@@ -16,7 +15,8 @@ export function AsesorSidebar() {
   return (
     <aside className="hidden lg:flex flex-col w-60 shrink-0 border-r border-[color:var(--color-border)] bg-white sticky top-0 h-screen p-5">
       <Link href="/asesor" className="flex items-center gap-2 font-display text-xl font-bold mb-8">
-        <LlaveLogo className="size-7 text-[color:var(--color-brand-700)]" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/brand/logo.png" alt="Llave" className="size-8" />
         <span>Llave · Asesor</span>
       </Link>
       <nav className="flex-1 space-y-1">
