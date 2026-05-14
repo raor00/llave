@@ -40,6 +40,7 @@ const PUBLIC_NAV = [
   { href: "/#manifiesto", label: "Manifiesto" },
   { href: "/#llavero", label: "Llavero IA" },
   { href: "/#asesores", label: "Para asesores" },
+  { href: "/presentacion", label: "Presentación" },
 ];
 
 const ROLE_NAV: Record<Role, Array<{ href: string; label: string }>> = {
