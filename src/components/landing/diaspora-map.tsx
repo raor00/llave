@@ -50,11 +50,13 @@ export function DiasporaMap() {
         <span className="chip">10 ciudades</span>
       </div>
 
-      <div className="relative aspect-[4/3] sm:aspect-[16/10] lg:aspect-[16/9] rounded-lg overflow-hidden bg-gradient-to-br from-[color:var(--color-brand-50)] to-[color:var(--color-bg)] min-h-[420px] sm:min-h-[480px] lg:min-h-[560px]">
+      <div className="relative w-full aspect-[4/5] sm:aspect-[16/10] lg:aspect-[16/9] rounded-lg overflow-hidden bg-gradient-to-br from-[color:var(--color-brand-50)] to-[color:var(--color-bg)]">
         <ComposableMap
           projection="geoNaturalEarth1"
-          projectionConfig={{ scale: 200, center: [-50, 5] }}
-          style={{ width: "100%", height: "100%" }}
+          projectionConfig={{ scale: 170, center: [-50, 5] }}
+          width={800}
+          height={600}
+          style={{ width: "100%", height: "100%", display: "block" }}
         >
           <Geographies geography={GEO_URL}>
             {({ geographies }) =>

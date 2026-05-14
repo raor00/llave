@@ -41,9 +41,13 @@ html, body {
   color: var(--color-fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 * { box-sizing: border-box; }
+
+img, video, svg { max-width: 100%; height: auto; }
 
 ::selection { background: var(--color-brand-100); color: var(--color-brand-900); }
 
