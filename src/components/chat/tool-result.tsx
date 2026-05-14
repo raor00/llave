@@ -170,6 +170,24 @@ export function ToolResult({ toolName, part }: { toolName: string; part: AnyPart
     );
   }
 
+  if (toolName === "setupMyProfile") {
+    if (output.ok === false) {
+      return <Hint type="warn">{String(output.error ?? "No pude configurar tu perfil")}</Hint>;
+    }
+    const redirectTo = String(output.redirect ?? "/inquilino");
+    return (
+      <div className="card p-4 bg-[color:var(--color-brand-50)] border-[color:var(--color-brand-300)]">
+        <div className="font-semibold text-[color:var(--color-brand-700)]">✓ Perfil configurado</div>
+        <div className="text-sm mt-1 text-[color:var(--color-fg)]">
+          Listo, {String(output.full_name ?? "")}. Tu rol es <strong>{String(output.role ?? "")}</strong>.
+        </div>
+        <Link href={redirectTo} className="btn btn-primary mt-3 text-xs">
+          Ir a Mi Llave
+        </Link>
+      </div>
+    );
+  }
+
   if (toolName === "suggestPrice") {
     if (output.ok === false) {
       return <Hint type="warn">{String(output.message ?? "Sin comparables disponibles")}</Hint>;

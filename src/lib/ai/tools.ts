@@ -8,6 +8,7 @@ import {
 } from "@/lib/db/queries";
 import { DEMO_OWNER } from "@/lib/db/seed-data";
 import type { PropertySummary } from "@/lib/types";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const propertyType = z.enum([
   "apartamento",
@@ -279,6 +280,43 @@ const suggestPriceTool = tool({
 });
 
 // ------------------------------------------------------------------
+// setupMyProfile — conversational onboarding alternative to /onboarding form
+// ------------------------------------------------------------------
+const setupMyProfileTool = tool({
+  description:
+    "Configura el perfil del usuario logueado durante el onboarding conversacional. Captura su rol (inquilino, asesor o propietario), nombre completo y teléfono. Solo úsala cuando el usuario te haya confirmado claramente esos 3 datos en el chat.",
+  inputSchema: z.object({
+    role: z.enum(["inquilino", "asesor", "propietario"]),
+    full_name: z.string().min(2),
+    phone: z.string().optional(),
+  }),
+  execute: async ({ role, full_name, phone }) => {
+    const supa = await createSupabaseServerClient();
+    if (!supa) return { ok: false, error: "Supabase no configurado" };
+    const { data: { user } } = await supa.auth.getUser();
+    if (!user) return { ok: false, error: "Necesitas iniciar sesión primero (magic link a tu correo)." };
+    const { error } = await supa
+      .from("profiles")
+      .upsert(
+        {
+          id: user.id,
+          role,
+          full_name,
+          phone: phone ?? null,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "id" }
+      );
+    if (error) return { ok: false, error: error.message };
+    const home: Record<typeof role, string> = {
+      inquilino: "/inquilino",
+      asesor: "/asesor",
+      propietario: "/propietario",
+    };
+    return { ok: true, role, full_name, redirect: home[role] };
+  },
+});
+
 export const llaveroTools = {
   searchProperties: searchPropertiesTool,
   getPropertyDetail: getPropertyDetailTool,
@@ -287,6 +325,7 @@ export const llaveroTools = {
   scheduleVisit: scheduleVisitTool,
   createPropertyDraft: createPropertyDraftTool,
   suggestPrice: suggestPriceTool,
+  setupMyProfile: setupMyProfileTool,
 };
 
 export type LlaveroToolName = keyof typeof llaveroTools;

@@ -48,12 +48,55 @@ export default async function InquilinoPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
         <StatCard label="Búsquedas guardadas" value="0" hint="Próximamente" />
         <StatCard label="Favoritos" value="0" hint="Marca corazones para guardar" />
         <StatCard label="Visitas agendadas" value="0" hint="A través de Llavero" />
-        <StatCard label="Llave Trust Score" value={trustScore || 720} hint="Tu reputación de pagos" />
       </div>
+
+      {/* Trust Score — diferenciador único vs Quarto/financieras */}
+      <section className="card p-6 mb-10 bg-gradient-to-br from-[color:var(--color-brand-50)] to-white">
+        <div className="flex items-baseline justify-between gap-4 mb-4">
+          <div>
+            <div className="text-xs uppercase tracking-wider text-[color:var(--color-brand-700)] font-semibold mb-1">Llave Trust Score</div>
+            <h2 className="font-display text-2xl font-bold">
+              {trustScore || 720}
+              <span className="text-base font-normal text-[color:var(--color-fg-soft)]"> / 1000</span>
+            </h2>
+          </div>
+          <div className="text-right">
+            <div className="text-xs text-[color:var(--color-fg-soft)] uppercase tracking-wide">Nivel</div>
+            <div className="font-display text-lg font-semibold text-[color:var(--color-brand-700)]">
+              {scoreLevel(trustScore || 720)}
+            </div>
+          </div>
+        </div>
+
+        {/* Progress bar */}
+        <div className="relative h-3 rounded-full bg-[color:var(--color-border)] overflow-hidden">
+          <div
+            className="absolute inset-y-0 left-0 bg-gradient-to-r from-[color:var(--color-brand-500)] to-[color:var(--color-accent)]"
+            style={{ width: `${Math.min(100, ((trustScore || 720) / 1000) * 100)}%` }}
+          />
+        </div>
+        <div className="mt-2 flex justify-between text-[10px] uppercase tracking-wider text-[color:var(--color-fg-soft)]">
+          <span>0 · Inicial</span>
+          <span>500 · Confiable</span>
+          <span>800 · Premium</span>
+          <span>1000</span>
+        </div>
+
+        <div className="grid sm:grid-cols-3 gap-3 mt-6">
+          <ScoreBlock icon="✓" title="+15 cada pago a tiempo" body="Sube tu score con cada renta puntual." />
+          <ScoreBlock icon="★" title="+30 al cumplir contrato" body="Cierras un contrato sin novedades, salto grande." />
+          <ScoreBlock icon="↑" title="Útil para banca futura" body="Tu Trust Score se exporta como credencial verificable." />
+        </div>
+
+        <p className="text-xs text-[color:var(--color-fg-soft)] mt-5">
+          Tu Trust Score reemplaza la constancia de trabajo y el RIF como prueba de capacidad de pago.
+          A diferencia de modelos tradicionales, lo construyes mientras alquilas — no antes.
+        </p>
+      </section>
 
       <section className="mb-10">
         <div className="flex items-baseline justify-between mb-4">
@@ -86,4 +129,24 @@ function StatCard({ label, value, hint }: { label: string; value: string | numbe
       <div className="text-xs text-[color:var(--color-fg-muted)] mt-1">{hint}</div>
     </div>
   );
+}
+
+function ScoreBlock({ icon, title, body }: { icon: string; title: string; body: string }) {
+  return (
+    <div className="rounded-lg bg-white border border-[color:var(--color-border)] p-4">
+      <div className="size-7 rounded-full bg-[color:var(--color-brand-100)] text-[color:var(--color-brand-700)] grid place-items-center text-sm font-semibold mb-2">
+        {icon}
+      </div>
+      <div className="font-semibold text-sm">{title}</div>
+      <div className="text-xs text-[color:var(--color-fg-muted)] mt-1 leading-relaxed">{body}</div>
+    </div>
+  );
+}
+
+function scoreLevel(score: number): string {
+  if (score >= 900) return "Élite";
+  if (score >= 800) return "Premium";
+  if (score >= 600) return "Confiable";
+  if (score >= 400) return "En construcción";
+  return "Inicial";
 }

@@ -23,11 +23,30 @@ export default async function LandingPage() {
           <div className="absolute -top-32 -right-24 size-[520px] rounded-full bg-[color:var(--color-brand-100)] blur-3xl opacity-50" />
         </div>
         <div className="container-x pt-12 pb-20 md:pt-16 md:pb-28">
+          {/* Differentiator strip — directly attacks Quarto's heavy-doc requirement */}
+          <FadeIn className="mb-6 flex flex-wrap items-center gap-3 justify-center text-sm" y={12}>
+            <span className="chip">
+              <span className="size-1.5 rounded-full bg-[color:var(--color-brand-500)]" />
+              Sin RIF
+            </span>
+            <span className="chip">
+              <span className="size-1.5 rounded-full bg-[color:var(--color-brand-500)]" />
+              Sin constancia de trabajo
+            </span>
+            <span className="chip">
+              <span className="size-1.5 rounded-full bg-[color:var(--color-brand-500)]" />
+              Sin esperar 2 semanas
+            </span>
+            <span className="chip bg-[color:var(--color-fg)] text-white border-transparent">
+              Solo cédula + Llavero
+            </span>
+          </FadeIn>
+
           <FadeIn y={32}>
             <div className="relative w-full overflow-hidden rounded-[var(--radius-2xl)] shadow-[var(--shadow-pop)] border border-[color:var(--color-border)] bg-[color:var(--color-bg-elev)]">
               <Image
                 src="/brand/hero.png"
-                alt="Llave — Alquila hoy, sin meses adelantados. Llavero IA te encuentra el inmueble ideal."
+                alt="Llave — Alquila en 24 horas. Sin papeles que no tienes."
                 width={1774}
                 height={887}
                 priority
@@ -40,9 +59,10 @@ export default async function LandingPage() {
             <div className="mt-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
               <div className="max-w-xl">
                 <p className="text-lg md:text-xl text-[color:var(--color-fg-muted)] leading-relaxed">
-                  Llave conecta a inquilinos con propietarios reales y elimina la fricción del modelo tradicional.
-                  Pagas un solo mes para entrar, depósito reducido y reembolsable, y tienes a{" "}
-                  <strong className="text-[color:var(--color-fg)]">Llavero</strong>, un agente IA, ayudándote a encontrar tu próxima casa.
+                  Alquila en <strong className="text-[color:var(--color-fg)]">24 horas</strong>, sin RIF ni constancia de trabajo,
+                  sin esperar dos semanas. Tu reputación se construye pagando, no presentando papeles que no tienes.
+                  Con <strong className="text-[color:var(--color-fg)]">Llavero</strong>, un agente IA que te entiende,
+                  no te interroga.
                 </p>
                 <div className="mt-7 flex flex-wrap gap-3">
                   <Link href="/buscar" className="btn btn-primary px-6 py-3 text-base">
@@ -57,18 +77,118 @@ export default async function LandingPage() {
                 </div>
               </div>
               <div className="grid grid-cols-4 gap-5 md:max-w-md flex-shrink-0">
-                <Stat number="Hoy" label="te mudas" />
+                <Stat number="24h" label="te mudas" />
                 <Stat number="0" label="meses adelantados" />
-                <Stat number="1" label="depósito máx." />
-                <Stat number="100%" label="reembolsable" />
+                <Stat number="1" label="depósito reembolsable" />
+                <Stat number="∅" label="papeles formales" />
               </div>
             </div>
           </FadeIn>
         </div>
       </section>
 
+      {/* COMPARATIVA — Llave vs el método tradicional */}
+      <section id="comparativa" className="section bg-white border-y">
+        <div className="container-x">
+          <FadeIn className="max-w-3xl mb-12">
+            <span className="chip chip-muted mb-3">La diferencia</span>
+            <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight">
+              Otros te <span className="text-[color:var(--color-danger)]">financian la fricción</span>. Llave la <span className="text-[color:var(--color-brand-500)]">elimina</span>.
+            </h2>
+            <p className="mt-4 text-[color:var(--color-fg-muted)] text-lg">
+              Quitar el "mes adelantado" no sirve si te exigen RIF, constancia de trabajo, movimientos bancarios y dos
+              semanas de espera. El 60% de Venezuela trabaja informal y queda afuera. Llave los incluye.
+            </p>
+          </FadeIn>
+
+          <FadeIn>
+            <div className="card overflow-hidden">
+              <div className="grid grid-cols-[1.4fr_1fr_1fr] text-sm">
+                <CompareRow head label="" llave="Llave" other="Modelo tradicional / fintech" />
+                <CompareRow label="Documentos para alquilar" llave="Solo cédula" other="Cédula + RIF + constancia + movimientos + redes verificadas" />
+                <CompareRow label="Tiempo de aprobación" llave="24 a 48 horas" other="1 a 2 semanas" />
+                <CompareRow label="Pago al mudarte" llave="1 mes + 1 depósito reembolsable" other="1 mes + 1 comisión + 1 garantía (no reembolsables)" />
+                <CompareRow label="Comisión al inquilino" llave="Cero" other="1 mes (no reembolsable)" />
+                <CompareRow label="Cosignatarios requeridos" llave="Ninguno" other="Hasta 5 con 2.0–2.5x ingreso sumado" />
+                <CompareRow label="Trabajo informal / freelance" llave="Aceptado con Trust Score" other="Excluido (sin constancia)" />
+                <CompareRow label="Tour 3D antes de visitar" llave="Sí, Gaussian Splat + LiDAR" other="Solo fotos" />
+                <CompareRow label="Agente IA conversacional" llave="Llavero (Claude Sonnet)" other="Formularios y validaciones" />
+                <CompareRow label="Construye reputación crediticia" llave="Trust Score útil para banca" other="No genera historial" />
+                <CompareRow label="Para venezolanos en diáspora" llave="Recorrido virtual + agente remoto" other="Visita presencial obligatoria" />
+                <CompareRow label="CRM para asesores" llave="Captación móvil + Meta Ads + IA" other="Marketplace solamente" />
+              </div>
+            </div>
+          </FadeIn>
+
+          {/* Cost reveal — destruye el marketing engañoso de "sin meses adelantados" */}
+          <FadeIn delay={0.1} className="mt-8 grid md:grid-cols-2 gap-5">
+            <div className="card p-6 border-[color:var(--color-danger)]/30 bg-white">
+              <div className="text-xs uppercase tracking-wider text-[color:var(--color-danger)] font-semibold mb-3">
+                El truco del "sin meses adelantados"
+              </div>
+              <p className="text-sm text-[color:var(--color-fg-muted)] leading-relaxed mb-4">
+                Otros publican "sin meses, sin depósito" en el banner pero en la letra chica te piden:
+              </p>
+              <ul className="space-y-2 text-sm">
+                <li className="flex justify-between gap-3"><span>1 mes de alquiler</span><strong>$280</strong></li>
+                <li className="flex justify-between gap-3"><span>1 mes de comisión a la plataforma</span><strong>$280</strong></li>
+                <li className="flex justify-between gap-3"><span>1 mes de garantía (si se requiere)</span><strong>$280</strong></li>
+                <li className="border-t border-[color:var(--color-border)] pt-2 mt-2 flex justify-between gap-3">
+                  <span className="font-semibold">Total upfront</span>
+                  <strong className="text-[color:var(--color-danger)]">$840</strong>
+                </li>
+                <li className="flex justify-between gap-3 text-xs text-[color:var(--color-fg-soft)]">
+                  <span>De los cuales NO se reembolsan</span><strong>$560</strong>
+                </li>
+              </ul>
+            </div>
+            <div className="card p-6 border-[color:var(--color-brand-500)] bg-[color:var(--color-brand-50)]">
+              <div className="text-xs uppercase tracking-wider text-[color:var(--color-brand-700)] font-semibold mb-3">
+                Lo que pagas en Llave
+              </div>
+              <p className="text-sm text-[color:var(--color-fg-muted)] leading-relaxed mb-4">
+                Cero comisiones al inquilino, depósito 100% reembolsable al cumplir contrato:
+              </p>
+              <ul className="space-y-2 text-sm">
+                <li className="flex justify-between gap-3"><span>1 mes de alquiler</span><strong>$280</strong></li>
+                <li className="flex justify-between gap-3"><span>1 mes de depósito (reembolsable)</span><strong>$280</strong></li>
+                <li className="flex justify-between gap-3 text-[color:var(--color-fg-soft)]"><span>Comisión al inquilino</span><strong>$0</strong></li>
+                <li className="border-t border-[color:var(--color-brand-300)] pt-2 mt-2 flex justify-between gap-3">
+                  <span className="font-semibold">Total upfront</span>
+                  <strong className="text-[color:var(--color-brand-700)]">$560</strong>
+                </li>
+                <li className="flex justify-between gap-3 text-xs text-[color:var(--color-brand-600)]">
+                  <span>De los cuales SE reembolsan</span><strong>$280</strong>
+                </li>
+              </ul>
+              <div className="mt-4 rounded-lg bg-white border border-[color:var(--color-brand-300)] p-3 text-xs text-[color:var(--color-brand-700)]">
+                <strong>Ahorras $280 NO recuperables</strong> respecto al modelo tradicional con &quot;cero meses&quot;.
+              </div>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.1} className="mt-8 grid md:grid-cols-2 gap-4">
+            <div className="card p-6 bg-[color:var(--color-brand-50)] border-[color:var(--color-brand-100)]">
+              <div className="text-xs uppercase tracking-wider text-[color:var(--color-brand-700)] font-semibold mb-2">El insight</div>
+              <p className="text-[color:var(--color-fg)] font-medium leading-relaxed">
+                "Sin meses adelantados" sin tocar la lista de requisitos sigue dejando afuera al{" "}
+                <strong>60% de la economía informal venezolana</strong>. Llave entra por esa grieta.
+              </p>
+            </div>
+            <div className="card p-6">
+              <div className="text-xs uppercase tracking-wider text-[color:var(--color-fg-soft)] font-semibold mb-2">Mercado real</div>
+              <p className="text-[color:var(--color-fg-muted)] leading-relaxed">
+                Llave sirve a estudiantes universitarios, profesionales jóvenes en USD sin recibo formal,
+                trabajadores informales, adultos mayores sin movimientos bancarios, y a la diáspora venezolana
+                de 7-8M de personas que necesita alquilar desde el exterior.
+              </p>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
       {/* PROBLEMA */}
-      <section id="problema" className="section bg-white border-y">
+      <section id="problema" className="section">
         <div className="container-x grid md:grid-cols-2 gap-12 items-center">
           <FadeIn>
             <span className="chip chip-muted mb-4">El problema</span>
@@ -97,16 +217,88 @@ export default async function LandingPage() {
         </div>
       </section>
 
+      {/* DIÁSPORA */}
+      <section id="diaspora" className="section bg-[color:var(--color-brand-50)] border-y">
+        <div className="container-x grid md:grid-cols-[1fr_1.2fr] gap-12 items-center">
+          <FadeIn>
+            <span className="chip mb-4">Para la diáspora venezolana</span>
+            <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight">
+              ¿Vives en <span className="gradient-text">Madrid, Bogotá, Buenos Aires o Miami</span>?
+              <br />
+              Recorre antes de mudarte.
+            </h2>
+            <p className="mt-5 text-lg text-[color:var(--color-fg-muted)]">
+              7 a 8 millones de venezolanos viven fuera. Muchos vuelven, otros alquilan para familia.
+              Con Llave recorres el inmueble en 3D — paredes, baños, vista al Ávila — sin tomar un vuelo.
+              Llavero negocia, agenda y firma desde la app.
+            </p>
+            <ul className="mt-6 space-y-2 text-[color:var(--color-fg)]">
+              <Bullet positive>Tour 3D Gaussian Splat — recorrido inmersivo</Bullet>
+              <Bullet positive>Llavero coordina la visita con un asesor local</Bullet>
+              <Bullet positive>Firma de contrato remota</Bullet>
+              <Bullet positive>Tu cédula vale igual desde el exterior</Bullet>
+            </ul>
+            <div className="mt-7">
+              <Link href="/buscar" className="btn btn-primary px-6 py-3 text-base">
+                Recorrer inmuebles
+              </Link>
+            </div>
+          </FadeIn>
+          <FadeIn delay={0.15}>
+            <div className="card p-2 overflow-hidden">
+              <div className="rounded-[var(--radius-lg)] bg-[color:var(--color-fg)] aspect-[4/3] grid place-items-center text-white relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-[color:var(--color-brand-700)]/40 to-[color:var(--color-brand-900)]" />
+                <div className="relative text-center px-6">
+                  <div className="text-5xl mb-3">🌎</div>
+                  <div className="font-display text-2xl font-bold">7-8M venezolanos</div>
+                  <div className="text-white/70 text-sm mt-1">fuera del país pueden alquilar acá</div>
+                  <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-xs">
+                    <span className="size-2 rounded-full bg-[color:var(--color-accent)] animate-pulse" />
+                    Tour 3D disponible en cada inmueble
+                  </div>
+                </div>
+              </div>
+              <div className="p-5 grid grid-cols-3 gap-3 text-center text-xs">
+                <div>
+                  <div className="font-display text-2xl font-bold text-[color:var(--color-brand-700)]">2.5M</div>
+                  <div className="text-[color:var(--color-fg-soft)]">Colombia</div>
+                </div>
+                <div>
+                  <div className="font-display text-2xl font-bold text-[color:var(--color-brand-700)]">800k</div>
+                  <div className="text-[color:var(--color-fg-soft)]">Estados Unidos</div>
+                </div>
+                <div>
+                  <div className="font-display text-2xl font-bold text-[color:var(--color-brand-700)]">500k</div>
+                  <div className="text-[color:var(--color-fg-soft)]">España</div>
+                </div>
+              </div>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
       {/* MANIFIESTO */}
       <section id="manifiesto" className="section">
         <div className="container-x">
           <FadeIn className="max-w-2xl">
             <span className="chip mb-4">Manifiesto Llave</span>
             <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight">
-              Volumen sobre fricción. Confianza sobre garantías abusivas.
+              Inclusión sobre exclusión. Reputación sobre papeleo.
             </h2>
           </FadeIn>
           <FadeInStagger className="mt-12 grid md:grid-cols-3 gap-6" stagger={0.08}>
+            <FadeInChild>
+              <PrincipleCard
+                title="Sin papeles que no tienes"
+                body="Solo cédula. No exigimos RIF, ni constancia de trabajo, ni movimientos bancarios. Tu Trust Score se construye pagando."
+              />
+            </FadeInChild>
+            <FadeInChild>
+              <PrincipleCard
+                title="Trust Score progresivo"
+                body="Cada pago a tiempo sube tu score. En el camino, tu reputación de inquilino vale incluso para gestiones bancarias futuras."
+              />
+            </FadeInChild>
             <FadeInChild>
               <PrincipleCard
                 title="Sin meses adelantados"
@@ -115,32 +307,20 @@ export default async function LandingPage() {
             </FadeInChild>
             <FadeInChild>
               <PrincipleCard
-                title="Comisión justa"
-                body="Comisiones bajas: el asesor gana por volumen y cliente recurrente, no por exprimir una sola operación."
+                title="Tour 3D antes de visitar"
+                body="Cada inmueble lleva un recorrido inmersivo Gaussian Splat. Decides antes de tomar el taxi — o el avión."
               />
             </FadeInChild>
             <FadeInChild>
               <PrincipleCard
-                title="Garantía al propietario"
-                body="Llave cubre incidentes cubiertos contractualmente. El propietario duerme tranquilo, el inquilino entra sin barreras."
-              />
-            </FadeInChild>
-            <FadeInChild>
-              <PrincipleCard
-                title="Reputación que vale"
-                body="Cada pago a tiempo construye un perfil de confianza que puede servir incluso para futuras gestiones bancarias."
-              />
-            </FadeInChild>
-            <FadeInChild>
-              <PrincipleCard
-                title="Asistente IA real"
-                body="Llavero entiende tu situación y conecta con la base real de inmuebles. No es un buscador con esteroides, es un colega."
+                title="Llavero te entiende"
+                body="Un agente IA real evalúa contexto, no formularios. Si tu situación es atípica, Llavero busca igual."
               />
             </FadeInChild>
             <FadeInChild>
               <PrincipleCard
                 title="CRM para asesores"
-                body="Un único lugar para publicar, gestionar leads, ver estadísticas, conectar redes sociales y hacer publicidad."
+                body="Captación móvil con cámara, publicación con IA, leads pre-calificados, redes sociales y Meta Ads en un solo panel."
               />
             </FadeInChild>
           </FadeInStagger>
@@ -173,17 +353,18 @@ export default async function LandingPage() {
           <FadeIn>
             <span className="chip mb-4">Llavero IA</span>
             <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight">
-              Un agente que <em className="not-italic gradient-text">entiende</em> tu situación.
+              Un agente que <em className="not-italic gradient-text">entiende</em>, no que <em className="not-italic">interroga</em>.
             </h2>
             <p className="mt-5 text-lg text-[color:var(--color-fg-muted)]">
-              Llavero conversa, pregunta lo justo, busca en la base real de Llave y te muestra opciones honestas. Para asesores,
-              redacta publicaciones y sugiere precios con comparables reales.
+              Llavero te pregunta lo justo, busca en la base real de Llave y te muestra opciones honestas. Sin formularios
+              de 30 campos. Sin "necesitas demostrar 2.5x tu ingreso". Para asesores: redacta publicaciones, sugiere
+              precios y maneja leads.
             </p>
             <ul className="mt-6 space-y-2 text-[color:var(--color-fg)]">
-              <Bullet positive>Búsqueda conversacional</Bullet>
-              <Bullet positive>Recomendaciones por perfil</Bullet>
-              <Bullet positive>Comparación lado a lado</Bullet>
-              <Bullet positive>Agenda de visitas</Bullet>
+              <Bullet positive>Búsqueda conversacional + voz</Bullet>
+              <Bullet positive>Recomendaciones por contexto, no por formulario</Bullet>
+              <Bullet positive>Tour 3D y agenda de visita en un mensaje</Bullet>
+              <Bullet positive>Onboarding sin papeles</Bullet>
               <Bullet positive>Asistente para asesores</Bullet>
             </ul>
             <div className="mt-7">
@@ -202,12 +383,11 @@ export default async function LandingPage() {
                 </div>
               </div>
               <ChatBubble who="user">
-                Busco apto en Caracas máximo $300, 2 ambientes, planta eléctrica.
+                Soy freelancer, cobro en USD pero no tengo constancia ni RIF. ¿Puedo alquilar?
               </ChatBubble>
               <ChatBubble who="ai">
-                Te muestro 3 opciones que encajan. <strong>Estudio amoblado en Chacao ($200)</strong> tiene wifi y planta, ideal si vives solo o en pareja.
-                <strong> Apto en Las Mercedes ($280)</strong> es más amplio (2 hab, 85m²) con seguridad 24/7. <strong>Catia ($150)</strong> si el presupuesto es justo.
-                ¿Cuál te ronda?
+                Sí, en Llave no te pido RIF ni constancia. Solo tu cédula y empezás con un Trust Score neutral
+                que sube con cada pago a tiempo. Te muestro 3 opciones en Caracas hasta $300. ¿Te ronda alguna zona?
               </ChatBubble>
             </div>
           </FadeIn>
@@ -262,15 +442,15 @@ export default async function LandingPage() {
               Lo que viene después del MVP.
             </h2>
             <p className="mt-4 text-[color:var(--color-fg-muted)]">
-              Lo de hoy ya funciona. Lo que sigue: contratos digitales, perfil crediticio para acceso a banca,
-              integración Meta Ads en vivo y conexiones de redes sociales.
+              Contratos digitales, perfil crediticio para acceso a banca, integración Meta Ads en vivo y
+              expansión a la diáspora con onboarding remoto.
             </p>
           </FadeIn>
           <FadeInStagger className="mt-10 grid md:grid-cols-4 gap-5" stagger={0.07}>
             <FadeInChild><RoadmapStep title="Tours 3D nativos" body="Captura LiDAR + Gaussian Splat directamente desde la app" /></FadeInChild>
             <FadeInChild><RoadmapStep title="Contratos digitales" body="Generados, firmados y guardados dentro de Llave" /></FadeInChild>
-            <FadeInChild><RoadmapStep title="Redes + Meta Ads" body="Publicar y promocionar desde un solo panel" /></FadeInChild>
-            <FadeInChild><RoadmapStep title="Perfil crediticio" body="Reputación de pagos útil para abrir puertas a banca" /></FadeInChild>
+            <FadeInChild><RoadmapStep title="Trust Score a banca" body="Tu reputación de pagos exportable como credencial verificable" /></FadeInChild>
+            <FadeInChild><RoadmapStep title="Onboarding diáspora" body="Identidad remota + firma desde el exterior + remesas integradas" /></FadeInChild>
           </FadeInStagger>
         </div>
       </section>
@@ -369,5 +549,45 @@ function Feature({ icon, title, body }: { icon: string; title: string; body: str
         <div className="text-sm text-white/70 mt-0.5">{body}</div>
       </div>
     </li>
+  );
+}
+
+function CompareRow({
+  label,
+  llave,
+  other,
+  head,
+}: {
+  label: string;
+  llave: string;
+  other: string;
+  head?: boolean;
+}) {
+  return (
+    <>
+      <div
+        className={`px-5 py-4 border-t border-[color:var(--color-border)] ${
+          head ? "bg-[color:var(--color-bg)] font-display text-base font-semibold" : "text-sm text-[color:var(--color-fg-muted)]"
+        }`}
+      >
+        {label}
+      </div>
+      <div
+        className={`px-5 py-4 border-t border-[color:var(--color-border)] ${
+          head
+            ? "bg-[color:var(--color-brand-50)] text-[color:var(--color-brand-700)] font-display text-base font-semibold border-l-2 border-l-[color:var(--color-brand-500)]"
+            : "text-sm font-semibold text-[color:var(--color-brand-700)] bg-[color:var(--color-brand-50)]/40 border-l-2 border-l-[color:var(--color-brand-500)]"
+        }`}
+      >
+        {llave}
+      </div>
+      <div
+        className={`px-5 py-4 border-t border-[color:var(--color-border)] ${
+          head ? "bg-[color:var(--color-bg)] font-display text-base font-semibold text-[color:var(--color-fg-muted)]" : "text-sm text-[color:var(--color-fg-soft)]"
+        }`}
+      >
+        {other}
+      </div>
+    </>
   );
 }
