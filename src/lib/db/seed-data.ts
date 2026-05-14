@@ -6,15 +6,14 @@ import type { Property, Profile } from "@/lib/types";
 export const DEMO_OWNER: Profile = {
   id: "11111111-1111-1111-1111-111111111111",
   role: "asesor",
-  full_name: "María Rodríguez (Demo)",
+  full_name: "Rafael Oviedo",
   phone: "+58 414-1234567",
-  avatar_url:
-    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200",
-  bio: "Asesora inmobiliaria con 8 años en el mercado venezolano. Especialista en Caracas y Valencia.",
+  avatar_url: null,
+  bio: "Asesor inmobiliario en Llave, builder del Platanus Build Night ft. Anthropic. Especialista en Caracas — hablamos por DM cuando quieras.",
   city: "Caracas",
-  rating_avg: 4.85,
-  rating_count: 124,
-  trust_score: 920,
+  rating_avg: 5.0,
+  rating_count: 1,
+  trust_score: 950,
 };
 
 const now = new Date().toISOString();
