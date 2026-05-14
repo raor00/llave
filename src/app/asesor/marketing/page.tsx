@@ -12,6 +12,7 @@ import { listCampaigns, listPosts, listSuggestions } from "@/lib/db/marketing";
 import {
   listPosts as listSocialPosts,
   listComments,
+  postEngagement,
 } from "@/lib/db/social-feed";
 import { DEMO_PROPERTIES } from "@/lib/db/seed-data";
 import { getOwnerProfile, listAllProperties, listLeadsForOwner } from "@/lib/db/queries";
@@ -90,6 +91,9 @@ export default async function MarketingPage() {
   const commentsByPost = new Map(
     socialPosts.map((p) => [p.id, listComments(p.id)] as const)
   );
+  const engagementByPost = new Map(
+    socialPosts.map((p) => [p.id, postEngagement(p.id)] as const)
+  );
   const propertyOptions = DEMO_PROPERTIES.map((p) => ({
     id: p.id,
     title: p.title.replace(/^Llave:\s*/, ""),
@@ -111,9 +115,12 @@ export default async function MarketingPage() {
             Tus campañas activas, posts orgánicos y lo que Llavero recomienda hacer esta semana para mover aguja.
           </p>
         </div>
-        <Link href="/asesor/publicar" className="btn btn-primary text-sm">
-          <IconMegaphone size={16} /> Crear campaña
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <CreatePostForm properties={propertyOptions} />
+          <Link href="/asesor/publicar" className="btn btn-outline text-sm">
+            <IconMegaphone size={16} /> Crear campaña
+          </Link>
+        </div>
       </header>
 
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
@@ -239,9 +246,6 @@ export default async function MarketingPage() {
         </div>
       </section>
 
-      {/* Crear publicación */}
-      <CreatePostForm properties={propertyOptions} />
-
       {/* Tus publicaciones y comentarios */}
       <section>
         <div className="flex items-baseline justify-between mb-3">
@@ -295,7 +299,7 @@ export default async function MarketingPage() {
                     Ver comentarios ({comments.length})
                   </summary>
                   <div className="mt-2 border-t border-[color:var(--color-border)] pt-1">
-                    <CommentThread comments={comments} />
+                    <CommentThread comments={comments} engagement={engagementByPost.get(p.id)} />
                   </div>
                 </details>
               </article>

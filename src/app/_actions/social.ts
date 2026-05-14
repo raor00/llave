@@ -7,7 +7,12 @@
  */
 
 import { revalidatePath } from "next/cache";
-import { createPost, replyToComment, type SocialPost } from "@/lib/db/social-feed";
+import {
+  createPost,
+  replyToComment,
+  toggleCommentLike,
+  type SocialPost,
+} from "@/lib/db/social-feed";
 import { DEMO_PROPERTIES } from "@/lib/db/seed-data";
 
 const VALID_PLATFORMS: SocialPost["platform"][] = [
@@ -58,4 +63,14 @@ export async function replyCommentAction(
 
   revalidatePath("/asesor/marketing");
   return { ok: true };
+}
+
+export async function likeCommentAction(
+  commentId: string
+): Promise<{ ok: true; likes: number; liked: boolean } | { ok: false; error: string }> {
+  if (!commentId) return { ok: false, error: "Falta el comentario." };
+  const res = toggleCommentLike(commentId);
+  if (!res) return { ok: false, error: "No se pudo dar like al comentario." };
+  revalidatePath("/asesor/marketing");
+  return { ok: true, ...res };
 }

@@ -30,6 +30,8 @@ export type PostComment = {
   author_initials: string;
   body: string;
   created_at: string;
+  likes: number;
+  liked: boolean;
   replies: Array<{ id: string; body: string; created_at: string; by: "me" }>;
 };
 
@@ -270,15 +272,18 @@ const COMMENT_SEEDS: CommentSeed[] = [
   },
 ];
 
-export const COMMENTS_STORE: PostComment[] = COMMENT_SEEDS.map((seed) => ({
+export const COMMENTS_STORE: PostComment[] = COMMENT_SEEDS.map((seed, idx) => ({
   id: seed.id,
   post_id: seed.post_id,
   author_name: seed.author_name,
   author_initials: initials(seed.author_name),
   body: seed.body,
   created_at: hoursAgo(seed.hoursAgo),
-  replies: (seed.replies ?? []).map((r, idx) => ({
-    id: `${seed.id}-r${idx + 1}`,
+  // likes pseudo-deterministas por índice del seed
+  likes: 1 + ((idx * 7) % 14),
+  liked: false,
+  replies: (seed.replies ?? []).map((r, ridx) => ({
+    id: `${seed.id}-r${ridx + 1}`,
     body: r.body,
     created_at: hoursAgo(r.hoursAgo),
     by: "me" as const,
@@ -340,4 +345,29 @@ export function replyToComment(
   };
   comment.replies.push(reply);
   return reply;
+}
+
+/** Alterna el like de un comentario. Devuelve el nuevo estado o null. */
+export function toggleCommentLike(
+  commentId: string
+): { likes: number; liked: boolean } | null {
+  const comment = COMMENTS_STORE.find((c) => c.id === commentId);
+  if (!comment) return null;
+  comment.liked = !comment.liked;
+  comment.likes += comment.liked ? 1 : -1;
+  return { likes: comment.likes, liked: comment.liked };
+}
+
+/** Engagement total de un post: comentarios + respuestas + likes de comentarios. */
+export function postEngagement(postId: string): {
+  comments: number;
+  replies: number;
+  commentLikes: number;
+} {
+  const comments = COMMENTS_STORE.filter((c) => c.post_id === postId);
+  return {
+    comments: comments.length,
+    replies: comments.reduce((acc, c) => acc + c.replies.length, 0),
+    commentLikes: comments.reduce((acc, c) => acc + c.likes, 0),
+  };
 }
