@@ -18,7 +18,6 @@ import {
   IconTikTok,
   IconWhatsapp,
   IconX,
-  IconMeta,
 } from "./social-icons";
 
 type Role = "inquilino" | "asesor" | "propietario";
@@ -161,7 +160,7 @@ export function UserMenu({
                     disabled={active || pending}
                     aria-pressed={active}
                     title={ROLE_LABEL[r]}
-                    className={`rounded px-1.5 py-1 text-[10px] font-bold uppercase tracking-wider border transition ${
+                    className={`rounded-full px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wider border transition ${
                       active
                         ? "bg-[color:var(--color-brand-500)] text-white border-[color:var(--color-brand-500)] cursor-default"
                         : "bg-white text-[color:var(--color-fg)] border-[color:var(--color-border-strong)] hover:border-[color:var(--color-brand-500)] hover:text-[color:var(--color-brand-700)]"
@@ -176,17 +175,16 @@ export function UserMenu({
           </div>
 
           {/* Redes en una línea */}
-          <div className="border-t border-[color:var(--color-border)] px-3 py-2 flex items-center justify-between">
-            <div className="flex items-center gap-1">
-              <SocialBtn label="Instagram" tint="text-[#e1306c]"><IconInstagram size={12} /></SocialBtn>
-              <SocialBtn label="Facebook" tint="text-[#1877f2]"><IconFacebook size={12} /></SocialBtn>
-              <SocialBtn label="TikTok" tint="text-[color:var(--color-fg)]"><IconTikTok size={12} /></SocialBtn>
-              <SocialBtn label="WhatsApp" tint="text-[#25d366]"><IconWhatsapp size={12} /></SocialBtn>
-              <SocialBtn label="X" tint="text-[color:var(--color-fg)]"><IconX size={11} /></SocialBtn>
-              <SocialBtn label="Meta Ads" tint="text-[#1877f2]"><IconMeta size={12} /></SocialBtn>
+          <div className="border-t border-[color:var(--color-border)] px-3 py-2.5 flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <SocialBtn label="Instagram" tint="text-[#e1306c]" bg="bg-[#e1306c]/10"><IconInstagram size={13} /></SocialBtn>
+              <SocialBtn label="Facebook" tint="text-[#1877f2]" bg="bg-[#1877f2]/10"><IconFacebook size={13} /></SocialBtn>
+              <SocialBtn label="TikTok" tint="text-[color:var(--color-fg)]" bg="bg-[color:var(--color-fg)]/10"><IconTikTok size={13} /></SocialBtn>
+              <SocialBtn label="WhatsApp" tint="text-[#25d366]" bg="bg-[#25d366]/10"><IconWhatsapp size={13} /></SocialBtn>
+              <SocialBtn label="X" tint="text-[color:var(--color-fg)]" bg="bg-[color:var(--color-fg)]/10"><IconX size={11} /></SocialBtn>
             </div>
             <Link
-              href="/asesor"
+              href="/asesor/marketing"
               onClick={() => setOpen(false)}
               className="text-[10px] text-[color:var(--color-brand-700)] hover:underline font-semibold"
               title="Configurar campañas"
@@ -239,16 +237,19 @@ function ShortcutCell({
 function SocialBtn({
   label,
   tint,
+  bg,
   children,
 }: {
   label: string;
   tint: string;
+  bg: string;
   children: React.ReactNode;
 }) {
   return (
     <span
       title={label}
-      className={`size-6 rounded grid place-items-center bg-[color:var(--color-bg)] border border-[color:var(--color-border)] ${tint}`}
+      aria-label={label}
+      className={`size-7 rounded-full grid place-items-center ${bg} ${tint} transition`}
     >
       {children}
     </span>
