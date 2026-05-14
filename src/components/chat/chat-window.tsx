@@ -8,6 +8,13 @@ import { ToolResult } from "./tool-result";
 import { LlaveLogo } from "@/components/llave-logo";
 import { useVoice } from "./use-voice";
 import { MarkdownText } from "./markdown-text";
+import {
+  IconMic,
+  IconMicOff,
+  IconSpeaker,
+  IconSpeakerOff,
+  IconSend,
+} from "@/components/dashboard-icons";
 
 const SUGGESTIONS = [
   "Busco un apto en Caracas, máximo $300, 2 ambientes",
@@ -73,9 +80,9 @@ export function ChatWindow({ asesorMode = false }: { asesorMode?: boolean }) {
   };
 
   return (
-    <div className="container-x py-6">
-      <div className="card overflow-hidden grid grid-rows-[auto_1fr_auto] h-[calc(100vh-160px)] min-h-[640px]">
-        <header className="flex items-center justify-between gap-3 border-b px-5 py-4 bg-white">
+    <div className="container-x py-4 sm:py-6">
+      <div className="card overflow-hidden grid grid-rows-[auto_1fr_auto] h-[calc(100dvh-7rem)] sm:h-[calc(100dvh-9rem)] max-h-[860px] min-h-[480px]">
+        <header className="flex items-center justify-between gap-3 border-b px-4 sm:px-5 py-3 sm:py-4 bg-white">
           <div className="flex items-center gap-3">
             <div className="size-10 rounded-full bg-[color:var(--color-brand-100)] flex items-center justify-center">
               <LlaveLogo className="size-5 text-[color:var(--color-brand-700)]" />
@@ -93,10 +100,16 @@ export function ChatWindow({ asesorMode = false }: { asesorMode?: boolean }) {
               <button
                 type="button"
                 onClick={() => setAutoSpeak((v) => !v)}
-                className={`btn btn-ghost text-xs ${autoSpeak ? "bg-[color:var(--color-brand-100)] text-[color:var(--color-brand-700)]" : ""}`}
-                title="Leer respuestas en voz alta"
+                className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold border transition ${
+                  autoSpeak
+                    ? "bg-[color:var(--color-brand-100)] text-[color:var(--color-brand-700)] border-[color:var(--color-brand-100)]"
+                    : "bg-white text-[color:var(--color-fg-muted)] border-[color:var(--color-border)] hover:text-[color:var(--color-fg)]"
+                }`}
+                title={autoSpeak ? "Apagar voz" : "Encender voz"}
+                aria-pressed={autoSpeak}
               >
-                {autoSpeak ? "🔊 Voz ON" : "🔈 Voz OFF"}
+                {autoSpeak ? <IconSpeaker size={14} /> : <IconSpeakerOff size={14} />}
+                <span className="hidden sm:inline">Voz {autoSpeak ? "encendida" : "apagada"}</span>
               </button>
             )}
             <span className="hidden md:flex chip">Claude + AI SDK</span>
@@ -112,7 +125,7 @@ export function ChatWindow({ asesorMode = false }: { asesorMode?: boolean }) {
               <h2 className="font-display text-2xl font-bold">
                 {asesorMode
                   ? "Soy Llavero. Te ayudo a publicar y gestionar inmuebles."
-                  : "Hola, soy Llavero. ¿Qué tipo de inmueble buscás?"}
+                  : "Hola, soy Llavero. ¿Qué tipo de inmueble buscas?"}
               </h2>
               <p className="mt-3 text-[color:var(--color-fg-muted)]">
                 Cuéntame ciudad, presupuesto y un par de detalles. Te muestro opciones reales y te ayudo a agendar visita.
@@ -183,22 +196,32 @@ export function ChatWindow({ asesorMode = false }: { asesorMode?: boolean }) {
               type="button"
               onClick={onMic}
               disabled={isBusy}
-              className={`btn ${voice.listening ? "btn-primary" : "btn-outline"} !px-3`}
-              title={voice.listening ? "Detener mic" : "Hablar"}
-              aria-label="Micrófono"
+              className={`shrink-0 size-10 rounded-full grid place-items-center border transition ${
+                voice.listening
+                  ? "bg-[color:var(--color-brand-500)] text-white border-[color:var(--color-brand-500)] animate-pulse"
+                  : "bg-white text-[color:var(--color-fg)] border-[color:var(--color-border)] hover:border-[color:var(--color-brand-500)] hover:text-[color:var(--color-brand-700)]"
+              } disabled:opacity-50`}
+              title={voice.listening ? "Detener micrófono" : "Hablar"}
+              aria-label={voice.listening ? "Detener micrófono" : "Hablar"}
+              aria-pressed={voice.listening}
             >
-              {voice.listening ? "⏹" : "🎤"}
+              {voice.listening ? <IconMicOff size={18} /> : <IconMic size={18} />}
             </button>
           )}
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={asesorMode ? "Dime qué inmueble quieres publicar…" : "Cuéntame qué buscas…"}
-            className="input flex-1"
+            className="input flex-1 min-w-0"
             disabled={isBusy}
           />
-          <button type="submit" disabled={isBusy || !input.trim()} className="btn btn-primary">
-            Enviar
+          <button
+            type="submit"
+            disabled={isBusy || !input.trim()}
+            className="shrink-0 size-10 rounded-full grid place-items-center bg-[color:var(--color-brand-500)] text-white hover:bg-[color:var(--color-brand-600)] disabled:opacity-40 disabled:cursor-not-allowed"
+            aria-label="Enviar"
+          >
+            <IconSend size={18} />
           </button>
         </form>
       </div>
@@ -223,7 +246,7 @@ function Message({
             : "bg-[color:var(--color-brand-100)] text-[color:var(--color-brand-700)]"
         }`}
       >
-        {isUser ? "Vos" : <LlaveLogo className="size-5" />}
+        {isUser ? "Tú" : <LlaveLogo className="size-5" />}
       </div>
       <div className={`max-w-[88%] space-y-3 ${isUser ? "items-end" : ""}`}>
         {parts.map((part, idx) => {

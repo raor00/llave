@@ -76,15 +76,15 @@ export default async function AsesorDashboard() {
       {/* Ingresos + comisiones */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <StatCard
-          label="Comisiones del mes"
+          label="Cobrado este mes"
           value={formatUSD(analytics.commissions.totals.paidThisMonth)}
-          hint={`Pendiente ${formatUSD(analytics.commissions.totals.pendingThisMonth)}`}
+          hint={`Por cobrar ${formatUSD(analytics.commissions.totals.pendingThisMonth)}`}
           highlight
         />
         <StatCard
-          label="Acumulado YTD"
+          label="Ganado este año"
           value={formatUSD(analytics.commissions.totals.ytd)}
-          hint={`Lifetime ${formatUSD(analytics.commissions.totals.lifetime)}`}
+          hint={`Total histórico ${formatUSD(analytics.commissions.totals.lifetime)}`}
         />
         <StatCard
           label="Inmuebles alquilados"
@@ -92,9 +92,9 @@ export default async function AsesorDashboard() {
           hint={`${analytics.commissions.byType.length} tipos · ${analytics.commissions.byCity.length} ciudades`}
         />
         <StatCard
-          label="Engagement promedio"
+          label="Interés promedio"
           value={`${analytics.totalExposure.engagementScoreAvg}/100`}
-          hint={analytics.totalExposure.engagementScoreAvg >= 60 ? "Top 15% asesores" : "Apunta a 60+"}
+          hint={analytics.totalExposure.engagementScoreAvg >= 60 ? "Top 15% de asesores" : "Apunta a 60 o más"}
         />
       </section>
 
