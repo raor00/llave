@@ -19,9 +19,26 @@ export const DEMO_OWNER: Profile = {
 const now = new Date().toISOString();
 const owner = DEMO_OWNER.id;
 
+// ID determinista derivado del título. CRÍTICO: con crypto.randomUUID() cada
+// instancia lambda de Vercel generaba ids distintos, así el chat devolvía un
+// id que la página de detalle (otro proceso) no encontraba → 404. Un id
+// estable hace que cualquier proceso resuelva el mismo inmueble.
+function slugId(title: string): string {
+  return (
+    "seed-" +
+    title
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 48)
+  );
+}
+
 function p(over: Partial<Property> & { title: string; price_usd: number; city: string; type: Property["type"]; rooms: number; bathrooms: number; cover_url: string }): Property {
   return {
-    id: crypto.randomUUID(),
+    id: slugId(over.title),
     owner_id: owner,
     description: "",
     address: "",
