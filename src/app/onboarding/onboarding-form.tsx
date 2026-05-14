@@ -117,6 +117,21 @@ export function OnboardingForm({ defaultName, email }: { defaultName: string; em
             <input name="phone" placeholder="+58 412-1234567" className="input" />
           </div>
         </div>
+        <div>
+          <label className="label">
+            Crea una contraseña <span className="text-[color:var(--color-fg-soft)] font-normal">(opcional, para entradas rápidas sin magic link)</span>
+          </label>
+          <input
+            name="password"
+            type="password"
+            placeholder="Mínimo 8 caracteres"
+            minLength={8}
+            className="input"
+          />
+          <p className="text-xs text-[color:var(--color-fg-soft)] mt-1">
+            Con contraseña entras directo en futuras sesiones. Si la dejas vacía, seguirás usando magic link y código.
+          </p>
+        </div>
       </div>
 
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
