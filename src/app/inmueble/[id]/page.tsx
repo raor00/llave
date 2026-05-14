@@ -34,10 +34,9 @@ export default async function PropertyDetailPage({
 
       <div className="mt-4 grid lg:grid-cols-[1.4fr_1fr] gap-10">
         <div>
-          <Gallery images={gallery} title={property.title} />
-
+          {/* Tour 3D primero — es el diferenciador de Llave */}
           {property.splat_url && (
-            <div className="mt-6">
+            <div className="mb-6">
               <div className="flex items-baseline justify-between mb-3">
                 <h2 className="font-display text-xl font-semibold">Tour 3D · Gaussian Splat</h2>
                 <span className="chip">Recorré el ambiente</span>
@@ -47,11 +46,16 @@ export default async function PropertyDetailPage({
           )}
 
           {property.tour_3d_url && !property.splat_url && (
-            <div className="mt-6">
-              <h2 className="font-display text-xl font-semibold mb-3">Tour 3D</h2>
+            <div className="mb-6">
+              <div className="flex items-baseline justify-between mb-3">
+                <h2 className="font-display text-xl font-semibold">Tour 3D</h2>
+                <span className="chip">Recorré el ambiente</span>
+              </div>
               <Tour3D url={property.tour_3d_url} title={property.title} />
             </div>
           )}
+
+          <Gallery images={gallery} title={property.title} />
 
           <div className="mt-8">
             <div className="flex flex-wrap gap-2 mb-3">

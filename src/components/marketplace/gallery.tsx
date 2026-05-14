@@ -30,8 +30,13 @@ export function Gallery({ images, title }: { images: string[]; title: string }) 
         )}
       </div>
       {images.length > 1 && (
-        <div className="mt-3 grid grid-cols-4 gap-2">
-          {images.slice(0, 4).map((src, i) => {
+        <div
+          className="mt-3 grid gap-2"
+          style={{
+            gridTemplateColumns: `repeat(${Math.min(images.length, 6)}, minmax(0, 1fr))`,
+          }}
+        >
+          {images.map((src, i) => {
             const thumbIsVideo = isVideo(src);
             return (
               <button
