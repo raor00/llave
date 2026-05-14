@@ -163,3 +163,12 @@ input[type="number"] {
 @media (min-width: 768px) { .section { padding: 7rem 0; } }
 .container-x { max-width: 1200px; margin-inline: auto; padding-inline: 1.25rem; }
 @media (min-width: 768px) { .container-x { padding-inline: 2rem; } }
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; }
+  .container-x { max-width: none; padding: 0 1.5rem; }
+  /* Oculta el header/footer globales del sitio para que el PDF salga limpio */
+  body > header,
+  body > footer { display: none !important; }
+}
