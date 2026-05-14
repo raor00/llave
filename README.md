@@ -4,9 +4,23 @@
 
 # Llave — Alquilar sin meses adelantados
 
-Plataforma venezolana de alquileres con `Llavero`, un agente de IA que rompe la fricción del modelo tradicional (meses adelantados + depósito + administrativo + comisión). Construida en el **Platanus Hackathon Build Night** de Anthropic (mayo 2026).
+Plataforma venezolana de alquileres con `Llavero`, un agente de IA que rompe la fricción del modelo tradicional (meses adelantados + depósito + administrativo + comisión). Construida en el **Platanus Build Night ft. Anthropic** (Caracas, 2026).
 
 🌐 **Demo en vivo**: <https://llave-ruby.vercel.app>
+📦 **Repo público (mirror)**: <https://github.com/raor00/llave>
+
+---
+
+## Participante — Platanus Build Night ft. Anthropic
+
+- **Edición**: 2026 · Caracas, Venezuela
+- **Nombre completo**: Rafael Alejandro Oviedo Rojas
+- **GitHub**: [@raor00](https://github.com/raor00)
+- **Proyecto**: Llave 🗝️ — marketplace de alquileres con agente IA
+
+🍌🚀
+
+---
 
 ---
 
