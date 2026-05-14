@@ -3,6 +3,14 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { switchRoleAction, signOutAction } from "./user-menu-actions";
+import {
+  IconHome,
+  IconBuildings,
+  IconKey,
+  IconPencil,
+  IconLogout,
+  IconChevronDown,
+} from "./llave-icons";
 
 type Role = "inquilino" | "asesor" | "propietario";
 
@@ -67,9 +75,7 @@ export function UserMenu({
         <span className="hidden md:block text-sm font-medium text-[color:var(--color-fg)]">
           {fullName?.split(" ")[0] ?? "Mi Llave"}
         </span>
-        <svg viewBox="0 0 12 8" className="size-3 text-[color:var(--color-fg-soft)]" fill="currentColor">
-          <path d="M1 1l5 5 5-5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-        </svg>
+        <IconChevronDown size={14} className="text-[color:var(--color-fg-soft)]" />
       </button>
 
       {open && (
@@ -91,34 +97,18 @@ export function UserMenu({
 
           {/* Atajos */}
           <div className="py-1 text-sm">
-            <Link
-              href={ROLE_HOME[role]}
-              onClick={() => setOpen(false)}
-              className="block px-4 py-2 hover:bg-[color:var(--color-bg)]"
-            >
-              📊 Ir a Mi Llave
-            </Link>
-            <Link
-              href="/buscar"
-              onClick={() => setOpen(false)}
-              className="block px-4 py-2 hover:bg-[color:var(--color-bg)]"
-            >
-              🏠 Ver inmuebles
-            </Link>
-            <Link
-              href="/chat"
-              onClick={() => setOpen(false)}
-              className="block px-4 py-2 hover:bg-[color:var(--color-bg)]"
-            >
-              🗝️ Hablar con Llavero
-            </Link>
-            <Link
-              href="/onboarding"
-              onClick={() => setOpen(false)}
-              className="block px-4 py-2 hover:bg-[color:var(--color-bg)]"
-            >
-              ⚙️ Editar perfil
-            </Link>
+            <MenuLink href={ROLE_HOME[role]} onClick={() => setOpen(false)} icon={<IconHome />}>
+              Ir a Mi Llave
+            </MenuLink>
+            <MenuLink href="/buscar" onClick={() => setOpen(false)} icon={<IconBuildings />}>
+              Ver inmuebles
+            </MenuLink>
+            <MenuLink href="/chat" onClick={() => setOpen(false)} icon={<IconKey />}>
+              Hablar con Llavero
+            </MenuLink>
+            <MenuLink href="/onboarding" onClick={() => setOpen(false)} icon={<IconPencil />}>
+              Editar perfil
+            </MenuLink>
           </div>
 
           {/* Role switcher demo */}
@@ -156,13 +146,37 @@ export function UserMenu({
           <form action={signOutAction} className="border-t border-[color:var(--color-border)]">
             <button
               type="submit"
-              className="w-full text-left px-4 py-2.5 text-sm text-[color:var(--color-danger)] hover:bg-[color:var(--color-bg)]"
+              className="w-full text-left px-4 py-2.5 text-sm text-[color:var(--color-danger)] hover:bg-[color:var(--color-bg)] flex items-center gap-3"
             >
+              <IconLogout size={18} />
               Cerrar sesión
             </button>
           </form>
         </div>
       )}
     </div>
+  );
+}
+
+function MenuLink({
+  href,
+  onClick,
+  icon,
+  children,
+}: {
+  href: string;
+  onClick: () => void;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      className="flex items-center gap-3 px-4 py-2 text-[color:var(--color-fg)] hover:bg-[color:var(--color-brand-50)] transition"
+    >
+      <span className="size-5 text-[color:var(--color-brand-700)] grid place-items-center">{icon}</span>
+      <span>{children}</span>
+    </Link>
   );
 }
