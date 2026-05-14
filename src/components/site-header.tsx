@@ -78,17 +78,22 @@ export async function SiteHeader() {
     <header className="sticky top-0 z-40 glass border-b">
       <div className="container-x flex h-16 items-center justify-between gap-3">
         <div className="flex items-center gap-2 min-w-0">
-          {!viewer && <MobileNav items={nav} />}
-          <Link href="/" className="flex items-center gap-2 font-display text-lg sm:text-xl font-bold min-w-0">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/logo.png" alt="Llave" className="size-7 sm:size-8 shrink-0" />
-            <span className="truncate">Llave</span>
-            {viewer && (
-              <span className="ml-1 hidden sm:inline text-[10px] uppercase tracking-wider text-[color:var(--color-brand-700)] font-semibold px-1.5 py-0.5 rounded bg-[color:var(--color-brand-100)]">
-                {ROLE_LABEL[viewer.role]}
-              </span>
-            )}
-          </Link>
+          {viewer ? (
+            // Logueado: el logo vive en el sidebar del dashboard. El header
+            // solo lleva el chip de rol para no duplicar la marca.
+            <span className="text-[10px] uppercase tracking-wider text-[color:var(--color-brand-700)] font-semibold px-2 py-1 rounded bg-[color:var(--color-brand-100)]">
+              {ROLE_LABEL[viewer.role]}
+            </span>
+          ) : (
+            <>
+              <MobileNav items={nav} />
+              <Link href="/" className="flex items-center gap-2 font-display text-lg sm:text-xl font-bold min-w-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/brand/logo.png" alt="Llave" className="size-7 sm:size-8 shrink-0" />
+                <span className="truncate">Llave</span>
+              </Link>
+            </>
+          )}
         </div>
 
         {!viewer && (
