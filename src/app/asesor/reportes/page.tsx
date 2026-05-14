@@ -14,11 +14,13 @@ import { buildAsesorAnalytics } from "@/lib/db/asesor-analytics";
 import { formatUSD } from "@/lib/format";
 import { getGreeting } from "@/lib/greeting";
 import { IconDownload, IconReport, IconDocument } from "@/components/dashboard-icons";
+import type { ReportType } from "@/lib/reports/report-builder";
 
 export const dynamic = "force-dynamic";
 
 type DownloadableReport = {
   id: string;
+  type: ReportType;
   title: string;
   description: string;
   updated_at: string;
@@ -28,6 +30,7 @@ type DownloadableReport = {
 const REPORTS: DownloadableReport[] = [
   {
     id: "rep-perf",
+    type: "performance-inmuebles",
     title: "Performance por inmueble",
     description: "Vistas, leads, conversión y engagement por cada inmueble en cartera.",
     updated_at: "Hoy, 09:14",
@@ -35,6 +38,7 @@ const REPORTS: DownloadableReport[] = [
   },
   {
     id: "rep-funnel",
+    type: "embudo-leads",
     title: "Embudo de leads",
     description: "Conversión de cada etapa: vista → click → CTA → lead → cierre.",
     updated_at: "Hoy, 09:14",
@@ -42,6 +46,7 @@ const REPORTS: DownloadableReport[] = [
   },
   {
     id: "rep-sources",
+    type: "origen-trafico",
     title: "Origen de tráfico",
     description: "Visitas por canal (Instagram, Facebook, WhatsApp, TikTok, etc.).",
     updated_at: "Hoy, 09:14",
@@ -49,6 +54,7 @@ const REPORTS: DownloadableReport[] = [
   },
   {
     id: "rep-commissions",
+    type: "comisiones-mes",
     title: "Comisiones por mes",
     description: "Histórico mensual de comisiones cobradas y pendientes.",
     updated_at: "Ayer, 22:30",
@@ -56,6 +62,7 @@ const REPORTS: DownloadableReport[] = [
   },
   {
     id: "rep-types",
+    type: "inmuebles-tipo",
     title: "Inmuebles por tipo",
     description: "Distribución de portafolio: apartamentos, casas, locales, habitaciones.",
     updated_at: "Hace 2 días",
@@ -63,6 +70,7 @@ const REPORTS: DownloadableReport[] = [
   },
   {
     id: "rep-trends",
+    type: "performance-inmuebles",
     title: "Tendencias de búsqueda",
     description: "Keywords y filtros que más impacto tienen en tus inmuebles.",
     updated_at: "Hace 2 días",
@@ -102,7 +110,7 @@ export default async function ReportesPage() {
           <span className="chip mb-2">Crecimiento · Reportes</span>
           <h1 className="font-display text-2xl sm:text-3xl font-bold">{greeting.full}, tus reportes</h1>
           <p className="text-sm text-[color:var(--color-fg-muted)] mt-1 max-w-2xl">
-            Toda la información sobre tu desempeño en un solo lugar. Descarga CSVs o consulta los reportes interactivos.
+            Toda la información sobre tu desempeño en un solo lugar. Descarga cada reporte en PDF o consúltalo online.
           </p>
         </div>
         <a
@@ -145,7 +153,7 @@ export default async function ReportesPage() {
       <section id="descargables">
         <div className="flex items-baseline justify-between mb-3">
           <h2 className="font-display text-lg font-semibold">Reportes descargables</h2>
-          <span className="text-xs text-[color:var(--color-fg-soft)]">CSV listos para Excel / Google Sheets</span>
+          <span className="text-xs text-[color:var(--color-fg-soft)]">PDF listos para imprimir o compartir</span>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {REPORTS.map((r) => (
@@ -164,13 +172,13 @@ export default async function ReportesPage() {
               </div>
               <div className="flex gap-2 mt-3">
                 <a
-                  href={`#download-${r.id}`}
+                  href={`/reporte/${r.type}/print?scope=asesor`}
                   className="btn btn-primary text-xs flex-1 justify-center"
                 >
-                  <IconDownload size={14} /> CSV
+                  <IconDownload size={14} /> Descargar PDF
                 </a>
                 <a
-                  href={`#view-${r.id}`}
+                  href={`/reporte/${r.type}?scope=asesor`}
                   className="btn btn-outline text-xs flex-1 justify-center"
                 >
                   Ver online
