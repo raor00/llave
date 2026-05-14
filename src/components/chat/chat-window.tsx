@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { ToolResult } from "./tool-result";
 import { LlaveLogo } from "@/components/llave-logo";
 import { useVoice } from "./use-voice";
+import { MarkdownText } from "./markdown-text";
 
 const SUGGESTIONS = [
   "Busco un apto en Caracas, máximo $300, 2 ambientes",
@@ -227,16 +228,17 @@ function Message({
       <div className={`max-w-[88%] space-y-3 ${isUser ? "items-end" : ""}`}>
         {parts.map((part, idx) => {
           if (part.type === "text") {
+            const text = String((part as { text?: string }).text ?? "");
             return (
               <div
                 key={idx}
-                className={`rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap ${
+                className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                   isUser
-                    ? "bg-[color:var(--color-fg)] text-white ml-auto"
+                    ? "bg-[color:var(--color-fg)] text-white ml-auto whitespace-pre-wrap"
                     : "bg-white border border-[color:var(--color-border)]"
                 }`}
               >
-                {String((part as { text?: string }).text ?? "")}
+                {isUser ? text : <MarkdownText>{text}</MarkdownText>}
               </div>
             );
           }
