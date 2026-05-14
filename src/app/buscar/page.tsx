@@ -41,7 +41,7 @@ export default async function BuscarPage({
             todos publicados bajo el modelo Llave (sin meses adelantados)
           </p>
         </div>
-        <Link href="/chat" className="btn btn-primary">Pedile a Llavero que busque por vos</Link>
+        <Link href="/chat" className="btn btn-primary">Pídele a Llavero que busque por ti</Link>
       </div>
 
       <div className="grid lg:grid-cols-[280px_1fr] gap-6">

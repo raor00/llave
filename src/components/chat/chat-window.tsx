@@ -11,7 +11,7 @@ import { useVoice } from "./use-voice";
 const SUGGESTIONS = [
   "Busco un apto en Caracas, máximo $300, 2 ambientes",
   "Soy estudiante en Mérida, presupuesto $200",
-  "Comparame los 3 inmuebles más baratos en Valencia",
+  "Compárame los 3 inmuebles más baratos en Valencia",
   "Quiero un local de 80m² en Sabana Grande",
 ];
 
@@ -114,15 +114,15 @@ export function ChatWindow({ asesorMode = false }: { asesorMode?: boolean }) {
                   : "Hola, soy Llavero. ¿Qué tipo de inmueble buscás?"}
               </h2>
               <p className="mt-3 text-[color:var(--color-fg-muted)]">
-                Contame ciudad, presupuesto y un par de detalles. Te muestro opciones reales y te ayudo a agendar visita.
-                {voice.supported && <> Podés usar el micrófono también.</>}
+                Cuéntame ciudad, presupuesto y un par de detalles. Te muestro opciones reales y te ayudo a agendar visita.
+                {voice.supported && <> Puedes usar el micrófono también.</>}
               </p>
               <div className="mt-7 grid sm:grid-cols-2 gap-3 max-w-xl mx-auto text-left">
                 {(asesorMode
                   ? [
                       "Quiero publicar un apto 2hab en Valencia, $260, con piscina",
-                      "Sugerime precio para una casa de 4 hab en El Hatillo",
-                      "Mostrame los leads pendientes",
+                      "Sugiéreme precio para una casa de 4 hab en El Hatillo",
+                      "Muéstrame los leads pendientes",
                       "Comparativa de comparables en Maracaibo",
                     ]
                   : SUGGESTIONS
@@ -192,7 +192,7 @@ export function ChatWindow({ asesorMode = false }: { asesorMode?: boolean }) {
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder={asesorMode ? "Decime qué inmueble querés publicar…" : "Contame qué buscás…"}
+            placeholder={asesorMode ? "Dime qué inmueble quieres publicar…" : "Cuéntame qué buscas…"}
             className="input flex-1"
             disabled={isBusy}
           />

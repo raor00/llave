@@ -117,8 +117,8 @@ export function CaptacionForm() {
               <h2 className="font-display text-xl font-semibold">Fotos del inmueble</h2>
               <p className="text-sm text-[color:var(--color-fg-muted)] mt-1">
                 {hasLidar
-                  ? "Detectamos un dispositivo iOS reciente. Si tenés iPhone Pro / iPad Pro, podés capturar también el tour 3D abajo."
-                  : "Tomá las fotos directo desde la cámara del dispositivo, o subí archivos existentes."}
+                  ? "Detectamos un dispositivo iOS reciente. Si tienes iPhone Pro / iPad Pro, puedes capturar también el tour 3D abajo."
+                  : "Toma las fotos directo desde la cámara del dispositivo, o sube archivos existentes."}
               </p>
             </div>
             <span className="chip">{photos.length} foto{photos.length === 1 ? "" : "s"}</span>

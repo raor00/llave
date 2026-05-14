@@ -142,7 +142,7 @@ export function detectIntent(text: string, history: ModelMessage[] = []): Intent
           inquilino_phone: phoneMatch[1],
         },
         intro: "Listo, agendo la visita.",
-        closer: "Un asesor te confirma por teléfono. Mientras, podés seguir explorando otros.",
+        closer: "Un asesor te confirma por teléfono. Mientras, puedes seguir explorando otros.",
       };
     }
     return {
@@ -182,7 +182,7 @@ export function detectIntent(text: string, history: ModelMessage[] = []): Intent
         amenities: ents.amenities,
       },
       intro: "Voy a redactar el borrador con esos datos.",
-      closer: "Listo, ya quedó publicado en estado disponible. Después podés editarlo desde tu panel.",
+      closer: "Listo, ya quedó publicado en estado disponible. Después puedes editarlo desde tu panel.",
     };
   }
 

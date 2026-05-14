@@ -9,9 +9,9 @@ export default function CaptacionPage() {
         <span className="chip mb-2">Captación</span>
         <h1 className="font-display text-3xl md:text-4xl font-bold">Captar inmueble en sitio</h1>
         <p className="text-[color:var(--color-fg-muted)] mt-2 max-w-2xl">
-          Tomá las fotos directo desde el teléfono (sin salir de Llave), cargá un tour 3D si
-          tenés un dispositivo con LiDAR y publicalo en segundos. Si todavía no estás en el inmueble,
-          podés guardar el borrador y completar después.
+          Toma las fotos directo desde el teléfono (sin salir de Llave), carga un tour 3D si
+          tienes un dispositivo con LiDAR y publícalo en segundos. Si todavía no estás en el inmueble,
+          puedes guardar el borrador y completar después.
         </p>
       </div>
       <CaptacionForm />

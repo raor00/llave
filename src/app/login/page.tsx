@@ -36,7 +36,7 @@ export default function LoginPage() {
         </Link>
         <h1 className="font-display text-4xl font-bold">Ingresá a tu cuenta</h1>
         <p className="text-[color:var(--color-fg-muted)] mt-2 max-w-md">
-          Magic link a tu correo. Si sos asesor, accedés al CRM. Si sos inquilino, a tu historial de visitas y favoritos.
+          Magic link a tu correo. Si eres asesor, accedes al CRM. Si eres inquilino, a tu historial de visitas y favoritos.
         </p>
       </div>
       <form onSubmit={handleLogin} className="card p-8 max-w-md w-full">
@@ -45,7 +45,7 @@ export default function LoginPage() {
           required
           type="email"
           className="input"
-          placeholder="vos@correo.com"
+          placeholder="tu@correo.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
