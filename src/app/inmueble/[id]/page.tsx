@@ -9,6 +9,7 @@ import { Gallery } from "@/components/marketplace/gallery";
 import { Tour3D } from "@/components/marketplace/tour-3d";
 import { SplatViewer } from "@/components/marketplace/splat-viewer";
 import { MeshViewer } from "@/components/marketplace/mesh-viewer";
+import { PolycamEmbed } from "@/components/marketplace/polycam-embed";
 
 export default async function PropertyDetailPage({
   params,
@@ -57,28 +58,40 @@ export default async function PropertyDetailPage({
       <div className="mt-4 grid lg:grid-cols-[1.4fr_1fr] gap-10">
         <div>
           {(() => {
-            const tourUrl = property.splat_url ?? property.tour_3d_url;
-            if (!tourUrl) return null;
-            const lower = tourUrl.toLowerCase();
-            const isSplat = lower.endsWith(".splat");
-            const isPly = lower.endsWith(".ply");
-            const label = isSplat
-              ? "Tour 3D · Gaussian Splat"
-              : isPly
-                ? "Tour 3D · Mesh fotogramétrico"
-                : "Tour 3D";
+            // Preferencia: Polycam embed (fotoreal, texturas) > Gaussian Splat
+            // > mesh .ply > model-viewer. El asesor puede pegar un share-link
+            // de Polycam como tour_3d_url y se renderiza con su viewer oficial.
+            const tourUrl = property.tour_3d_url ?? property.splat_url;
+            const splatUrl = property.splat_url;
+            const isPolycam =
+              !!property.tour_3d_url && /^https?:\/\/(www\.)?poly\.cam\//i.test(property.tour_3d_url);
+            const resolvedUrl = isPolycam ? property.tour_3d_url! : splatUrl ?? property.tour_3d_url;
+            if (!resolvedUrl) return null;
+            const lower = resolvedUrl.toLowerCase();
+            const isSplat = !isPolycam && lower.endsWith(".splat");
+            const isPly = !isPolycam && lower.endsWith(".ply");
+            const label = isPolycam
+              ? "Tour 3D · Polycam"
+              : isSplat
+                ? "Tour 3D · Gaussian Splat"
+                : isPly
+                  ? "Tour 3D · Mesh fotogramétrico"
+                  : "Tour 3D";
+            void tourUrl;
             return (
               <div className="mb-6">
                 <div className="flex items-baseline justify-between mb-3">
                   <h2 className="font-display text-xl font-semibold">{label}</h2>
                   <span className="chip">Recorre el ambiente</span>
                 </div>
-                {isSplat ? (
-                  <SplatViewer url={tourUrl} title={property.title} />
+                {isPolycam ? (
+                  <PolycamEmbed url={resolvedUrl} title={property.title} />
+                ) : isSplat ? (
+                  <SplatViewer url={resolvedUrl} title={property.title} />
                 ) : isPly ? (
-                  <MeshViewer url={tourUrl} title={property.title} />
+                  <MeshViewer url={resolvedUrl} title={property.title} />
                 ) : (
-                  <Tour3D url={tourUrl} title={property.title} />
+                  <Tour3D url={resolvedUrl} title={property.title} />
                 )}
               </div>
             );
