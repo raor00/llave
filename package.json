@@ -2,6 +2,26 @@
   "name": "llave",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
+  "description": "Plataforma venezolana de alquileres con Llavero, un agente IA construido sobre Claude. Sin meses adelantados, cero depósito, solo cédula.",
+  "homepage": "https://llave-ruby.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/raor00/llave"
+  },
+  "keywords": [
+    "real-estate",
+    "venezuela",
+    "rental",
+    "ai-agent",
+    "claude",
+    "anthropic",
+    "platanus-build-night",
+    "gaussian-splatting",
+    "supabase",
+    "nextjs"
+  ],
+  "author": "Rafael Alejandro Oviedo Rojas <raor00@users.noreply.github.com>",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

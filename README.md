@@ -23,24 +23,10 @@ Good luck 🍌🚀
 
 <p align="left">
   <img alt="Platanus Build Night" src="https://img.shields.io/badge/Platanus%20Build%20Night-ft.%20Anthropic-c4513a?style=for-the-badge&labelColor=4a1e13&logo=anthropic&logoColor=white" />
-  <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=next.js&logoColor=white" />
-  <img alt="React 19" src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=000000" />
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
-  <br/>
   <img alt="Claude Sonnet 4.5" src="https://img.shields.io/badge/Powered%20by-Claude%20Sonnet%204.5-D97757?style=for-the-badge&logo=anthropic&logoColor=white" />
-  <img alt="AI SDK v6" src="https://img.shields.io/badge/Vercel%20AI%20SDK-v6-000000?style=for-the-badge&logo=vercel&logoColor=white" />
-  <img alt="Tools" src="https://img.shields.io/badge/AI%20tools-8%20Zod--typed-8a3722?style=for-the-badge" />
-  <br/>
-  <img alt="Supabase" src="https://img.shields.io/badge/Database-Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white" />
-  <img alt="Tailwind v4" src="https://img.shields.io/badge/Tailwind-v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
-  <img alt="Vercel" src="https://img.shields.io/badge/Deploy-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" />
-  <br/>
-  <img alt="Tour 3D" src="https://img.shields.io/badge/Tour%203D-Gaussian%20Splat%20%2B%20USDZ-c4513a?style=for-the-badge" />
-  <img alt="Mapa Diáspora" src="https://img.shields.io/badge/Mapa-Di%C3%A1spora%20VE-8a3722?style=for-the-badge" />
-  <img alt="Garantía 360" src="https://img.shields.io/badge/Garant%C3%ADa-Llave%20360%C2%B0-c4513a?style=for-the-badge" />
-  <br/>
-  <img alt="Vitest" src="https://img.shields.io/badge/Vitest-29%20tests-6E9F18?style=for-the-badge&logo=vitest&logoColor=white" />
-  <img alt="MIT" src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
+  <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=next.js&logoColor=white" />
+  <img alt="Supabase" src="https://img.shields.io/badge/Supabase-Auth%20%2B%20Postgres-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white" />
+  <a href="./LICENSE"><img alt="License MIT" src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" /></a>
   <img alt="Hecho en Venezuela" src="https://img.shields.io/badge/Hecho%20en-Venezuela%20%F0%9F%87%BB%F0%9F%87%AA-FCE300?style=for-the-badge&labelColor=CE1126" />
 </p>
 
