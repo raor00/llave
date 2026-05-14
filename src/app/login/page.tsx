@@ -20,7 +20,7 @@ export default function LoginPage() {
     setSending(true);
     const { error } = await supa.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: `${window.location.origin}/asesor` },
+      options: { emailRedirectTo: `${window.location.origin}/onboarding` },
     });
     setSending(false);
     if (error) toast.error(error.message);
