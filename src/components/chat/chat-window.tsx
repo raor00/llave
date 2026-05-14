@@ -23,7 +23,17 @@ const SUGGESTIONS = [
   "Quiero un local de 80m² en Sabana Grande",
 ];
 
-export function ChatWindow({ asesorMode = false }: { asesorMode?: boolean }) {
+export function ChatWindow({
+  asesorMode = false,
+  embedded = false,
+  heightClass = "h-[calc(100dvh-7rem)] sm:h-[calc(100dvh-9rem)] max-h-[860px] min-h-[480px]",
+}: {
+  asesorMode?: boolean;
+  // embedded: sin el wrapper container-x, para encajar dentro de una columna.
+  embedded?: boolean;
+  // heightClass: permite dimensionar el chat para una columna en vez de full-page.
+  heightClass?: string;
+}) {
   const sp = useSearchParams();
   const initialContext = sp.get("context");
 
@@ -80,8 +90,10 @@ export function ChatWindow({ asesorMode = false }: { asesorMode?: boolean }) {
   };
 
   return (
-    <div className="container-x py-4 sm:py-6">
-      <div className="card overflow-hidden grid grid-rows-[auto_1fr_auto] h-[calc(100dvh-7rem)] sm:h-[calc(100dvh-9rem)] max-h-[860px] min-h-[480px]">
+    <div className={embedded ? "" : "container-x py-4 sm:py-6"}>
+      <div
+        className={`card overflow-hidden grid grid-rows-[auto_1fr_auto] ${heightClass}`}
+      >
         <header className="flex items-center justify-between gap-3 border-b px-4 sm:px-5 py-3 sm:py-4 bg-white">
           <div className="flex items-center gap-3">
             <div className="size-10 rounded-full bg-[color:var(--color-brand-100)] flex items-center justify-center">

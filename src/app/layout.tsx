@@ -6,6 +6,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { LlaveroWidgetProvider } from "@/components/llavero/llavero-widget-provider";
+import { LlaveroWidget } from "@/components/llavero/llavero-widget";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jakarta = Plus_Jakarta_Sans({
@@ -39,9 +41,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-itunes-app" content="app-id=1532482376" />
       </head>
       <body>
-        <SiteHeader />
-        <main>{children}</main>
-        <SiteFooter />
+        <LlaveroWidgetProvider>
+          <SiteHeader />
+          <main>{children}</main>
+          <SiteFooter />
+          <LlaveroWidget />
+        </LlaveroWidgetProvider>
         <Toaster richColors position="top-center" />
         <Analytics />
         <SpeedInsights />
