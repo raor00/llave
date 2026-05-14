@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
-import { searchProperties } from "@/lib/db/queries";
+import { getPropertyById, searchProperties } from "@/lib/db/queries";
+import { DEMO_PROPERTIES } from "@/lib/db/seed-data";
 
 describe("searchProperties (seed-backed)", () => {
   test("returns disponible properties", async () => {
@@ -53,5 +54,23 @@ describe("searchProperties (seed-backed)", () => {
     });
     expect(narrowed.length).toBeGreaterThan(0);
     expect(narrowed.length).toBeLessThan(all.length);
+  });
+
+  test("searchProperties devuelve coordenadas para renderizar el mapa", async () => {
+    const properties = await searchProperties({ city: "Caracas", limit: 5 });
+    expect(properties.length).toBeGreaterThan(0);
+    expect(properties.some((p) => typeof p.lat === "number" && typeof p.lng === "number")).toBe(true);
+  });
+
+  test("seed expone el Loft Hackathon con tour GLB", async () => {
+    const loft = DEMO_PROPERTIES.find((p) => p.title.includes("Loft Hackathon"));
+    expect(loft).toBeTruthy();
+    expect(loft?.tour_3d_url).toBe("/inmuebles/comedor/loft-hackathon-tour.glb");
+
+    const detail = await getPropertyById(loft!.id);
+    expect(detail?.tour_3d_url).toBe("/inmuebles/comedor/loft-hackathon-tour.glb");
+
+    const matches = await searchProperties({ query: "Hackathon" });
+    expect(matches.some((p) => p.title.includes("Loft Hackathon"))).toBe(true);
   });
 });

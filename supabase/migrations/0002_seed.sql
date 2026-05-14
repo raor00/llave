@@ -168,3 +168,25 @@ begin
     'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200',
     array['https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200']);
 end $$;
+
+update public.properties
+set
+  title = 'Llave: Loft Hackathon — viví donde Llave fue construida',
+  description = 'El comedor donde nació Llave convertido en loft creativo: luz natural, mesa grande de trabajo, café cerca y un tour 3D real para recorrerlo antes de visitarlo. Ideal para builders remotos, fundadores o alguien que quiera vivir donde cerramos el demo.',
+  address = 'Oficinas de Fina · Comedor del Hackathon',
+  price_usd = 1000,
+  rooms = 1,
+  bathrooms = 1,
+  area_m2 = 72,
+  amenities = array['tour 3D real','wifi fibra','mesa de trabajo','aire acondicionado','seguridad','café cerca'],
+  rules = array['no fiestas entre semana','cuidar equipos compartidos'],
+  cover_url = '/inmuebles/comedor/comedor1.jpg',
+  gallery_urls = array[
+    '/inmuebles/comedor/comedor1.jpg',
+    '/inmuebles/comedor/comedor2.jpg',
+    '/inmuebles/comedor/comedor3.jpg',
+    '/inmuebles/comedor/comedor4.jpg',
+    '/inmuebles/comedor/comedor5.mp4'
+  ],
+  tour_3d_url = '/inmuebles/comedor/loft-hackathon-tour.glb'
+where title = 'Llave: Apartamento luminoso en Las Mercedes';

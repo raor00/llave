@@ -17,7 +17,7 @@ export type SearchFilters = {
 };
 
 const PROPERTY_SUMMARY_COLS =
-  "id,title,type,city,state,price_usd,rooms,bathrooms,area_m2,amenities,cover_url,no_months_upfront,deposit_months";
+  "id,title,type,city,state,lat,lng,price_usd,rooms,bathrooms,area_m2,amenities,cover_url,no_months_upfront,deposit_months";
 
 function summarize(p: Property): PropertySummary {
   return {
@@ -26,6 +26,8 @@ function summarize(p: Property): PropertySummary {
     type: p.type,
     city: p.city,
     state: p.state,
+    lat: p.lat,
+    lng: p.lng,
     price_usd: p.price_usd,
     rooms: p.rooms,
     bathrooms: p.bathrooms,

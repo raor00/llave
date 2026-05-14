@@ -99,8 +99,8 @@ export default async function AsesorDashboard() {
       </section>
 
       {/* Exposición global */}
-      <section className="grid lg:grid-cols-[1.4fr_1fr] gap-5">
-        <div className="card p-5 sm:p-6">
+      <section className="grid lg:grid-cols-[1.4fr_1fr] gap-5 items-start">
+        <div className="card p-5 sm:p-6 self-start">
           <div className="flex items-baseline justify-between mb-1">
             <h2 className="font-display text-lg font-semibold">Exposición esta semana</h2>
             <span className="text-xs text-[color:var(--color-fg-soft)]">7 días</span>
@@ -122,7 +122,7 @@ export default async function AsesorDashboard() {
           </div>
         </div>
 
-        <div className="card p-5 sm:p-6">
+        <div className="card p-5 sm:p-6 self-start">
           <div className="flex items-baseline justify-between mb-3">
             <h2 className="font-display text-lg font-semibold">Fuentes de tráfico</h2>
             <span className="text-xs text-[color:var(--color-fg-soft)]">de dónde llegan</span>

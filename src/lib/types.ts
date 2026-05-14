@@ -55,6 +55,8 @@ export type PropertySummary = Pick<
   | "type"
   | "city"
   | "state"
+  | "lat"
+  | "lng"
   | "price_usd"
   | "rooms"
   | "bathrooms"

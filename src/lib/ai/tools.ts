@@ -154,6 +154,8 @@ const comparePropertiesTool = tool({
       type: p.type,
       city: p.city,
       state: p.state,
+      lat: p.lat,
+      lng: p.lng,
       price_usd: p.price_usd,
       rooms: p.rooms,
       bathrooms: p.bathrooms,
