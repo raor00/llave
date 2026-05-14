@@ -24,8 +24,43 @@ async function getViewer() {
   };
 }
 
+const PUBLIC_NAV = [
+  { href: "/#problema", label: "El problema" },
+  { href: "/#manifiesto", label: "Manifiesto" },
+  { href: "/#llavero", label: "Llavero IA" },
+  { href: "/#asesores", label: "Para asesores" },
+];
+
+const ROLE_NAV: Record<Role, Array<{ href: string; label: string }>> = {
+  inquilino: [
+    { href: "/inquilino", label: "Mi Llave" },
+    { href: "/buscar", label: "Inmuebles" },
+    { href: "/chat", label: "Llavero" },
+    { href: "/#diaspora", label: "Diáspora" },
+  ],
+  asesor: [
+    { href: "/asesor", label: "Dashboard" },
+    { href: "/asesor/captacion", label: "Captación" },
+    { href: "/asesor/leads", label: "Leads" },
+    { href: "/asesor/publicar", label: "Publicar IA" },
+  ],
+  propietario: [
+    { href: "/propietario", label: "Mis inmuebles" },
+    { href: "/buscar", label: "Mercado" },
+    { href: "/chat", label: "Llavero" },
+    { href: "/asesor/captacion", label: "Publicar" },
+  ],
+};
+
+const ROLE_LABEL: Record<Role, string> = {
+  inquilino: "INQUILINO",
+  asesor: "ASESOR",
+  propietario: "PROPIETARIO",
+};
+
 export async function SiteHeader() {
   const viewer = await getViewer();
+  const nav = viewer ? ROLE_NAV[viewer.role] : PUBLIC_NAV;
 
   return (
     <header className="sticky top-0 z-40 glass border-b">
@@ -34,21 +69,23 @@ export async function SiteHeader() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/brand/logo.png" alt="Llave" className="size-8" />
           <span>Llave</span>
+          {viewer && (
+            <span className="ml-1 hidden sm:inline text-[10px] uppercase tracking-wider text-[color:var(--color-brand-700)] font-semibold px-1.5 py-0.5 rounded bg-[color:var(--color-brand-100)]">
+              {ROLE_LABEL[viewer.role]}
+            </span>
+          )}
         </Link>
-        <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-[color:var(--color-fg-muted)]">
-          <Link href="/#problema" className="hover:text-[color:var(--color-fg)]">El problema</Link>
-          <Link href="/#manifiesto" className="hover:text-[color:var(--color-fg)]">Manifiesto</Link>
-          <Link href="/#llavero" className="hover:text-[color:var(--color-fg)]">Llavero IA</Link>
-          <Link href="/#asesores" className="hover:text-[color:var(--color-fg)]">Para asesores</Link>
+
+        <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-[color:var(--color-fg-muted)]">
+          {nav.map((item) => (
+            <Link key={item.href} href={item.href} className="hover:text-[color:var(--color-fg)] transition">
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
         {viewer ? (
-          <div className="flex items-center gap-2">
-            <Link href="/buscar" className="hidden sm:inline-flex btn btn-ghost">
-              Ver inmuebles
-            </Link>
-            <UserMenu fullName={viewer.fullName} email={viewer.email} role={viewer.role} />
-          </div>
+          <UserMenu fullName={viewer.fullName} email={viewer.email} role={viewer.role} />
         ) : (
           <div className="flex items-center gap-2">
             <Link href="/login" className="btn btn-ghost">Mi Llave</Link>
