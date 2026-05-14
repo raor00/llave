@@ -4,6 +4,7 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { LlaveLogo } from "@/components/llave-logo";
 import { ToolResult } from "@/components/chat/tool-result";
 import { MarkdownText } from "@/components/chat/markdown-text";
@@ -56,8 +57,8 @@ export function LlaveroWidget() {
       )}
 
       {open && (
-        <div className="fixed z-50 inset-x-3 bottom-3 sm:inset-x-auto sm:right-5 sm:bottom-5 sm:w-[360px]">
-          <div className="card overflow-hidden grid grid-rows-[auto_1fr_auto] h-[70dvh] max-h-[520px] shadow-pop">
+        <div className="fixed z-50 inset-x-3 bottom-3 sm:inset-x-auto sm:right-5 sm:bottom-5 sm:w-[420px] md:w-[440px]">
+          <div className="card overflow-hidden grid grid-rows-[auto_1fr_auto] h-[80dvh] max-h-[660px] shadow-pop">
             <header className="flex items-center justify-between gap-3 border-b px-4 py-3 bg-white">
               <div className="flex items-center gap-2.5">
                 <div className="size-9 rounded-full bg-[color:var(--color-brand-100)] flex items-center justify-center">
@@ -70,26 +71,31 @@ export function LlaveroWidget() {
                   </div>
                 </div>
               </div>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="size-8 rounded-full grid place-items-center text-[color:var(--color-fg-muted)] hover:bg-[color:var(--color-bg)] hover:text-[color:var(--color-fg)] transition"
-                aria-label="Cerrar chat"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  className="size-4"
-                  aria-hidden
+              <div className="flex items-center gap-1">
+                <Link
+                  href="/chat"
+                  onClick={() => setOpen(false)}
+                  className="text-[11px] font-semibold text-[color:var(--color-brand-700)] hover:underline px-2 py-1"
+                  title="Abrir el chat completo"
                 >
-                  <path
-                    d="M6 6 L18 18 M18 6 L6 18"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </button>
+                  Ver completo
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="size-8 rounded-full grid place-items-center text-[color:var(--color-fg-muted)] hover:bg-[color:var(--color-bg)] hover:text-[color:var(--color-fg)] transition"
+                  aria-label="Cerrar chat"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" className="size-4" aria-hidden>
+                    <path
+                      d="M6 6 L18 18 M18 6 L6 18"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </button>
+              </div>
             </header>
 
             <div
@@ -197,7 +203,7 @@ function Message({
       >
         {isUser ? "Tú" : <LlaveLogo className="size-4" />}
       </div>
-      <div className="max-w-[85%] space-y-2">
+      <div className={`space-y-2 ${isUser ? "max-w-[85%]" : "max-w-[92%] w-full"}`}>
         {parts.map((part, idx) => {
           if (part.type === "text") {
             const text = String((part as { text?: string }).text ?? "");
