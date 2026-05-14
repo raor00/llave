@@ -57,7 +57,7 @@ export function Tour3D({ url, title }: { url: string; title: string }) {
         />
       </div>
       <div className="p-4 text-xs text-[color:var(--color-fg-soft)] flex items-center justify-between">
-        <span>Tour 3D · arrastrá para girar, scroll para zoom</span>
+        <span>Tour 3D · arrastra para girar, scroll para zoom</span>
         <a href={url} download className="text-[color:var(--color-brand-700)] hover:underline">
           Descargar modelo
         </a>

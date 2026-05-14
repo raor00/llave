@@ -87,7 +87,7 @@ export function SplatViewer({ url, title }: { url: string; title: string }) {
         )}
       </div>
       <div className="p-4 text-xs text-[color:var(--color-fg-soft)] flex items-center justify-between">
-        <span>Gaussian Splat · arrastrá para girar, scroll para zoom</span>
+        <span>Gaussian Splat · arrastra para girar, scroll para zoom</span>
         <a href={url} download className="text-[color:var(--color-brand-700)] hover:underline">
           Descargar .splat
         </a>

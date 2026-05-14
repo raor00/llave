@@ -39,7 +39,7 @@ export default async function PropertyDetailPage({
             <div className="mb-6">
               <div className="flex items-baseline justify-between mb-3">
                 <h2 className="font-display text-xl font-semibold">Tour 3D · Gaussian Splat</h2>
-                <span className="chip">Recorré el ambiente</span>
+                <span className="chip">Recorre el ambiente</span>
               </div>
               <SplatViewer url={property.splat_url} title={property.title} />
             </div>
@@ -49,7 +49,7 @@ export default async function PropertyDetailPage({
             <div className="mb-6">
               <div className="flex items-baseline justify-between mb-3">
                 <h2 className="font-display text-xl font-semibold">Tour 3D</h2>
-                <span className="chip">Recorré el ambiente</span>
+                <span className="chip">Recorre el ambiente</span>
               </div>
               <Tour3D url={property.tour_3d_url} title={property.title} />
             </div>
