@@ -6,6 +6,7 @@ import { searchProperties } from "@/lib/db/queries";
 import { getActiveContractForTenant } from "@/lib/db/contracts";
 import { PropertyCard } from "@/components/marketplace/property-card";
 import { formatUSD } from "@/lib/format";
+import { getGreeting } from "@/lib/greeting";
 
 export const dynamic = "force-dynamic";
 
@@ -33,15 +34,14 @@ export default async function InquilinoPage() {
 
   const contractStatus = await getActiveContractForTenant(userId);
   const suggested = await searchProperties({ price_max: 350, limit: 6 });
+  const greeting = getGreeting(fullName);
 
   return (
     <div className="container-x py-10">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
           <span className="chip mb-2">Mi Llave · Inquilino</span>
-          <h1 className="font-display text-3xl md:text-4xl font-bold">
-            Hola{fullName ? `, ${fullName.split(" ")[0]}` : ""}
-          </h1>
+          <h1 className="font-display text-3xl md:text-4xl font-bold">{greeting.full}</h1>
           <p className="text-[color:var(--color-fg-muted)] mt-1">
             Encuentra tu próximo inmueble con Llavero. Sin meses adelantados.
           </p>

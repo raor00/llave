@@ -19,6 +19,7 @@ import {
   IconMeta,
 } from "@/components/social-icons";
 import { formatUSD } from "@/lib/format";
+import { getGreeting } from "@/lib/greeting";
 
 export const dynamic = "force-dynamic";
 
@@ -53,15 +54,15 @@ export default async function AsesorDashboard() {
     leadCount: leads.length,
   });
 
+  const greeting = getGreeting(owner.full_name);
+
   return (
     <div className="container-x py-8 sm:py-10 space-y-10">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <span className="chip mb-2">Panel asesor · CRM Llave</span>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold">
-            Hola, {owner.full_name?.split(" ")[0]}
-          </h1>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold">{greeting.full}</h1>
           <p className="text-sm text-[color:var(--color-fg-muted)] mt-1 max-w-2xl">
             Métricas reales de tus inmuebles, comisiones acumuladas y oportunidades que el algoritmo Llave preparó para ti.
           </p>

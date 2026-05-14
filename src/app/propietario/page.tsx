@@ -6,6 +6,7 @@ import { formatUSD } from "@/lib/format";
 import type { Property } from "@/lib/types";
 import { listAllProperties, listLeadsForOwner } from "@/lib/db/queries";
 import { getViewsByProperty, getViewsTimeSeries } from "@/lib/db/views";
+import { getGreeting } from "@/lib/greeting";
 
 export const dynamic = "force-dynamic";
 
@@ -66,14 +67,14 @@ export default async function PropietarioPage() {
     .map((p) => ({ p, views: viewsMap.get(p.id) ?? 0 }))
     .sort((a, b) => b.views - a.views)[0];
 
+  const greeting = getGreeting(fullName);
+
   return (
     <div className="container-x py-10">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
           <span className="chip mb-2">Mi Llave · Propietario</span>
-          <h1 className="font-display text-3xl md:text-4xl font-bold">
-            Hola{fullName ? `, ${fullName.split(" ")[0]}` : ""}
-          </h1>
+          <h1 className="font-display text-3xl md:text-4xl font-bold">{greeting.full}</h1>
           <p className="text-[color:var(--color-fg-muted)] mt-1">
             Tu cartera, demanda real y leads. Llave protege la operación; tú decides.
           </p>
