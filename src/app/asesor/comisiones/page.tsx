@@ -207,11 +207,13 @@ function CommissionsChart({ data }: { data: Array<{ month: string; amount: numbe
       {data.map((d, i) => {
         const pct = Math.round((d.amount / max) * 100);
         return (
-          <div key={i} className="flex-1 flex flex-col items-center justify-end gap-1">
-            <div
-              className="w-full rounded-t-md bg-gradient-to-t from-[color:var(--color-accent)] to-[#f7d9cb]"
-              style={{ height: `${Math.max(6, pct)}%` }}
-            />
+          <div key={i} className="flex-1 flex flex-col items-center gap-1 h-full">
+            <div className="flex-1 w-full flex items-end">
+              <div
+                className="w-full rounded-t-md bg-gradient-to-t from-[color:var(--color-accent)] to-[#f7d9cb]"
+                style={{ height: `${Math.max(6, pct)}%` }}
+              />
+            </div>
             <div className="text-[10px] text-[color:var(--color-fg-soft)] capitalize">{d.month}</div>
             <div className="text-[10px] text-[color:var(--color-fg-muted)]">${d.amount}</div>
           </div>

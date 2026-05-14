@@ -87,12 +87,14 @@ export default async function PropietarioPagosPage() {
           {series.map((s, i) => {
             const pct = Math.round((s.total_usd / maxSeries) * 100);
             return (
-              <div key={i} className="flex-1 flex flex-col items-center justify-end gap-1">
-                <div
-                  className="w-full rounded-t-md bg-gradient-to-t from-[color:var(--color-brand-700)] to-[color:var(--color-brand-400)]"
-                  style={{ height: `${Math.max(6, pct)}%` }}
-                  title={formatUSD(s.total_usd)}
-                />
+              <div key={i} className="flex-1 flex flex-col items-center gap-1 h-full">
+                <div className="flex-1 w-full flex items-end">
+                  <div
+                    className="w-full rounded-t-md bg-gradient-to-t from-[color:var(--color-brand-700)] to-[color:var(--color-brand-400)]"
+                    style={{ height: `${Math.max(6, pct)}%` }}
+                    title={formatUSD(s.total_usd)}
+                  />
+                </div>
                 <div className="text-[10px] text-[color:var(--color-fg-soft)] capitalize">{s.label}</div>
                 <div className="text-[10px] text-[color:var(--color-fg-muted)]">
                   {formatUSD(s.total_usd)}
