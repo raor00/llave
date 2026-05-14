@@ -63,14 +63,15 @@ describe("searchProperties (seed-backed)", () => {
   });
 
   test("seed expone el Loft Hackathon con tour GLB", async () => {
-    const loft = DEMO_PROPERTIES.find((p) => p.title.includes("Loft Hackathon"));
+    const loft = DEMO_PROPERTIES.find((p) => p.title.includes("Comedor Fina"));
     expect(loft).toBeTruthy();
     expect(loft?.tour_3d_url).toBe("/inmuebles/comedor/loft-hackathon-tour.glb");
+    expect(loft?.title).toContain("vive donde Llave fue construida");
 
     const detail = await getPropertyById(loft!.id);
     expect(detail?.tour_3d_url).toBe("/inmuebles/comedor/loft-hackathon-tour.glb");
 
     const matches = await searchProperties({ query: "Hackathon" });
-    expect(matches.some((p) => p.title.includes("Loft Hackathon"))).toBe(true);
+    expect(matches.some((p) => p.title.includes("Comedor Fina"))).toBe(true);
   });
 });

@@ -47,8 +47,8 @@ function p(over: Partial<Property> & { title: string; price_usd: number; city: s
 
 export const DEMO_PROPERTIES: Property[] = [
   p({
-    title: "Llave: Loft Hackathon — viví donde Llave fue construida",
-    description: "El comedor donde nació Llave convertido en loft creativo: luz natural, mesa grande de trabajo, café cerca y un tour 3D real para recorrerlo antes de visitarlo. Ideal para builders remotos, fundadores o alguien que quiera vivir donde cerramos el demo.",
+    title: "Llave: Comedor Fina — vive donde Llave fue construida",
+    description: "El comedor de Fina donde nació Llave convertido en loft creativo: luz natural, mesa grande de trabajo, café cerca y un tour 3D real para recorrerlo antes de visitarlo. Ideal para builders remotos, fundadores o alguien que quiera vivir donde cerramos el hackathon.",
     type: "apartamento",
     address: "Oficinas de Fina · Comedor del Hackathon",
     city: "Caracas",

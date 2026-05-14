@@ -292,6 +292,10 @@ const SLIDES: Slide[] = [
           <Bullet>Publicación con IA</Bullet>
           <Bullet>Métricas reales: exposición, fuentes, conversión</Bullet>
           <Bullet>
+            Integración con Meta y redes sociales: monitoreas y respondes todo desde un
+            solo sitio
+          </Bullet>
+          <Bullet>
             Comisiones y el algoritmo Llave que premia al que responde rápido
           </Bullet>
         </motion.ul>

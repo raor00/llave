@@ -171,8 +171,8 @@ end $$;
 
 update public.properties
 set
-  title = 'Llave: Loft Hackathon — viví donde Llave fue construida',
-  description = 'El comedor donde nació Llave convertido en loft creativo: luz natural, mesa grande de trabajo, café cerca y un tour 3D real para recorrerlo antes de visitarlo. Ideal para builders remotos, fundadores o alguien que quiera vivir donde cerramos el demo.',
+  title = 'Llave: Comedor Fina — vive donde Llave fue construida',
+  description = 'El comedor de Fina donde nació Llave convertido en loft creativo: luz natural, mesa grande de trabajo, café cerca y un tour 3D real para recorrerlo antes de visitarlo. Ideal para builders remotos, fundadores o alguien que quiera vivir donde cerramos el hackathon.',
   address = 'Oficinas de Fina · Comedor del Hackathon',
   price_usd = 1000,
   rooms = 1,
@@ -188,5 +188,9 @@ set
     '/inmuebles/comedor/comedor4.jpg',
     '/inmuebles/comedor/comedor5.mp4'
   ],
-  tour_3d_url = '/inmuebles/comedor/loft-hackathon-tour.glb'
-where title = 'Llave: Apartamento luminoso en Las Mercedes';
+  tour_3d_url = '/inmuebles/comedor/loft-hackathon-tour.glb',
+  splat_url = null
+where title in (
+  'Llave: Apartamento luminoso en Las Mercedes',
+  'Llave: Loft Hackathon — viví donde Llave fue construida'
+);

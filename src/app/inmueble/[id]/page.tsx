@@ -58,19 +58,26 @@ export default async function PropertyDetailPage({
       <div className="mt-4 grid lg:grid-cols-[1.4fr_1fr] gap-10">
         <div>
           {(() => {
-            // Preferencia: Polycam embed (fotoreal, texturas) > Gaussian Splat
-            // > mesh .ply > model-viewer. El asesor puede pegar un share-link
-            // de Polycam como tour_3d_url y se renderiza con su viewer oficial.
+            // Preferencia: Polycam embed (fotoreal, texturas) > tour 3D explícito
+            // > Gaussian Splat > mesh .ply. Si el inmueble ya tiene un GLB/USDZ
+            // asignado en `tour_3d_url`, eso debe ganar sobre un splat legacy.
             const tourUrl = property.tour_3d_url ?? property.splat_url;
             const splatUrl = property.splat_url;
             const isPolycam =
               !!property.tour_3d_url && /^https?:\/\/(www\.)?poly\.cam\//i.test(property.tour_3d_url);
-            const resolvedUrl = isPolycam ? property.tour_3d_url! : splatUrl ?? property.tour_3d_url;
+            const resolvedUrl = isPolycam
+              ? property.tour_3d_url!
+              : property.tour_3d_url ?? splatUrl;
             if (!resolvedUrl) return null;
             const lower = resolvedUrl.toLowerCase();
             const isSplat = !isPolycam && lower.endsWith(".splat");
             const isPly = !isPolycam && lower.endsWith(".ply");
-            const label = isPolycam
+            const isComedorFina =
+              /comedor fina/i.test(property.title) ||
+              /oficinas de fina/i.test(property.address);
+            const label = isComedorFina
+              ? "Comedor Fina"
+              : isPolycam
               ? "Tour 3D · Polycam"
               : isSplat
                 ? "Tour 3D · Gaussian Splat"
