@@ -183,7 +183,7 @@ const SLIDES: Slide[] = [
         <Headline>Llave entra por esa grieta</Headline>
         <div className="grid gap-4 sm:grid-cols-3">
           <NumberCard big="01" label="Solo cédula" tone="dark" />
-          <NumberCard big="02" label="24 a 48 horas" tone="dark" />
+          <NumberCard big="02" label="24 horas" tone="dark" />
           <NumberCard big="03" label="Cero depósito al inquilino" tone="dark" />
         </div>
         <Punch tone="dark">
