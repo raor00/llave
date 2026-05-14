@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { capturarInmueble } from "./captacion-action";
+import { NumberStepper } from "@/components/ui/number-stepper";
 
 const AMENITY_OPTIONS = [
   "planta electrica", "agua 24/7", "piscina", "gimnasio", "balcón",
@@ -286,11 +287,11 @@ export function CaptacionForm() {
           <div className="grid sm:grid-cols-4 gap-4">
             <div>
               <label className="label">Habitaciones</label>
-              <input required type="number" name="rooms" min={0} defaultValue={2} className="input" />
+              <NumberStepper name="rooms" defaultValue={2} min={0} max={20} required />
             </div>
             <div>
               <label className="label">Baños</label>
-              <input required type="number" name="bathrooms" min={0} defaultValue={2} className="input" />
+              <NumberStepper name="bathrooms" defaultValue={2} min={0} max={20} required />
             </div>
             <div>
               <label className="label">Área m²</label>
@@ -298,12 +299,12 @@ export function CaptacionForm() {
             </div>
             <div>
               <label className="label">Parking</label>
-              <input type="number" name="parking_spots" min={0} defaultValue={0} className="input" />
+              <NumberStepper name="parking_spots" defaultValue={0} min={0} max={10} />
             </div>
           </div>
 
           <div>
-            <span className="label">Amenities (clickeá lo que aplica)</span>
+            <span className="label">Amenities (haz clic en lo que aplica)</span>
             <div className="flex flex-wrap gap-2">
               {AMENITY_OPTIONS.map((a) => {
                 const active = amenities.has(a);

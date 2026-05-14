@@ -49,6 +49,17 @@ html, body {
 
 img, video, svg { max-width: 100%; height: auto; }
 
+/* Hide native number input spinner arrows — Llave usa stepper custom (+/-) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 ::selection { background: var(--color-brand-100); color: var(--color-brand-900); }
 
 .font-display { font-family: var(--font-display); }
