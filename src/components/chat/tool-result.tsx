@@ -214,7 +214,7 @@ export function ToolResult({ toolName, part }: { toolName: string; part: AnyPart
         </div>
         <div className="flex flex-wrap gap-2 mt-4">
           <Link
-            href={String(output.pdf_route ?? "#")}
+            href={`${String(output.pdf_route ?? "#")}?celebrar=1`}
             className="btn btn-primary text-xs !py-1.5"
           >
             Ver contrato

@@ -11,19 +11,32 @@ import { notFound } from "next/navigation";
 import { getContractById } from "@/lib/db/contracts";
 import { ContractDocument } from "@/components/contrato/contract-document";
 import { PrintButton, PrintIconButton } from "@/components/contrato/print-button";
+import { CelebrationOverlay } from "@/components/celebration-overlay";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { SUPABASE_ENABLED } from "@/lib/supabase/env";
 
 export const dynamic = "force-dynamic";
 
+type Role = "inquilino" | "asesor" | "propietario";
+
 export default async function ContractDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams?: Promise<{ celebrar?: string; rol?: string; primera?: string }>;
 }) {
   const { id } = await params;
+  const sp = (await searchParams) ?? {};
   const contract = getContractById(id);
   if (!contract) return notFound();
+
+  // Celebración al alquilar: el card de `generateRentalContract` enlaza con
+  // ?celebrar=1&rol=<rol>&primera=<0|1>. Confetti + copy según rol.
+  const celebrate = sp.celebrar === "1";
+  const celebrateRole: Role =
+    sp.rol === "asesor" || sp.rol === "propietario" ? sp.rol : "inquilino";
+  const celebrateFirst = sp.primera !== "0";
 
   // Si Supabase está activo y el usuario está logueado, idealmente validamos
   // que sea owner/tenant/asesor/admin. Con el seed actual los IDs no coinciden
@@ -41,6 +54,14 @@ export default async function ContractDetailPage({
 
   return (
     <div className="bg-[color:var(--color-bg)] min-h-screen">
+      {celebrate && (
+        <CelebrationOverlay
+          role={celebrateRole}
+          first={celebrateFirst}
+          ctaHref={`/contrato/${id}`}
+          ctaLabel="Ver mi contrato"
+        />
+      )}
       <header className="no-print sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-[color:var(--color-border)]">
         <div className="container-x py-3 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3 min-w-0">

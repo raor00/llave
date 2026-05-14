@@ -16,7 +16,7 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: "Llave — Alquilar sin meses adelantados",
   description:
-    "Plataforma venezolana de alquileres sin meses adelantados, con asistente IA Llavero. Reducí la fricción, mudate tranquilo.",
+    "Plataforma venezolana de alquileres sin meses adelantados, con asistente IA Llavero. Reduce la fricción, múdate tranquilo.",
   openGraph: {
     title: "Llave — Alquilar sin meses adelantados",
     description:
@@ -24,6 +24,11 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
+
+// El SiteHeader lee cookies + sesión Supabase; forzamos render dinámico para
+// que el header refleje el estado autenticado (user menu + bell + role nav)
+// en cuanto inicias sesión, sin servir una versión cacheada con la nav pública.
+export const dynamic = "force-dynamic";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
