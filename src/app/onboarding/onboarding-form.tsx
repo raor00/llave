@@ -40,8 +40,20 @@ const ROLES: Array<{
   },
 ];
 
-export function OnboardingForm({ defaultName, email }: { defaultName: string; email: string }) {
-  const [role, setRole] = useState<Role | null>(null);
+export function OnboardingForm({
+  defaultName,
+  email,
+  defaultPhone = "",
+  defaultRole = null,
+  editMode = false,
+}: {
+  defaultName: string;
+  email: string;
+  defaultPhone?: string;
+  defaultRole?: Role | null;
+  editMode?: boolean;
+}) {
+  const [role, setRole] = useState<Role | null>(defaultRole);
   const [pending, startTransition] = useTransition();
 
   async function onSubmit(formData: FormData) {
@@ -114,7 +126,7 @@ export function OnboardingForm({ defaultName, email }: { defaultName: string; em
           </div>
           <div>
             <label className="label">Teléfono (opcional)</label>
-            <input name="phone" placeholder="+58 412-1234567" className="input" />
+            <input name="phone" placeholder="+58 412-1234567" defaultValue={defaultPhone} className="input" />
           </div>
         </div>
         <div>
@@ -143,7 +155,7 @@ export function OnboardingForm({ defaultName, email }: { defaultName: string; em
           disabled={pending || !role}
           className="btn btn-primary px-8 py-3 text-base"
         >
-          {pending ? "Guardando…" : "Entrar a Mi Llave"}
+          {pending ? "Guardando…" : editMode ? "Guardar cambios" : "Entrar a Mi Llave"}
         </button>
       </div>
     </form>
