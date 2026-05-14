@@ -160,7 +160,7 @@ export function UserMenu({
                     disabled={active || pending}
                     aria-pressed={active}
                     title={ROLE_LABEL[r]}
-                    className={`rounded-full px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wider border transition ${
+                    className={`flex items-center justify-center text-center rounded-full px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wider border transition ${
                       active
                         ? "bg-[color:var(--color-brand-500)] text-white border-[color:var(--color-brand-500)] cursor-default"
                         : "bg-white text-[color:var(--color-fg)] border-[color:var(--color-border-strong)] hover:border-[color:var(--color-brand-500)] hover:text-[color:var(--color-brand-700)]"
