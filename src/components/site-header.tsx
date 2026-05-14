@@ -78,7 +78,7 @@ export async function SiteHeader() {
     <header className="sticky top-0 z-40 glass border-b">
       <div className="container-x flex h-16 items-center justify-between gap-3">
         <div className="flex items-center gap-2 min-w-0">
-          <MobileNav items={nav} />
+          {!viewer && <MobileNav items={nav} />}
           <Link href="/" className="flex items-center gap-2 font-display text-lg sm:text-xl font-bold min-w-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/brand/logo.png" alt="Llave" className="size-7 sm:size-8 shrink-0" />
@@ -91,13 +91,15 @@ export async function SiteHeader() {
           </Link>
         </div>
 
-        <nav className="hidden md:flex items-center gap-5 lg:gap-6 text-sm font-medium text-[color:var(--color-fg-muted)]">
-          {nav.map((item) => (
-            <Link key={item.href} href={item.href} className="hover:text-[color:var(--color-fg)] transition whitespace-nowrap">
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        {!viewer && (
+          <nav className="hidden md:flex items-center gap-5 lg:gap-6 text-sm font-medium text-[color:var(--color-fg-muted)]">
+            {nav.map((item) => (
+              <Link key={item.href} href={item.href} className="hover:text-[color:var(--color-fg)] transition whitespace-nowrap">
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        )}
 
         {viewer ? (
           <div className="flex items-center gap-2 shrink-0">
