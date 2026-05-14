@@ -15,6 +15,8 @@ import { getBalanceForOwner } from "@/lib/db/payments";
 import { DEMO_OWNER } from "@/lib/db/seed-data";
 import type { ReportType } from "@/lib/reports/report-builder";
 import { IconDownload, IconDocument } from "@/components/dashboard-icons";
+import { resolvePeriod } from "@/lib/reports/period";
+import { PeriodPicker } from "@/components/reports/period-picker";
 
 export const dynamic = "force-dynamic";
 
@@ -58,7 +60,21 @@ const REPORTS: DownloadableReport[] = [
   },
 ];
 
-export default async function PropietarioReportesPage() {
+export default async function PropietarioReportesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ preset?: string; from?: string; to?: string }>;
+}) {
+  const { preset, from, to } = await searchParams;
+  const period = resolvePeriod(preset, from, to);
+  // Query string del período para arrastrar la selección a /reporte/[type].
+  const periodQuery = new URLSearchParams({ scope: "propietario", preset: period.preset });
+  if (period.preset === "personalizado") {
+    periodQuery.set("from", period.from);
+    periodQuery.set("to", period.to);
+  }
+  const periodQs = periodQuery.toString();
+
   const [allProps, leads, owner] = await Promise.all([
     listAllProperties(),
     listLeadsForOwner(),
@@ -120,6 +136,9 @@ export default async function PropietarioReportesPage() {
           <h2 className="font-display text-lg font-semibold">Reportes descargables</h2>
           <span className="text-xs text-[color:var(--color-fg-soft)]">PDF listos para imprimir o compartir</span>
         </div>
+        <div className="mb-4">
+          <PeriodPicker />
+        </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {REPORTS.map((r) => (
             <article key={r.type} className="card p-5 flex flex-col">
@@ -133,16 +152,16 @@ export default async function PropietarioReportesPage() {
                 </div>
               </div>
               <div className="text-[11px] text-[color:var(--color-fg-soft)] mt-3">Actualizado {r.updated_at}</div>
-              <div className="flex gap-2 mt-3">
+              <div className="flex items-center gap-3 mt-3 pt-3 border-t border-[color:var(--color-border)]">
                 <a
-                  href={`/reporte/${r.type}/print?scope=propietario`}
-                  className="btn btn-primary text-xs flex-1 justify-center"
+                  href={`/reporte/${r.type}/print?${periodQs}`}
+                  className="btn btn-primary text-xs"
                 >
                   <IconDownload size={14} /> Descargar PDF
                 </a>
                 <Link
-                  href={`/reporte/${r.type}?scope=propietario`}
-                  className="btn btn-outline text-xs flex-1 justify-center"
+                  href={`/reporte/${r.type}?${periodQs}`}
+                  className="text-xs font-medium text-[color:var(--color-brand-700)] hover:underline"
                 >
                   Ver online
                 </Link>

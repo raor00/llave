@@ -11,6 +11,7 @@ import { listAllContracts, listContractsForOwner, getContractProgress } from "@/
 import { listPaymentsForOwner, getBalanceForOwner } from "@/lib/db/payments";
 import { formatUSD, formatPropertyType } from "@/lib/format";
 import { DEMO_OWNER } from "@/lib/db/seed-data";
+import { resolvePeriod, periodScale, type ResolvedPeriod } from "@/lib/reports/period";
 
 export type ReportType =
   | "performance-inmuebles"
@@ -41,6 +42,7 @@ export type ReportDoc = {
   subtitle: string;
   generatedAt: string;
   scope: ReportScope;
+  period: { label: string; from: string; to: string };
   sections: ReportSection[];
 };
 
@@ -80,13 +82,28 @@ function nowLabel(): string {
   });
 }
 
-function notApplicable(type: ReportType, scope: ReportScope): ReportDoc {
+/** Escala un entero de forma determinística según el período seleccionado. */
+function scaleInt(value: number, factor: number): number {
+  return Math.round(value * factor);
+}
+
+/** Escala y reformatea un monto USD según el período. */
+function scaleUSD(value: number, factor: number): string {
+  return formatUSD(Math.round(value * factor));
+}
+
+function notApplicable(
+  type: ReportType,
+  scope: ReportScope,
+  period: ResolvedPeriod
+): ReportDoc {
   return {
     type,
     title: REPORT_TITLE[type],
     subtitle: "Reporte no disponible para este perfil",
     generatedAt: nowLabel(),
     scope,
+    period: { label: period.label, from: period.from, to: period.to },
     sections: [
       {
         heading: "Sin datos para este perfil",
@@ -108,10 +125,19 @@ function notApplicable(type: ReportType, scope: ReportScope): ReportDoc {
  */
 export async function buildReport(
   type: ReportType,
-  scope: ReportScope
+  scope: ReportScope,
+  period?: ResolvedPeriod
 ): Promise<ReportDoc> {
   const generatedAt = nowLabel();
   const title = REPORT_TITLE[type];
+  const resolvedPeriod = period ?? resolvePeriod();
+  const periodMeta = {
+    label: resolvedPeriod.label,
+    from: resolvedPeriod.from,
+    to: resolvedPeriod.to,
+  };
+  const factor = periodScale(resolvedPeriod);
+  const periodSuffix = ` · ${resolvedPeriod.label}`;
 
   // Reportes propios del asesor
   if (
@@ -121,7 +147,7 @@ export async function buildReport(
       type === "comisiones-mes") &&
     scope === "propietario"
   ) {
-    return notApplicable(type, scope);
+    return notApplicable(type, scope, resolvedPeriod);
   }
   // Reportes propios del propietario
   if (
@@ -131,7 +157,7 @@ export async function buildReport(
       type === "historial-pagos") &&
     scope === "asesor"
   ) {
-    return notApplicable(type, scope);
+    return notApplicable(type, scope, resolvedPeriod);
   }
 
   const [props, leads, owner] = await Promise.all([
@@ -158,8 +184,8 @@ export async function buildReport(
           p.title.replace(/^Llave:\s*/, ""),
           formatPropertyType(p.type),
           p.city,
-          String(m?.views ?? 0),
-          String(m?.leads ?? 0),
+          String(scaleInt(m?.views ?? 0, factor)),
+          String(scaleInt(m?.leads ?? 0, factor)),
           `${m?.conversionViewToLead ?? 0}%`,
           `${m?.engagementScore ?? 0}/100`,
         ];
@@ -167,17 +193,18 @@ export async function buildReport(
       return {
         type,
         title,
-        subtitle: "Vistas, leads, conversión y engagement por inmueble en cartera",
+        subtitle: `Vistas, leads, conversión y engagement por inmueble en cartera${periodSuffix}`,
         generatedAt,
         scope,
+        period: periodMeta,
         sections: [
           {
             heading: "Resumen de cartera",
             kind: "kpis",
             kpis: [
               { label: "Inmuebles", value: String(ownerProps.length) },
-              { label: "Vistas (7 días)", value: String(analytics.totalExposure.views) },
-              { label: "Leads totales", value: String(analytics.totalExposure.leads) },
+              { label: "Vistas", value: String(scaleInt(analytics.totalExposure.views, factor)) },
+              { label: "Leads totales", value: String(scaleInt(analytics.totalExposure.leads, factor)) },
               {
                 label: "Engagement promedio",
                 value: `${analytics.totalExposure.engagementScoreAvg}/100`,
@@ -195,23 +222,28 @@ export async function buildReport(
     }
 
     case "embudo-leads": {
-      const cerrados = analytics.commissions.items.length;
+      const cerrados = scaleInt(analytics.commissions.items.length, factor);
       const e = analytics.totalExposure;
+      const eViews = scaleInt(e.views, factor);
+      const eClicks = scaleInt(e.clicks, factor);
+      const eCta = scaleInt(e.ctaClicks, factor);
+      const eLeads = scaleInt(e.leads, factor);
       return {
         type,
         title,
-        subtitle: "Conversión de cada etapa: vista → click → CTA → lead → cierre",
+        subtitle: `Conversión de cada etapa: vista → click → CTA → lead → cierre${periodSuffix}`,
         generatedAt,
         scope,
+        period: periodMeta,
         sections: [
           {
             heading: "Embudo de conversión",
             kind: "bars",
             bars: [
-              { label: "Vistas", value: e.views },
-              { label: "Clicks", value: e.clicks },
-              { label: "CTA", value: e.ctaClicks },
-              { label: "Leads", value: e.leads },
+              { label: "Vistas", value: eViews },
+              { label: "Clicks", value: eClicks },
+              { label: "CTA", value: eCta },
+              { label: "Leads", value: eLeads },
               { label: "Cerrados", value: cerrados },
             ],
           },
@@ -222,15 +254,15 @@ export async function buildReport(
               { label: "Vista → Lead", value: `${e.conversionPct}%` },
               {
                 label: "Click → CTA",
-                value: e.clicks ? `${Math.round((e.ctaClicks / e.clicks) * 100)}%` : "0%",
+                value: eClicks ? `${Math.round((eCta / eClicks) * 100)}%` : "0%",
               },
               {
                 label: "CTA → Lead",
-                value: e.ctaClicks ? `${Math.round((e.leads / e.ctaClicks) * 100)}%` : "0%",
+                value: eCta ? `${Math.round((eLeads / eCta) * 100)}%` : "0%",
               },
               {
                 label: "Lead → Cierre",
-                value: e.leads ? `${Math.round((cerrados / e.leads) * 100)}%` : "0%",
+                value: eLeads ? `${Math.round((cerrados / eLeads) * 100)}%` : "0%",
               },
             ],
           },
@@ -242,16 +274,17 @@ export async function buildReport(
       return {
         type,
         title,
-        subtitle: "Visitas por canal: Instagram, Facebook, WhatsApp, TikTok y más",
+        subtitle: `Visitas por canal: Instagram, Facebook, WhatsApp, TikTok y más${periodSuffix}`,
         generatedAt,
         scope,
+        period: periodMeta,
         sections: [
           {
             heading: "Visitas por canal",
             kind: "bars",
             bars: analytics.sources.map((s) => ({
               label: SOURCE_LABEL[s.source],
-              value: s.visits,
+              value: scaleInt(s.visits, factor),
             })),
           },
           {
@@ -260,7 +293,7 @@ export async function buildReport(
             columns: ["Canal", "Visitas", "Participación"],
             rows: analytics.sources.map((s) => [
               SOURCE_LABEL[s.source],
-              String(s.visits),
+              String(scaleInt(s.visits, factor)),
               `${s.pct}%`,
             ]),
           },
@@ -273,16 +306,17 @@ export async function buildReport(
       return {
         type,
         title,
-        subtitle: "Comisiones cobradas y pendientes por mes, tipo y ciudad",
+        subtitle: `Comisiones cobradas y pendientes por mes, tipo y ciudad${periodSuffix}`,
         generatedAt,
         scope,
+        period: periodMeta,
         sections: [
           {
             heading: "Totales de comisiones",
             kind: "kpis",
             kpis: [
-              { label: "Cobrado este mes", value: formatUSD(c.totals.paidThisMonth) },
-              { label: "Pendiente este mes", value: formatUSD(c.totals.pendingThisMonth) },
+              { label: "Cobrado en el período", value: scaleUSD(c.totals.paidThisMonth, factor) },
+              { label: "Pendiente en el período", value: scaleUSD(c.totals.pendingThisMonth, factor) },
               { label: "Acumulado del año", value: formatUSD(c.totals.ytd) },
               { label: "Histórico total", value: formatUSD(c.totals.lifetime) },
             ],
@@ -326,9 +360,10 @@ export async function buildReport(
       return {
         type,
         title,
-        subtitle: "Distribución del portafolio: apartamentos, casas, locales, habitaciones",
+        subtitle: `Distribución del portafolio: apartamentos, casas, locales, habitaciones${periodSuffix}`,
         generatedAt,
         scope,
+        period: periodMeta,
         sections: [
           {
             heading: "Distribución por tipo",
@@ -360,9 +395,10 @@ export async function buildReport(
       return {
         type,
         title,
-        subtitle: "Ingresos vigentes, cobros realizados y montos pendientes",
+        subtitle: `Ingresos vigentes, cobros realizados y montos pendientes${periodSuffix}`,
         generatedAt,
         scope,
+        period: periodMeta,
         sections: [
           {
             heading: "Resumen de ingresos",
@@ -370,7 +406,7 @@ export async function buildReport(
             kpis: [
               { label: "Ingreso vigente", value: formatUSD(incomeVigente) },
               { label: "Potencial mensual", value: formatUSD(potential) },
-              { label: "Cobrado en el año", value: formatUSD(balance.total_paid_ytd_usd) },
+              { label: "Cobrado en el período", value: scaleUSD(balance.total_paid_ytd_usd, factor) },
               { label: "Pendiente por cobrar", value: formatUSD(balance.total_pending_usd) },
             ],
           },
@@ -396,9 +432,10 @@ export async function buildReport(
       return {
         type,
         title,
-        subtitle: "Ocupación de la cartera y estado individual de cada inmueble",
+        subtitle: `Ocupación de la cartera y estado individual de cada inmueble${periodSuffix}`,
         generatedAt,
         scope,
+        period: periodMeta,
         sections: [
           {
             heading: "Resumen de ocupación",
@@ -434,9 +471,10 @@ export async function buildReport(
       return {
         type,
         title,
-        subtitle: "Contratos activos con canon, inquilino y meses restantes",
+        subtitle: `Contratos activos con canon, inquilino y meses restantes${periodSuffix}`,
         generatedAt,
         scope,
+        period: periodMeta,
         sections: [
           {
             heading: "Resumen de contratos",
@@ -478,16 +516,17 @@ export async function buildReport(
       return {
         type,
         title,
-        subtitle: "Pagos registrados en los últimos 6 meses",
+        subtitle: `Pagos registrados en el período seleccionado${periodSuffix}`,
         generatedAt,
         scope,
+        period: periodMeta,
         sections: [
           {
             heading: "Resumen de pagos",
             kind: "kpis",
             kpis: [
               { label: "Pagos registrados", value: String(recent.length) },
-              { label: "Total cobrado (6 meses)", value: formatUSD(totalCobrado) },
+              { label: "Total cobrado", value: formatUSD(totalCobrado) },
             ],
           },
           {
@@ -510,6 +549,6 @@ export async function buildReport(
     }
 
     default:
-      return notApplicable(type, scope);
+      return notApplicable(type, scope, resolvedPeriod);
   }
 }
