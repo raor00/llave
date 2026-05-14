@@ -36,78 +36,173 @@ Plataforma venezolana de alquileres con **Llavero**, un agente IA construido sob
 
 ---
 
-## Qué hace Llave distinto
+## El problema
 
-Otros prometen "sin meses adelantados" pero en la letra chica piden RIF, constancia de trabajo, movimientos bancarios y dos semanas de espera. El 60% de la economía informal de Venezuela queda afuera. Llave entra por esa grieta.
+El alquiler tradicional venezolano (y la fintech "moderna" tipo Quarto) exige antes de mudarte:
 
-- **Solo cédula** para alquilar — sin RIF, sin constancia de trabajo, sin movimientos bancarios.
-- **24 a 48 horas** desde el primer chat hasta las llaves en mano (vs 1-2 semanas de la competencia).
-- **Cero depósito al inquilino · Garantía Llave 360°** — Llave asume la garantía con un sistema de 5 capas (verificación previa, protocolo firmado, fondo Llave, gestión SUNAVI, supervisión semestral). El propietario duerme tranquilo, el inquilino entra sin barreras.
-- **Trust Score progresivo** — tu reputación se construye pagando, no presentando papeles. Exportable como credencial verificable para banca futura.
-- **Tour 3D Gaussian Splat + USDZ AR** — recorre el inmueble desde Madrid, Bogotá, Buenos Aires o Miami antes de tomar un vuelo. En iPhone, AR Quick Look directo.
-- **Llavero IA** — agente con 8 tools que entiende contexto, no formularios. Modo voz nativo. Onboarding conversacional.
-- **CRM unificado** para asesores — captación móvil con cámara, publicación con IA, leads pre-calificados, redes sociales y Meta Ads en un panel + comando Cmd+K.
-- **Mapa interactivo de la diáspora** — 10 ciudades con marcadores animados, líneas terracota desde Caracas.
-- **Login con contraseña o magic link + OTP** — el código del email funciona aunque tu browser haga prefetch del link.
-- **Role switcher demo** — desde el menú del usuario podes saltar entre vistas de inquilino, asesor y propietario con la misma cuenta.
+- RIF, constancia de trabajo, movimientos bancarios de 3 meses
+- 2 a 5 cosignatarios con ingresos 2.5× la renta
+- 1 mes de adelanto + 1 mes de depósito + 1 mes de comisión + administrativo (>$800 antes de mudarte)
+- 1 a 2 semanas de espera mientras los papeles dan vueltas
 
-## Documentación
+El 60% de la economía venezolana es informal. La diáspora paga alquiler a distancia para familiares. Los freelancers cobran en USDT/Zelle/Binance. Ninguno califica con el modelo viejo.
 
-Toda la documentación detallada vive en [`docs/`](./docs/README.md):
+## Lo que Llave construyó
 
-- [Arquitectura](./docs/architecture.md) · [Rutas](./docs/routes.md) · [Modelo de datos](./docs/data-model.md)
-- [Agente Llavero](./docs/agent-llavero.md) · [Branding](./docs/branding.md)
-- [Desarrollo](./docs/development.md) · [Testing](./docs/testing.md) · [Deployment](./docs/deployment.md)
-- [Seguridad](./docs/security.md) · [Roadmap](./docs/roadmap.md)
-- [Anatomía del logo](./docs/logo-anatomy.md) · [Estrategia de marca](./docs/brand-strategy.md)
-- [Workflow de captura 3D](./docs/3d-capture-workflow.md) · [LiDAR roadmap](./docs/lidar-roadmap.md) · [Testing manual](./docs/testing-flow.md)
-- [Handoff prompt para retomar](./docs/handoff-prompt.md)
+| Promesa | Implementación |
+|---------|----------------|
+| **Solo cédula** | Onboarding sin RIF, sin constancia, sin movimientos bancarios. Trust Score reemplaza la "capacidad de pago". |
+| **Cero depósito al inquilino** | Garantía Llave 360° de 5 capas (verificación previa, protocolo firmado, fondo Llave, gestión SUNAVI, supervisión periódica). El depósito legal del Art. 19 LRCAV lo absorbe Llave, no el inquilino. |
+| **Sin comisión al inquilino** | Solo el propietario paga comisión (10% por defecto, configurable). La plataforma se sostiene por volumen. |
+| **24 a 48 horas** | Del primer chat con Llavero hasta el contrato firmado en PDF. |
+| **Trust Score progresivo** | Sube +15 puntos por pago a tiempo, +30 por cierre limpio de contrato. Exportable como credencial verificable hacia banca. |
+| **Tour 3D antes de viajar** | Gaussian Splat para fluidez, mesh `.ply` para fidelidad, `<model-viewer>` para AR Quick Look iOS. La diáspora ve cada ambiente sin tomar el vuelo. |
 
-Para contributors (humanos o agentes): `.claude/skills/llave/SKILL.md` se carga automáticamente y trae el contrato completo del proyecto. Además [`AGENTS.md`](./AGENTS.md) es el punto de entrada agnóstico para cualquier asistente IA (Claude Code, Codex, Cursor, Gemini CLI, OpenCode).
+## Features por rol
+
+### Inquilino
+
+- Búsqueda guiada por **Llavero** (chat con voz + 12 tools).
+- Dashboard con **Trust Score** y nivel (Inicial / En construcción / Confiable / Premium / Élite).
+- **Contrato activo** con meses restantes, próximo pago, % de progreso y CTA de renovación cuando faltan ≤3 meses.
+- **Pagos**: registra mensualidad por Transferencia / Pago Móvil / Zelle / Efectivo / Binance. Historial 6 meses y saldo en tiempo real.
+- **Documentos**: contrato, cédula, comprobantes y otros archivos versionados.
+- **Sugerencias predichas**: Llavero aprende del tráfico de búsqueda y propone inmuebles afines.
+- **Notificaciones por rol** con recordatorio de pago, score updates y zonas con coincidencia.
+
+### Asesor (CRM completo)
+
+12 secciones agrupadas en sidebar colapsable:
+
+**Operación**
+- Dashboard con métricas reales (vistas, únicos, clicks, CTA, conversión, engagement compuesto 0–100)
+- Leads en pipeline (nuevo / contactado / agendado / firmado)
+- Contactos (12 seeded con source, tags, temperatura caliente/tibio/frío)
+- Visitas con calendario semanal + recordatorio WhatsApp
+
+**Cartera**
+- Inmuebles con métricas por listing
+- Captación móvil con cámara + workflow LiDAR (App Clip + RoomPlan en roadmap)
+- **Publicar con IA**: wizard que lee GPS EXIF de la foto, ofrece geolocation del navegador como fallback, pinea en mapa Maplibre, y delega título/descripción/precio a Llavero
+- Contratos (filtros y progress bar de meses)
+
+**Crecimiento**
+- Reportes (resumen ejecutivo, descargables, top inmuebles, embudo)
+- Comisiones (cobrado mes / ganado año / total histórico, gráfico 6 meses, breakdown por tipo y ciudad)
+- Marketing & Ads (Instagram / Facebook / TikTok / WhatsApp / X + Meta Ads con sugerencias de Llavero)
+
+**Cuenta**
+- Configuración (perfil, slider de comisión 5–15%, switches de notificaciones e integraciones)
+
+**Algoritmo Llave**: el motor recomienda al asesor acciones concretas (responder lead en <1h, ajustar precio en inmueble con engagement alto sin leads, boost de Meta Ads, agregar tour 3D, priority listing). Badges: Respondedor relámpago, Cerrador del mes, Platinum (+$5k YTD), Embajador 3D.
+
+### Propietario
+
+- Sidebar dedicado con Dashboard, Inmuebles, Inquilinos, Contratos, Pagos, Documentos, Reportes.
+- Stats: vistas reales por inmueble (7 días), ocupación, ingreso vigente, potencial mensual.
+- **Saldo por inquilino**: identifica quién pagó qué inmueble, cuál está al día y cuál atrasado.
+- Recordatorio automático (WhatsApp) al inquilino con saldo pendiente.
+
+### Llavero IA
+
+Agente sobre Claude Sonnet 4.5 (Vercel AI SDK v6, AI Gateway o Anthropic directo) con **12 tools** Zod-tipadas:
+
+| Tool | Para |
+|------|------|
+| `searchProperties` | Búsqueda principal con filtros |
+| `getPropertyDetail` | Ficha completa de un inmueble |
+| `recommendByProfile` | Recomendación por lifestyle + presupuesto |
+| `compareProperties` | Tabla comparativa 2–4 inmuebles |
+| `scheduleVisit` | Crea lead `agendado` con datos del inquilino |
+| `createPropertyDraft` | Publica inmueble (rol asesor) |
+| `suggestPrice` | Rango sugerido con comparables |
+| `setupMyProfile` | Onboarding conversacional (rol + nombre + teléfono) |
+| `generateRentalContract` | Genera contrato LRCAV con cláusulas Art. 19, 22, 91 |
+| `listMyContracts` | Devuelve contratos visibles según rol |
+| `recordPayment` | Registra mensualidad y devuelve nuevo saldo |
+| `getOwnerBalance` | Saldo total + por inquilino para el propietario |
+
+Modo voz nativo (Web Speech API). Onboarding completo desde el chat: en 60 segundos Llavero recoge rol, nombre y teléfono y llama a `setupMyProfile` sin formulario.
+
+### Contratos LRCAV en PDF
+
+Llavero genera contratos respetando la **Ley para la Regularización y Control de los Arrendamientos de Vivienda**:
+
+- Duración mínima 12 meses (vivienda)
+- Prórroga automática si no se denuncia 60 días antes
+- Notificación previa 90 días para no prórroga
+- Desalojo solo por vía judicial bajo causales del Art. 91
+- Depósito máximo 4 meses Art. 19 (absorbido por Llave, no cobrado al inquilino)
+- Reajustes regulados por SUNAVI
+
+El contrato se renderiza en `/contrato/[id]` con cláusulas formales y exporta a PDF vía `/contrato/[id]/print` con `window.print()` (sin dependencia externa).
+
+### Tour 3D
+
+Tres viewers ruteados por extensión:
+
+- `.splat` → **gsplat** (Gaussian Splat fluido)
+- `.ply` → **three.js PLYLoader** (mesh fotogramétrico)
+- `.usdz` / `.glb` → **Google `<model-viewer>`** (AR Quick Look iOS, fallback desktop)
+
+El inmueble icónico (Loft Hackathon en Oficinas de Fina, donde Llave fue construido) usa mesh `.ply` exportado desde Polycam.
+
+### Mapa de la diáspora
+
+10 ciudades con marcadores animados y líneas terracota desde Caracas: Madrid, Bogotá, Buenos Aires, Miami, Lima, Santiago, Panamá, Houston, Quito, CDMX. Stats por país visibles.
+
+### Notificaciones
+
+Bell server-rendered con feed personalizado por rol (lead nuevo, visita agendada, vista nueva en inmueble, score boost, recordatorio de contrato, sugerencias). Activable como push del navegador (Notification.requestPermission). Web Push real con service worker + VAPID está en el roadmap.
+
+### Marketplace
+
+- Búsqueda con filtros (ciudad, tipo, precio, ambientes, baños, amenities).
+- Modo lista o mapa Maplibre + Carto Positron.
+- Comparador hasta 4 inmuebles con drawer flotante.
 
 ## Stack
 
-- Next.js 16 App Router + Turbopack + React 19 + TypeScript strict
-- Vercel AI SDK v6 + `@ai-sdk/anthropic` (Claude Sonnet 4.5) con 8 tools Zod-tipadas
-- Supabase SSR (Auth + Postgres + RLS + Storage) con seed in-memory fallback
-- Tailwind v4 (terracota caribeño `#c4513a`)
-- React Three Fiber + drei (escenas 3D)
-- gsplat (Gaussian Splat viewer, tipo SuperSplat) + `<model-viewer>` (USDZ/GLB) + three.js PLYLoader (mesh) + Maplibre (mapa)
-- react-simple-maps + Natural Earth topojson (mapa diáspora animado)
-- Motion (Framer Motion v12) — animaciones scroll-driven en la landing
-- react-markdown + remark-gfm — render de respuestas Llavero
-- Web Speech API — modo voz nativo en `/chat`
-- Vitest + happy-dom — 29 aserciones
+- **Next.js 16 App Router** + Turbopack + React 19 + TypeScript strict
+- **Vercel AI SDK v6** + `@ai-sdk/anthropic` (Claude Sonnet 4.5) con 12 tools Zod
+- **Supabase SSR** (Auth + Postgres + RLS + Storage) con seed in-memory fallback
+- **Tailwind v4** (terracota caribeño `#c4513a`)
+- **React Three Fiber + drei** + **gsplat** + **`<model-viewer>`** + **three.js PLYLoader** + **Maplibre**
+- **react-simple-maps** + Natural Earth topojson
+- **Motion** (Framer Motion v12) — animaciones scroll-driven
+- **react-markdown + remark-gfm** — render del chat
+- **Web Speech API** — modo voz
+- **Vitest + happy-dom** — 29 aserciones
 
 ## Setup local
 
 ```bash
 pnpm install
 cp env.example .env.local
-# edita .env.local con tu ANTHROPIC_API_KEY
+# edita .env.local con tu ANTHROPIC_API_KEY (o AI_GATEWAY_API_KEY)
 pnpm dev
 ```
 
-Sin Supabase, la app funciona con seed in-memory de 17 inmuebles. Sin key de IA, Llavero usa un parser local de intents que igual llama a las tools reales.
+Sin Supabase, la app corre con seed in-memory de 17 inmuebles, 5 contratos firmados, pagos y notificaciones. Sin key de IA, Llavero usa un parser local determinista que igual llama a las tools reales.
 
 ### Variables de entorno
 
 | Variable | Requerida | De dónde sale |
 |----------|-----------|---------------|
 | `ANTHROPIC_API_KEY` | sí (preferida) | console.anthropic.com → API Keys |
-| `AI_GATEWAY_API_KEY` | alterna | vercel.com → AI Gateway (requiere tarjeta) |
+| `AI_GATEWAY_API_KEY` | alterna | vercel.com → AI Gateway |
 | `LLAVE_OFFLINE` | opcional | `1` fuerza el mock determinista |
 | `NEXT_PUBLIC_SUPABASE_URL` | opcional | vercel.com → Marketplace → Supabase |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | opcional | mismo lugar |
 | `SUPABASE_SERVICE_ROLE_KEY` | opcional | mismo lugar (server-only) |
 
-Más detalle en [docs/deployment.md](./docs/deployment.md).
+`.env*` está gitignored. Ninguna clave real vive en el repo; `env.example` solo contiene placeholders. Detalle en [docs/security.md](./docs/security.md).
 
 ## Scripts
 
 ```bash
 pnpm dev          # dev server (Turbopack)
-pnpm test         # Vitest (29 aserciones, 3 suites)
+pnpm test         # Vitest
 pnpm test:watch
 pnpm typecheck    # tsc --noEmit
 pnpm build        # build de producción
@@ -125,40 +220,94 @@ vercel env add SUPABASE_SERVICE_ROLE_KEY production
 vercel deploy --prod
 ```
 
+Producción en <https://llave-ruby.vercel.app>. Mirror público en <https://github.com/raor00/llave>.
+
 ## Estructura
 
 ```
 src/
   app/
-    page.tsx                 → Landing (motion + comparativa anti-Quarto)
-    buscar/                  → Marketplace con lista/mapa + comparador
-    inmueble/[id]/           → Detalle con galería + Tour 3D Gaussian Splat
-    chat/                    → Llavero IA con voz + tools inline
-    onboarding/              → Onboarding por rol (form o vía chat)
-    inquilino/               → Dashboard inquilino + Trust Score
-    asesor/                  → CRM (dashboard, captación, leads, publicar)
-    propietario/             → Dashboard propietario (ocupación, leads)
-    login/                   → Supabase magic link
-    api/chat/route.ts        → AI SDK streamText + 8 tools
-    opengraph-image.tsx      → OG dinámica
-    icon.png                 → Favicon estático
+    page.tsx                    → Landing (motion + comparativa anti-Quarto + Garantía 360°)
+    buscar/                     → Marketplace con lista/mapa + comparador
+    inmueble/[id]/              → Detalle con tour 3D + view tracker
+    contrato/[id]/              → Contrato LRCAV firmable + ruta print
+    chat/                       → Llavero IA con voz + tools inline
+    onboarding/                 → Onboarding por rol (form o vía chat)
+    inquilino/                  → Trust Score + contrato + pagos + documentos
+    asesor/                     → CRM completo (12 secciones)
+    propietario/                → Dashboard + saldos + contratos + documentos
+    login/                      → Magic link + OTP + contraseña
+    api/chat/route.ts           → AI SDK streamText + 12 tools
   components/
-    landing/                 → fade-in, scroll-progress, crm-mockup, hero-3d (legado)
-    chat/                    → chat-window + tool-result + use-voice
-    marketplace/             → cards, filtros, mapa, comparador, tour-3d, splat-viewer
-    asesor/                  → sidebar + command-palette + captación
+    landing/                    → motion + comparativa + diáspora + garantía
+    chat/                       → composer dvh + voz + markdown + tool-result
+    marketplace/                → cards + filtros + mapa + tour-3d + mesh-viewer
+    asesor/                     → sidebar collapsable + captación + publicar-wizard
+    propietario/                → sidebar
+    notifications/              → bell server + shell client
+    dashboard-icons.tsx         → 20+ icons SVG brand
+    social-icons.tsx            → Instagram / Facebook / TikTok / WhatsApp / X / Meta
   lib/
-    ai/system-prompt.ts      → Personalidad Llavero (Venezolano tuteo)
-    ai/tools.ts              → 8 tools Zod (incluye setupMyProfile)
-    ai/local-mock-model.ts   → Fallback offline
-    db/queries.ts            → Supabase + seed fallback
-    db/seed-data.ts          → 17 inmuebles VE
-supabase/migrations/         → Schema + seed SQL con RLS
-docs/                        → Documentación completa
-tests/                       → Vitest
-.claude/skills/llave/        → Skill del proyecto (auto-load)
+    ai/system-prompt.ts         → Personalidad Llavero (tuteo venezolano)
+    ai/tools.ts                 → 12 tools Zod
+    ai/lrcav.ts                 → Cláusulas legales + buildContractDraft
+    ai/local-mock-model.ts      → Fallback offline determinista
+    db/queries.ts               → Supabase + seed fallback
+    db/seed-data.ts             → 17 inmuebles + DEMO_OWNER
+    db/views.ts                 → Property views + 7-day timeseries
+    db/contracts.ts             → Contracts store + APIs por rol
+    db/contracts-list.ts        → Seed de 8 contratos para CRM
+    db/payments.ts              → Payments store + saldo por contrato/propietario
+    db/documents.ts             → Documents store
+    db/visits.ts                → Visitas seed
+    db/contacts.ts              → Contactos seed (CRM)
+    db/marketing.ts             → Campañas + posts
+    db/asesor-analytics.ts      → Motor de métricas + comisiones + oportunidades
+    notifications/              → Seed + queries
+    greeting.ts                 → Saludo dinámico Caracas tz
+    exif.ts                     → JPEG EXIF GPS parser + reverse geocode
+supabase/migrations/
+  0001_init.sql                 → Schema base + RLS
+  0002_seed.sql                 → 17 inmuebles + DEMO_OWNER
+  0003_stats_contracts_notifications.sql
+                                → property_views + contracts + notifications + RPC
+docs/                           → Documentación detallada
+tests/                          → Vitest (29 aserciones)
+.claude/skills/llave/SKILL.md   → Skill del proyecto (auto-load)
 ```
+
+## Documentación detallada
+
+Todo lo extenso vive en [`docs/`](./docs/README.md):
+
+- [Arquitectura](./docs/architecture.md) · [Rutas](./docs/routes.md) · [Modelo de datos](./docs/data-model.md)
+- [Agente Llavero](./docs/agent-llavero.md) · [Branding](./docs/branding.md) · [Anatomía del logo](./docs/logo-anatomy.md)
+- [Workflow de captura 3D](./docs/3d-capture-workflow.md) · [LiDAR roadmap](./docs/lidar-roadmap.md)
+- [Desarrollo](./docs/development.md) · [Testing](./docs/testing.md) · [Deployment](./docs/deployment.md)
+- [Seguridad](./docs/security.md) · [Roadmap](./docs/roadmap.md)
+- [Handoff para retomar](./docs/handoff-prompt.md)
+
+Contributors (humanos o agentes): `.claude/skills/llave/SKILL.md` se carga automáticamente con el contrato completo del proyecto. [`AGENTS.md`](./AGENTS.md) es la entrada agnóstica para Claude Code, Codex, Cursor, Gemini CLI, OpenCode.
 
 ## Roadmap
 
-Próximas etapas (LiDAR nativo, contratos digitales, Trust Score exportable a banca, onboarding remoto para diáspora con identidad verificada, integración Meta Ads en vivo) en [docs/roadmap.md](./docs/roadmap.md).
+- Captura LiDAR nativa via App Clip de Llave + Apple RoomPlan (10 MB, sin install, abre con NFC/QR pegado al inmueble)
+- Web Push real (service worker + VAPID + subscription)
+- Trust Score exportable a banca como credencial verificable
+- Pagos integrados (Pago Móvil API, USDT on-chain, Zelle conciliación)
+- Identidad verificada para diáspora con OCR de cédula + liveness
+- Integración Meta Ads en vivo con publicación bidireccional
+
+Más en [docs/roadmap.md](./docs/roadmap.md).
+
+## Seguridad
+
+- `.env*` gitignored. Sin claves reales en repo ni en historial.
+- `env.example` solo contiene placeholders (`sk-ant-xxxx…`, `YOUR_SERVICE_ROLE_KEY`).
+- Service role JWT solo en server actions y API routes; nunca expuesto al cliente.
+- RLS activo en `profiles`, `properties`, `leads`, `messages`, `favorites`, `contracts`, `notifications`, `property_views`.
+- Inserts de visitas anónimas permitidas por policy abierta de `property_views.INSERT`, pero el SELECT solo el dueño del inmueble lo ve.
+
+## Licencia
+
+MIT — ver [LICENSE](./LICENSE). Hecho en Venezuela durante el Platanus Build Night ft. Anthropic, mayo 2026.
