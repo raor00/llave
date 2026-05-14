@@ -82,6 +82,9 @@ export default async function LandingPage() {
                   <Link href="/chat" className="btn btn-ghost px-6 py-3 text-base">
                     Habla con Llavero
                   </Link>
+                  <Link href="/showcase" className="btn btn-ghost px-6 py-3 text-base">
+                    Ver Llave en 30s
+                  </Link>
                 </div>
               </div>
               <div className="grid grid-cols-4 gap-5 md:max-w-md flex-shrink-0">
