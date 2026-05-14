@@ -41,7 +41,18 @@ html, body {
   color: var(--color-fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Evita scroll horizontal del root sin crear scroll-container.
+   `overflow-x: clip` preserva position:sticky de descendientes (el
+   SiteHeader); `hidden` lo rompe. Fallback hidden para browsers viejos. */
+html {
   overflow-x: hidden;
+  overflow-x: clip;
+}
+body {
+  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100vw;
 }
 
