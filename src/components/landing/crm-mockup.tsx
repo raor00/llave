@@ -47,6 +47,17 @@ const SIDEBAR = [
 const TREND = [42, 58, 51, 73, 66, 88, 79];
 const TREND_DAYS = ["L", "M", "M", "J", "V", "S", "D"];
 
+// Rendimiento mensual — barras agrupadas leads vs cierres (6 meses).
+const PERF = [
+  { m: "Dic", leads: 12, cierres: 4 },
+  { m: "Ene", leads: 18, cierres: 6 },
+  { m: "Feb", leads: 15, cierres: 5 },
+  { m: "Mar", leads: 24, cierres: 9 },
+  { m: "Abr", leads: 28, cierres: 11 },
+  { m: "May", leads: 34, cierres: 14 },
+];
+const PERF_MAX = 34;
+
 // Fuentes de tráfico — porcentaje y color de marca.
 const SOURCES = [
   { name: "Instagram", pct: 34, color: "#e1306c", Icon: IconInstagram },
@@ -147,6 +158,50 @@ export function CrmMockup() {
               ))}
             </div>
             <div className="text-[9px] text-white/40 mt-1.5">Tendencia de vistas · últimos 7 días</div>
+          </div>
+
+          {/* Rendimiento mensual — barras agrupadas leads vs cierres */}
+          <div className="rounded-lg bg-white/5 border border-white/5 p-3">
+            <div className="flex items-baseline justify-between mb-2">
+              <span className="text-[10px] uppercase tracking-wider text-white/50">Rendimiento · 6 meses</span>
+              <span className="flex items-center gap-2 text-[9px]">
+                <span className="flex items-center gap-1 text-white/60">
+                  <span className="size-1.5 rounded-sm bg-[color:var(--color-accent)]" /> Leads
+                </span>
+                <span className="flex items-center gap-1 text-white/60">
+                  <span className="size-1.5 rounded-sm bg-[color:var(--color-brand-500)]" /> Cierres
+                </span>
+              </span>
+            </div>
+            <div className="flex items-end justify-between gap-2 h-20">
+              {PERF.map((p, i) => (
+                <div key={p.m} className="flex-1 flex flex-col items-center gap-1">
+                  <div className="w-full flex items-end justify-center gap-0.5 h-full">
+                    <motion.span
+                      initial={{ scaleY: 0 }}
+                      whileInView={{ scaleY: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.5 + i * 0.08, duration: 0.55, ease: "easeOut" }}
+                      className="w-1/2 origin-bottom rounded-t-sm bg-[color:var(--color-accent)]"
+                      style={{ height: `${(p.leads / PERF_MAX) * 100}%` }}
+                    />
+                    <motion.span
+                      initial={{ scaleY: 0 }}
+                      whileInView={{ scaleY: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.56 + i * 0.08, duration: 0.55, ease: "easeOut" }}
+                      className="w-1/2 origin-bottom rounded-t-sm bg-[color:var(--color-brand-500)]"
+                      style={{ height: `${(p.cierres / PERF_MAX) * 100}%` }}
+                    />
+                  </div>
+                  <span className="text-[8px] text-white/35">{p.m}</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-between text-[9px] text-white/40 mt-1.5">
+              <span>Leads y cierres por mes</span>
+              <span className="text-[color:var(--color-accent)]">+183% semestral</span>
+            </div>
           </div>
 
           {/* Fuentes de tráfico + leads */}
