@@ -79,8 +79,8 @@ export default async function LandingPage() {
               <div className="grid grid-cols-4 gap-5 md:max-w-md flex-shrink-0">
                 <Stat number="24h" label="te mudas" />
                 <Stat number="0" label="meses adelantados" />
-                <Stat number="1" label="depósito reembolsable" />
-                <Stat number="∅" label="papeles formales" />
+                <Stat number="0" label="depósito" />
+                <Stat number="100%" label="Llave responde" />
               </div>
             </div>
           </FadeIn>
@@ -107,7 +107,8 @@ export default async function LandingPage() {
                 <CompareRow head label="" llave="Llave" other="Modelo tradicional / fintech" />
                 <CompareRow label="Documentos para alquilar" llave="Solo cédula" other="Cédula + RIF + constancia + movimientos + redes verificadas" />
                 <CompareRow label="Tiempo de aprobación" llave="24 a 48 horas" other="1 a 2 semanas" />
-                <CompareRow label="Pago al mudarte" llave="1 mes + 1 depósito reembolsable" other="1 mes + 1 comisión + 1 garantía (no reembolsables)" />
+                <CompareRow label="Pago al mudarte" llave="Solo 1 mes de alquiler" other="1 mes + 1 comisión + 1 garantía (no reembolsables)" />
+                <CompareRow label="Depósito en garantía" llave="Cero — Llave responde" other="1 mes adicional (a veces 'si se requiere')" />
                 <CompareRow label="Comisión al inquilino" llave="Cero" other="1 mes (no reembolsable)" />
                 <CompareRow label="Cosignatarios requeridos" llave="Ninguno" other="Hasta 5 con 2.0–2.5x ingreso sumado" />
                 <CompareRow label="Trabajo informal / freelance" llave="Aceptado con Trust Score" other="Excluido (sin constancia)" />
@@ -147,22 +148,22 @@ export default async function LandingPage() {
                 Lo que pagas en Llave
               </div>
               <p className="text-sm text-[color:var(--color-fg-muted)] leading-relaxed mb-4">
-                Cero comisiones al inquilino, depósito 100% reembolsable al cumplir contrato:
+                Cero comisiones, cero depósito. Solo 1 mes de alquiler. Llave responde por la propiedad.
               </p>
               <ul className="space-y-2 text-sm">
                 <li className="flex justify-between gap-3"><span>1 mes de alquiler</span><strong>$280</strong></li>
-                <li className="flex justify-between gap-3"><span>1 mes de depósito (reembolsable)</span><strong>$280</strong></li>
+                <li className="flex justify-between gap-3 text-[color:var(--color-fg-soft)]"><span>Depósito en garantía</span><strong>$0</strong></li>
                 <li className="flex justify-between gap-3 text-[color:var(--color-fg-soft)]"><span>Comisión al inquilino</span><strong>$0</strong></li>
                 <li className="border-t border-[color:var(--color-brand-300)] pt-2 mt-2 flex justify-between gap-3">
                   <span className="font-semibold">Total upfront</span>
-                  <strong className="text-[color:var(--color-brand-700)]">$560</strong>
+                  <strong className="text-[color:var(--color-brand-700)]">$280</strong>
                 </li>
                 <li className="flex justify-between gap-3 text-xs text-[color:var(--color-brand-600)]">
-                  <span>De los cuales SE reembolsan</span><strong>$280</strong>
+                  <span>Llave responde por daños</span><strong>Incluido</strong>
                 </li>
               </ul>
               <div className="mt-4 rounded-lg bg-white border border-[color:var(--color-brand-300)] p-3 text-xs text-[color:var(--color-brand-700)]">
-                <strong>Ahorras $280 NO recuperables</strong> respecto al modelo tradicional con &quot;cero meses&quot;.
+                <strong>Ahorras $560 al mudarte</strong> respecto al modelo tradicional con &quot;cero meses adelantados&quot;.
               </div>
             </div>
           </FadeIn>
@@ -301,8 +302,8 @@ export default async function LandingPage() {
             </FadeInChild>
             <FadeInChild>
               <PrincipleCard
-                title="Sin meses adelantados"
-                body="Pagas solo el primer mes. Depósito máximo 1 mes, reembolsable al cumplir el contrato."
+                title="Cero depósito. Llave responde."
+                body="No te pedimos depósito. El fondo Llave cubre daños cubiertos por contrato. Pagas solo el primer mes para mudarte."
               />
             </FadeInChild>
             <FadeInChild>
@@ -324,6 +325,85 @@ export default async function LandingPage() {
               />
             </FadeInChild>
           </FadeInStagger>
+        </div>
+      </section>
+
+      {/* GARANTÍA LLAVE 360° */}
+      <section id="garantia" className="section bg-white border-y">
+        <div className="container-x">
+          <FadeIn className="max-w-3xl mb-12">
+            <span className="chip mb-3">Garantía Llave 360°</span>
+            <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight">
+              Cero depósito. <span className="gradient-text">Llave responde</span>.
+            </h2>
+            <p className="mt-4 text-lg text-[color:var(--color-fg-muted)]">
+              El propietario duerme tranquilo, el inquilino entra sin barreras. En lugar de pedir un mes de
+              depósito al inquilino, <strong className="text-[color:var(--color-fg)]">Llave asume la garantía</strong> con
+              un sistema de 5 capas: verificación previa, protocolo firmado, fondo de respaldo,
+              gestión SUNAVI y supervisión periódica.
+            </p>
+          </FadeIn>
+
+          <FadeInStagger className="grid md:grid-cols-2 lg:grid-cols-5 gap-4" stagger={0.08}>
+            <FadeInChild>
+              <GuaranteeCard
+                step="01"
+                title="Verificación previa"
+                body="Trust Score, cédula y validación con Llavero IA antes de firmar. Filtramos inquilinos que no puedan cumplir."
+              />
+            </FadeInChild>
+            <FadeInChild>
+              <GuaranteeCard
+                step="02"
+                title="Protocolo firmado"
+                body="El inquilino firma digitalmente un protocolo de convivencia: cuidado, ruidos, normas. Vinculante."
+              />
+            </FadeInChild>
+            <FadeInChild>
+              <GuaranteeCard
+                step="03"
+                title="Fondo Llave"
+                body="Cubre daños cubiertos por contrato (no estructurales) y hasta 1 mes de mora. Sin papeleo al propietario."
+              />
+            </FadeInChild>
+            <FadeInChild>
+              <GuaranteeCard
+                step="04"
+                title="Gestión SUNAVI"
+                body="Si hay incumplimiento, Llave inicia y acompaña el procedimiento conciliatorio. No estás solo."
+              />
+            </FadeInChild>
+            <FadeInChild>
+              <GuaranteeCard
+                step="05"
+                title="Supervisión"
+                body="Inspección remota cada 6 meses con fotos georeferenciadas. Anomalías se reportan al propietario al instante."
+              />
+            </FadeInChild>
+          </FadeInStagger>
+
+          <div className="mt-10 grid md:grid-cols-2 gap-5">
+            <div className="card p-6">
+              <div className="text-xs uppercase tracking-wider text-[color:var(--color-fg-soft)] font-semibold mb-2">Para el propietario</div>
+              <h3 className="font-display text-lg font-semibold mb-2">Llave cubre lo que el depósito tradicional cubría — y más.</h3>
+              <ul className="space-y-2 text-sm text-[color:var(--color-fg-muted)]">
+                <li className="flex gap-2"><span className="text-[color:var(--color-brand-500)]">✓</span> Daños contractuales no estructurales</li>
+                <li className="flex gap-2"><span className="text-[color:var(--color-brand-500)]">✓</span> Hasta 1 mes de mora del inquilino</li>
+                <li className="flex gap-2"><span className="text-[color:var(--color-brand-500)]">✓</span> Procedimiento SUNAVI gestionado por nosotros</li>
+                <li className="flex gap-2"><span className="text-[color:var(--color-brand-500)]">✓</span> Inspección periódica con reporte digital</li>
+              </ul>
+            </div>
+            <div className="card p-6 bg-[color:var(--color-brand-900)] text-white border-[color:var(--color-brand-900)]">
+              <div className="text-xs uppercase tracking-wider text-[color:var(--color-accent)] font-semibold mb-2">Para el inquilino</div>
+              <h3 className="font-display text-lg font-semibold mb-2">Cero depósito retenido. Tu plata se queda contigo.</h3>
+              <ul className="space-y-2 text-sm text-white/80">
+                <li className="flex gap-2"><span className="text-[color:var(--color-accent)]">✓</span> Te mudas pagando solo el primer mes</li>
+                <li className="flex gap-2"><span className="text-[color:var(--color-accent)]">✓</span> Sin trámite de reintegro al final del contrato</li>
+                <li className="flex gap-2"><span className="text-[color:var(--color-accent)]">✓</span> Firmas un protocolo claro de convivencia</li>
+                <li className="flex gap-2"><span className="text-[color:var(--color-accent)]">✓</span> Tu Trust Score sube con cada pago</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -534,6 +614,18 @@ function ChatBubble({ who, children }: { who: "user" | "ai"; children: React.Rea
       }`}
     >
       {children}
+    </div>
+  );
+}
+
+function GuaranteeCard({ step, title, body }: { step: string; title: string; body: string }) {
+  return (
+    <div className="card p-5 h-full relative overflow-hidden">
+      <div className="absolute -top-2 -right-2 size-14 rounded-full bg-[color:var(--color-brand-50)] flex items-center justify-center font-display text-xs font-bold text-[color:var(--color-brand-700)]">
+        {step}
+      </div>
+      <h3 className="font-display text-base font-semibold mt-3 mb-2 max-w-[80%]">{title}</h3>
+      <p className="text-sm text-[color:var(--color-fg-muted)] leading-relaxed">{body}</p>
     </div>
   );
 }

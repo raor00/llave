@@ -30,11 +30,9 @@ export function PropertyCard({
           )}
           <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
             <span className="chip">{formatPropertyType(property.type)}</span>
-            {property.no_months_upfront && (
-              <span className="chip bg-[color:var(--color-accent)]/90 text-[color:var(--color-brand-900)] border-transparent">
-                Sin meses adelantados
-              </span>
-            )}
+            <span className="chip bg-[color:var(--color-accent)]/90 text-[color:var(--color-brand-900)] border-transparent">
+              Cero depósito · Llave responde
+            </span>
           </div>
         </div>
       </Link>

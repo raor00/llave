@@ -28,6 +28,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${inter.variable} ${jakarta.variable}`}>
+      <head>
+        {/* Smart App Banner — surfaces Polycam install banner on iOS Safari for asesores
+            in /asesor/captacion who haven't installed it yet. */}
+        <meta name="apple-itunes-app" content="app-id=1532482376" />
+      </head>
       <body>
         <SiteHeader />
         <main>{children}</main>

@@ -56,12 +56,10 @@ export default async function PropertyDetailPage({
           <div className="mt-8">
             <div className="flex flex-wrap gap-2 mb-3">
               <span className="chip">{formatPropertyType(property.type)}</span>
-              {property.no_months_upfront && (
-                <span className="chip bg-[color:var(--color-accent)]/90 text-[color:var(--color-brand-900)] border-transparent">
-                  Sin meses adelantados
-                </span>
-              )}
-              <span className="chip chip-muted">Depósito {property.deposit_months} mes(es)</span>
+              <span className="chip bg-[color:var(--color-accent)]/90 text-[color:var(--color-brand-900)] border-transparent">
+                Cero depósito · Llave responde
+              </span>
+              <span className="chip chip-muted">Garantía 360°</span>
             </div>
             <h1 className="font-display text-3xl md:text-4xl font-bold leading-tight">
               {property.title.replace(/^Llave:\s*/, "")}
@@ -104,18 +102,19 @@ export default async function PropertyDetailPage({
           </div>
         </div>
 
-        <aside className="space-y-5">
-          <div className="card p-6 sticky top-20">
+        <aside className="space-y-5 lg:sticky lg:top-20 lg:self-start lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto">
+          <div className="card p-6">
             <div className="flex items-baseline justify-between">
               <div className="font-display text-3xl font-bold">{formatUSD(property.price_usd)}</div>
               <div className="text-sm text-[color:var(--color-fg-soft)]">/ mes</div>
             </div>
             <div className="mt-3 text-sm text-[color:var(--color-fg-muted)]">
-              Para entrar pagás solo <strong className="text-[color:var(--color-fg)]">{formatUSD(property.price_usd)}</strong> +
-              depósito de <strong className="text-[color:var(--color-fg)]">{formatUSD(property.price_usd * property.deposit_months)}</strong> (reembolsable).
+              Para entrar pagas solo <strong className="text-[color:var(--color-fg)]">{formatUSD(property.price_usd)}</strong>.
+              Sin depósito retenido. Sin comisión al inquilino.
             </div>
             <div className="mt-3 rounded-lg bg-[color:var(--color-brand-50)] p-3 text-xs text-[color:var(--color-brand-700)]">
-              En modelo tradicional pagarías ~{formatUSD(property.price_usd * 4)} antes de mudarte. En Llave: {formatUSD(property.price_usd * (1 + property.deposit_months))}.
+              En el modelo tradicional pagarías ~{formatUSD(property.price_usd * 3)} antes de mudarte. En Llave: {formatUSD(property.price_usd)}.
+              Llave responde por la propiedad con la <a href="/#garantia" className="underline">Garantía 360°</a>.
             </div>
             <Link href={chatHref} className="btn btn-primary w-full mt-5">
               Preguntale a Llavero
