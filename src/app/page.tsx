@@ -6,6 +6,13 @@ import { FadeIn, FadeInChild, FadeInStagger } from "@/components/landing/fade-in
 import { CrmMockup } from "@/components/landing/crm-mockup";
 import { ScrollProgress } from "@/components/landing/scroll-progress";
 import { DiasporaMap } from "@/components/landing/diaspora-map";
+import {
+  IconDashboard,
+  IconCapture,
+  IconSparkle,
+  IconLeads,
+} from "@/components/dashboard-icons";
+import { IconMeta, IconInstagram } from "@/components/social-icons";
 
 export const revalidate = 60;
 
@@ -469,12 +476,12 @@ export default async function LandingPage() {
           <div className="mt-12 grid lg:grid-cols-[1fr_1.3fr] gap-10 items-start">
             <FadeIn delay={0.1}>
               <ul className="space-y-4 text-white/90">
-                <Feature icon="▣" title="Dashboard en vivo" body="Inmuebles activos, leads, conversión y portafolio en tarjetas." />
-                <Feature icon="◉" title="Captación con cámara" body="Toma fotos sin salir de Llave, sube tours 3D Gaussian Splat o USDZ." />
-                <Feature icon="✦" title="Publicación con IA" body="Llavero redacta título, descripción y sugiere precio con comparables." />
-                <Feature icon="◎" title="Leads + chat integrado" body="Cada lead trae el resumen del agente y un hilo de conversación." />
-                <Feature icon="📣" title="Meta Ads desde Llave" body="Promociona tus inmuebles en Facebook e Instagram sin cambiar de pestaña." />
-                <Feature icon="📱" title="Redes conectadas" body="Liga tus cuentas de Instagram, Facebook y TikTok para publicar a todas a la vez." />
+                <Feature icon={<IconDashboard size={18} />} title="Dashboard en vivo" body="Inmuebles activos, leads, conversión y portafolio en tarjetas." />
+                <Feature icon={<IconCapture size={18} />} title="Captación con cámara" body="Toma fotos sin salir de Llave, sube tours 3D Gaussian Splat o USDZ." />
+                <Feature icon={<IconSparkle size={18} />} title="Publicación con IA" body="Llavero redacta título, descripción y sugiere precio con comparables." />
+                <Feature icon={<IconLeads size={18} />} title="Leads + chat integrado" body="Cada lead trae el resumen del agente y un hilo de conversación." />
+                <Feature icon={<IconMeta size={18} />} title="Meta Ads desde Llave" body="Promociona tus inmuebles en Facebook e Instagram sin cambiar de pestaña." />
+                <Feature icon={<IconInstagram size={18} />} title="Redes conectadas" body="Liga tus cuentas de Instagram, Facebook y TikTok para publicar a todas a la vez." />
               </ul>
               <div className="mt-7 flex flex-wrap gap-3">
                 <Link href="/login" className="btn btn-primary bg-[color:var(--color-accent)] !text-[color:var(--color-brand-900)] hover:opacity-90 px-6 py-3 text-base">
@@ -607,10 +614,10 @@ function GuaranteeCard({ step, title, body }: { step: string; title: string; bod
   );
 }
 
-function Feature({ icon, title, body }: { icon: string; title: string; body: string }) {
+function Feature({ icon, title, body }: { icon: React.ReactNode; title: string; body: string }) {
   return (
     <li className="flex items-start gap-3">
-      <span className="shrink-0 size-9 rounded-lg bg-white/10 flex items-center justify-center text-[color:var(--color-accent)] text-lg">
+      <span className="shrink-0 size-9 rounded-lg bg-white/10 flex items-center justify-center text-[color:var(--color-accent)]">
         {icon}
       </span>
       <div>
