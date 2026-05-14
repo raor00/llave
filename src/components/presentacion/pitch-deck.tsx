@@ -109,7 +109,7 @@ const SLIDES: Slide[] = [
   // 1 — Apertura
   {
     id: "apertura",
-    durationMs: 12000,
+    durationMs: 6000,
     tone: "dark",
     render: () => (
       <motion.div
@@ -148,7 +148,7 @@ const SLIDES: Slide[] = [
   // 2 — El problema
   {
     id: "problema",
-    durationMs: 16000,
+    durationMs: 8500,
     tone: "light",
     render: () => (
       <motion.div variants={container} className="flex flex-col gap-7">
@@ -175,7 +175,7 @@ const SLIDES: Slide[] = [
   // 3 — La solución
   {
     id: "solucion",
-    durationMs: 16000,
+    durationMs: 8500,
     tone: "dark",
     render: () => (
       <motion.div variants={container} className="flex flex-col gap-7">
@@ -195,7 +195,7 @@ const SLIDES: Slide[] = [
   // 4 — Llavero IA
   {
     id: "llavero",
-    durationMs: 16000,
+    durationMs: 8500,
     tone: "light",
     render: () => (
       <motion.div variants={container} className="flex flex-col gap-6">
@@ -223,7 +223,7 @@ const SLIDES: Slide[] = [
   // 5 — Garantía Llave 360
   {
     id: "garantia",
-    durationMs: 14000,
+    durationMs: 7500,
     tone: "dark",
     render: () => (
       <motion.div variants={container} className="flex flex-col gap-6">
@@ -261,7 +261,7 @@ const SLIDES: Slide[] = [
   // 6 — Trust Score
   {
     id: "trust-score",
-    durationMs: 12000,
+    durationMs: 6500,
     tone: "light",
     render: () => (
       <motion.div variants={container} className="flex flex-col gap-7">
@@ -281,7 +281,7 @@ const SLIDES: Slide[] = [
   // 7 — CRM para asesores
   {
     id: "crm",
-    durationMs: 16000,
+    durationMs: 8500,
     tone: "dark",
     render: () => (
       <motion.div variants={container} className="flex flex-col gap-6">
@@ -308,7 +308,7 @@ const SLIDES: Slide[] = [
   // 8 — El mercado
   {
     id: "mercado",
-    durationMs: 14000,
+    durationMs: 7500,
     tone: "light",
     render: () => (
       <motion.div variants={container} className="flex flex-col gap-7">
@@ -330,7 +330,7 @@ const SLIDES: Slide[] = [
   // 9 — Cierre
   {
     id: "cierre",
-    durationMs: 8000,
+    durationMs: 4500,
     tone: "dark",
     render: () => (
       <motion.div
