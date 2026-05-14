@@ -1,5 +1,5 @@
-// Página de publicación asistida: wizard EXIF/geo a la izquierda y Llavero a la
-// derecha en dos columnas que comparten alto de viewport (stack en mobile).
+// Página de publicación asistida: wizard EXIF/geo arriba, Llavero abajo —
+// stack vertical full-width para que ambos se desplieguen bien sin clipping.
 import { Suspense } from "react";
 import { PublicarWizard } from "@/components/asesor/publicar-wizard";
 import { ChatWindow } from "@/components/chat/chat-window";
@@ -19,43 +19,38 @@ export default function PublicarPage() {
         </p>
       </div>
 
-      <div className="container-x pb-8 sm:pb-10">
-        <div className="grid lg:grid-cols-2 gap-6 lg:items-start">
-          <div className="min-w-0">
-            <PublicarWizard />
-          </div>
-
-          <div className="min-w-0">
-            <h2 className="font-display text-lg sm:text-xl font-semibold">
-              Habla con Llavero
-            </h2>
-            <p className="text-xs text-[color:var(--color-fg-muted)] mt-1 mb-3">
-              Cuéntale precio, ambientes y notas adicionales. Llavero puede llamar a{" "}
-              <code className="text-[10px] bg-[color:var(--color-bg)] px-1 py-0.5 rounded">
-                suggestPrice
-              </code>{" "}
-              y{" "}
-              <code className="text-[10px] bg-[color:var(--color-bg)] px-1 py-0.5 rounded">
-                createPropertyDraft
-              </code>{" "}
-              directo.
-            </p>
-            <Suspense
-              fallback={
-                <div className="card p-10 text-sm text-[color:var(--color-fg-muted)]">
-                  Cargando…
-                </div>
-              }
-            >
-              <ChatWindow
-                asesorMode
-                embedded
-                heightClass="h-[70dvh] lg:h-[calc(100dvh-13rem)] max-h-[760px] min-h-[460px]"
-              />
-            </Suspense>
-          </div>
-        </div>
+      <div className="container-x pb-6">
+        <PublicarWizard />
       </div>
+
+      <div className="container-x pb-2">
+        <h2 className="font-display text-lg sm:text-xl font-semibold">
+          Habla con Llavero
+        </h2>
+        <p className="text-xs text-[color:var(--color-fg-muted)] mt-1">
+          Cuéntale precio, ambientes y notas adicionales. Llavero puede llamar a{" "}
+          <code className="text-[10px] bg-[color:var(--color-bg)] px-1 py-0.5 rounded">
+            suggestPrice
+          </code>{" "}
+          y{" "}
+          <code className="text-[10px] bg-[color:var(--color-bg)] px-1 py-0.5 rounded">
+            createPropertyDraft
+          </code>{" "}
+          directo.
+        </p>
+      </div>
+      <Suspense
+        fallback={
+          <div className="container-x py-10 text-sm text-[color:var(--color-fg-muted)]">
+            Cargando…
+          </div>
+        }
+      >
+        <ChatWindow
+          asesorMode
+          heightClass="h-[72dvh] max-h-[780px] min-h-[520px]"
+        />
+      </Suspense>
     </div>
   );
 }

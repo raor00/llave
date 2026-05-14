@@ -51,46 +51,104 @@ src/
   app/
     page.tsx                  → landing
     buscar/page.tsx           → marketplace (server-rendered, searchParams driven)
-    inmueble/[id]/page.tsx    → property detail
-    chat/page.tsx             → Llavero chat
-    asesor/                   → CRM demo (dashboard, leads, publicar)
+    inmueble/[id]/page.tsx    → property detail — routing by extension:
+                                 poly.cam URL → PolycamEmbed
+                                 .splat       → SplatViewer (gsplat)
+                                 .ply         → MeshViewer (three.js PLYLoader, WASD walkthrough)
+                                 .glb/.usdz/.gltf → Tour3D (<model-viewer>, AR on iOS)
+    contrato/[id]/page.tsx    → LRCAV contract view
+    contrato/[id]/print/      → PDF export via window.print()
+    reporte/[type]/           → report online view (9 types)
+    reporte/[type]/print/     → report PDF auto-print
+    chat/page.tsx             → Llavero chat (full-screen)
+    onboarding/               → role-based onboarding (form or via chat)
+    presentacion/             → 9-slide pitch deck, ~66 s autoplay
+    showcase/                 → 6-scene showcase reel, ~25 s auto-loop
+    inquilino/                → Trust Score dashboard + contratos + pagos + documentos + mensajes
+    asesor/                   → CRM completo 12 secciones (sidebar colapsable)
+      inmuebles/[id]/editar/  → property edit form
+      marketing/              → social feed: crear publicaciones + comentarios
+      mensajes/               → bandeja de mensajes asesor
+    propietario/              → dashboard + inmuebles + inquilinos + contratos +
+                                 pagos + documentos + reportes + configuracion + mensajes
     login/page.tsx            → Supabase magic-link auth
-    api/chat/route.ts         → AI SDK streamText + tools (offline-aware)
+    update-password/          → post-magic-link password reset
+    api/chat/route.ts         → AI SDK streamText + 12 tools (offline-aware)
+    _actions/
+      messages.ts             → server actions: sendMessage, getConversations
+      properties.ts           → setPropertyStatusAction, updatePropertyAction
+      social.ts               → createPostAction, replyCommentAction, likeCommentAction
     opengraph-image.tsx       → dynamic OG (edge)
     icon.tsx                  → dynamic favicon (edge)
     layout.tsx, globals.css   → root shell + theme tokens
   components/
-    landing/                  → hero-3d, crm-mockup, diaspora-map, guarantee-card
+    landing/                  → hero-3d, hero-3d-wrapper, crm-mockup, diaspora-map,
+                                 fade-in, scroll-progress
     marketplace/              → property-card, filters, gallery, property-map,
                                  compare-store, compare-drawer, results-view,
-                                 tour-3d, splat-viewer, mesh-viewer
+                                 tour-3d, splat-viewer, mesh-viewer, polycam-embed
     chat/                     → chat-window, tool-result, use-voice, markdown-text
+    llavero/                  → llavero-widget-provider, llavero-widget
+                                 (FAB bottom-right, persists across navigation, hidden on /chat)
+    mensajes/                 → messages-inbox (2-panel inbox + composer + optimistic send)
+    inmuebles/                → property-row-actions (... menu: Ver/Editar/Marcar estado)
+                                 edit-property-form
+    contrato/                 → contract-document, auto-print, print-button
+    reports/                  → report-document, period-picker
+    presentacion/             → pitch-deck
+    showcase/                 → showcase-reel
+    asesor/                   → sidebar (collapsable, grouped: Operación/Cartera/Crecimiento/Cuenta)
+                                 captacion-form, publicar-wizard (EXIF GPS + geolocation + pin map)
+                                 create-post-form, comment-thread, command-palette, pin-map
+    propietario/              → sidebar (dedicated layout)
     notifications/            → notification-bell (server), notification-bell-shell (client)
-    asesor/                   → captacion-form (con LiDAR demo showcase)
-    site-header.tsx, site-footer.tsx, llave-logo.tsx, llave-icons.tsx,
-    social-icons.tsx, user-menu.tsx, user-menu-actions.ts, mobile-nav.tsx
+    celebration-overlay.tsx   → confetti on property status → alquilado
+    dashboard-icons.tsx       → ~24 SVG brand icons
+    social-icons.tsx          → Instagram / Facebook / TikTok / WhatsApp / X / Meta
+    llave-icons.tsx, llave-logo.tsx, mobile-nav.tsx
+    site-header.tsx           → logged-in: role chip + NotificationBell + UserMenu only
+                                 public: logo + nav + CTA buttons
+    site-footer.tsx, user-menu.tsx
+    ui/number-stepper.tsx     → accessible numeric stepper
   lib/
     ai/
       system-prompt.ts        → Llavero persona + manifesto (tuteo venezolano)
-      tools.ts                → 8 Zod-typed tools (incl. setupMyProfile)
+      tools.ts                → 12 Zod-typed tools
+      lrcav.ts                → 14 LRCAV clauses + buildContractDraft
       local-mock-model.ts     → offline / no-key fallback (MockLanguageModelV3)
     db/
       queries.ts              → Supabase + seed fallback
+                                 (also: updatePropertyStatus, updateProperty)
       seed-data.ts            → 17 properties + demo owner Rafael Oviedo
       views.ts                → property view counter + 7-day timeseries
       contracts.ts            → active lease + countdown for inquilino
+      contracts-list.ts       → 8-contract seed for CRM
+      payments.ts             → payments store + balance per contract/owner
+      documents.ts            → documents store
+      visits.ts               → visits seed
+      contacts.ts             → contacts seed (12 seeded, CRM)
+      marketing.ts            → campaigns + posts
+      social-feed.ts          → POSTS_STORE + COMMENTS_STORE + toggleCommentLike
+                                 + postEngagement
+      messages.ts             → CONVERSATIONS_STORE + MESSAGES_STORE (in-memory seed)
+      asesor-analytics.ts     → metrics engine + commissions + algorithm opportunities + badges
     notifications/
       seed.ts                 → role-tailored in-memory feed
       queries.ts              → Supabase-aware reader + unread count
+    reports/
+      report-builder.ts       → 9 report types
+      period.ts               → period selector: presets + custom range (no generic calendar)
     supabase/
       server.ts, client.ts, middleware.ts, env.ts
+    greeting.ts               → time-based greeting (America/Caracas tz)
+    exif.ts                   → JPEG EXIF GPS parser + reverse geocode
     format.ts, types.ts, utils.ts
   middleware.ts               → Supabase session refresh
 supabase/migrations/
   0001_init.sql               → core schema + RLS
   0002_seed.sql               → demo owner + 17 properties
   0003_stats_contracts_notifications.sql
-                              → property_views, contracts, notifications
+                              → property_views, contracts, notifications, RPC
                                 + properties.view_count / favorite_count
 ```
 
@@ -118,6 +176,10 @@ supabase/migrations/
 | `createPropertyDraft` | Asesor-only publish flow | success card → /inmueble/[id] |
 | `suggestPrice` | Comparables-based price range | range card + comp list |
 | `setupMyProfile` | Conversational onboarding (role + name + phone) | success card → role dashboard |
+| `generateRentalContract` | Generates LRCAV contract (Art. 19, 22, 91) | contract card → /contrato/[id] |
+| `listMyContracts` | Returns contracts visible per role | contracts list card |
+| `recordPayment` | Records monthly payment; returns new balance | payment confirmation card |
+| `getOwnerBalance` | Total + per-tenant balance for propietario | balance breakdown card |
 
 When adding a new tool: add it to `llaveroTools`, add a render branch in `tool-result.tsx`, and update this skill's table above.
 

@@ -23,14 +23,14 @@ Good luck 🍌🚀
 
 <p align="left">
   <img alt="Platanus Build Night" src="https://img.shields.io/badge/Platanus%20Build%20Night-ft.%20Anthropic-c4513a?style=for-the-badge&labelColor=4a1e13&logo=anthropic&logoColor=white" />
-  <img alt="Claude Sonnet 4.5" src="https://img.shields.io/badge/Powered%20by-Claude%20Sonnet%204.5-D97757?style=for-the-badge&logo=anthropic&logoColor=white" />
+  <img alt="Claude Sonnet 4.6" src="https://img.shields.io/badge/Powered%20by-Claude%20Sonnet%204.6-D97757?style=for-the-badge&logo=anthropic&logoColor=white" />
   <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=next.js&logoColor=white" />
   <img alt="Supabase" src="https://img.shields.io/badge/Supabase-Auth%20%2B%20Postgres-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white" />
   <a href="./LICENSE"><img alt="License MIT" src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" /></a>
   <img alt="Hecho en Venezuela" src="https://img.shields.io/badge/Hecho%20en-Venezuela%20%F0%9F%87%BB%F0%9F%87%AA-FCE300?style=for-the-badge&labelColor=CE1126" />
 </p>
 
-Plataforma venezolana de alquileres con **Llavero**, un agente IA construido sobre Claude Sonnet 4.5 que acepta a quien el modelo tradicional excluye: trabajadores informales, freelancers, estudiantes y la diáspora venezolana.
+Plataforma venezolana de alquileres con **Llavero**, un agente IA construido sobre Claude Sonnet 4.6 que acepta a quien el modelo tradicional excluye: trabajadores informales, freelancers, estudiantes y la diáspora venezolana.
 
 🌐 **Demo en vivo**: <https://llave-ruby.vercel.app>
 
@@ -105,7 +105,7 @@ El 60% de la economía venezolana es informal. La diáspora paga alquiler a dist
 
 ### Llavero IA
 
-Agente sobre Claude Sonnet 4.5 (Vercel AI SDK v6, AI Gateway o Anthropic directo) con **12 tools** Zod-tipadas:
+Agente sobre Claude Sonnet 4.6 (Vercel AI SDK v6, AI Gateway o Anthropic directo) con **12 tools** Zod-tipadas:
 
 | Tool | Para |
 |------|------|
@@ -139,13 +139,26 @@ El contrato se renderiza en `/contrato/[id]` con cláusulas formales y exporta a
 
 ### Tour 3D
 
-Tres viewers ruteados por extensión:
+Cuatro viewers ruteados por extensión en `src/app/inmueble/[id]/page.tsx`:
 
-- `.splat` → **gsplat** (Gaussian Splat fluido)
-- `.ply` → **three.js PLYLoader** (mesh fotogramétrico)
-- `.usdz` / `.glb` → **Google `<model-viewer>`** (AR Quick Look iOS, fallback desktop)
+- URL `poly.cam` → **PolycamEmbed** (iframe embed de scan Polycam)
+- `.splat` → **SplatViewer** (gsplat, Gaussian Splat fluido)
+- `.ply` → **MeshViewer** (three.js PLYLoader, walkthrough WASD + PointerLock)
+- `.glb` / `.usdz` / `.gltf` → **Tour3D** (Google `<model-viewer>`, AR Quick Look iOS)
 
-El inmueble icónico (Loft Hackathon en Oficinas de Fina, donde Llave fue construido) usa mesh `.ply` exportado desde Polycam.
+El inmueble icónico "Comedor Fina" usa un GLB real (escaneo LiDAR Polycam) servido desde Supabase Storage.
+
+### Widget Llavero flotante
+
+FAB bottom-right presente en toda la app (`src/components/llavero/`). Panel de chat compacto que reutiliza `/api/chat` + ToolResult. La conversación persiste al navegar (provider montado en el root layout). Se oculta automáticamente en `/chat` para no duplicar la UI.
+
+### Pitch deck
+
+`/presentacion` — deck full-screen de 9 slides con ~66 s en autoplay. Soporta navegación manual. `src/components/presentacion/pitch-deck.tsx`. Botón "Presentación" en el header público.
+
+### Showcase reel
+
+`/showcase` — reel auto-loop de 6 escenas (~25 s). `src/components/showcase/showcase-reel.tsx`. Botón "Ver Llave en 30s" en el hero de la landing.
 
 ### Mapa de la diáspora
 
@@ -164,7 +177,7 @@ Bell server-rendered con feed personalizado por rol (lead nuevo, visita agendada
 ## Stack
 
 - **Next.js 16 App Router** + Turbopack + React 19 + TypeScript strict
-- **Vercel AI SDK v6** + `@ai-sdk/anthropic` (Claude Sonnet 4.5) con 12 tools Zod
+- **Vercel AI SDK v6** + `@ai-sdk/anthropic` (Claude Sonnet 4.6) con 12 tools Zod
 - **Supabase SSR** (Auth + Postgres + RLS + Storage) con seed in-memory fallback
 - **Tailwind v4** (terracota caribeño `#c4513a`)
 - **React Three Fiber + drei** + **gsplat** + **`<model-viewer>`** + **three.js PLYLoader** + **Maplibre**
@@ -229,30 +242,48 @@ src/
   app/
     page.tsx                    → Landing (motion + comparativa anti-Quarto + Garantía 360°)
     buscar/                     → Marketplace con lista/mapa + comparador
-    inmueble/[id]/              → Detalle con tour 3D + view tracker
-    contrato/[id]/              → Contrato LRCAV firmable + ruta print
+    inmueble/[id]/              → Detalle con tour 3D polimórfico (poly.cam / .splat / .ply / .glb)
+    contrato/[id]/              → Contrato LRCAV firmable + ruta print (PDF via window.print)
+    reporte/[type]/             → Reporte online + ruta print (9 tipos)
     chat/                       → Llavero IA con voz + tools inline
     onboarding/                 → Onboarding por rol (form o vía chat)
-    inquilino/                  → Trust Score + contrato + pagos + documentos
+    presentacion/               → Pitch deck 9 slides con autoplay
+    showcase/                   → Showcase reel 6 escenas ~25 s
+    inquilino/                  → Trust Score, contrato, pagos, documentos, mensajes
     asesor/                     → CRM completo (12 secciones)
-    propietario/                → Dashboard + saldos + contratos + documentos
+      inmuebles/[id]/editar/    → Formulario de edición de inmueble
+      marketing/                → Feed social + crear publicaciones
+      mensajes/                 → Bandeja de mensajes (asesor)
+    propietario/                → Dashboard + saldos + contratos + documentos + mensajes
     login/                      → Magic link + OTP + contraseña
+    update-password/            → Reset de contraseña post-magic-link
     api/chat/route.ts           → AI SDK streamText + 12 tools
+    _actions/                   → Server actions (messages, properties, social)
   components/
     landing/                    → motion + comparativa + diáspora + garantía
     chat/                       → composer dvh + voz + markdown + tool-result
-    marketplace/                → cards + filtros + mapa + tour-3d + mesh-viewer
-    asesor/                     → sidebar collapsable + captación + publicar-wizard
-    propietario/                → sidebar
-    notifications/              → bell server + shell client
-    dashboard-icons.tsx         → 20+ icons SVG brand
+    marketplace/                → cards + filtros + mapa + tour-3d + splat-viewer + mesh-viewer
+    asesor/                     → sidebar colapsable + captación + publicar-wizard +
+                                   create-post-form + comment-thread
+    propietario/                → sidebar dedicado
+    llavero/                    → llavero-widget-provider + llavero-widget (FAB flotante)
+    mensajes/                   → messages-inbox (bandeja 2 paneles + composer)
+    inmuebles/                  → property-row-actions + edit-property-form
+    contrato/                   → contract-document + auto-print + print-button
+    reports/                    → report-document + period-picker
+    presentacion/               → pitch-deck
+    showcase/                   → showcase-reel
+    notifications/              → notification-bell (server) + notification-bell-shell (client)
+    celebration-overlay.tsx     → confetti al marcar un inmueble como alquilado
+    dashboard-icons.tsx         → ~24 iconos SVG brand
     social-icons.tsx            → Instagram / Facebook / TikTok / WhatsApp / X / Meta
+    ui/number-stepper.tsx       → stepper numérico accesible
   lib/
     ai/system-prompt.ts         → Personalidad Llavero (tuteo venezolano)
     ai/tools.ts                 → 12 tools Zod
-    ai/lrcav.ts                 → Cláusulas legales + buildContractDraft
+    ai/lrcav.ts                 → 14 cláusulas LRCAV + buildContractDraft
     ai/local-mock-model.ts      → Fallback offline determinista
-    db/queries.ts               → Supabase + seed fallback
+    db/queries.ts               → Supabase + seed fallback (+ updatePropertyStatus, updateProperty)
     db/seed-data.ts             → 17 inmuebles + DEMO_OWNER
     db/views.ts                 → Property views + 7-day timeseries
     db/contracts.ts             → Contracts store + APIs por rol
@@ -262,9 +293,13 @@ src/
     db/visits.ts                → Visitas seed
     db/contacts.ts              → Contactos seed (CRM)
     db/marketing.ts             → Campañas + posts
-    db/asesor-analytics.ts      → Motor de métricas + comisiones + oportunidades
-    notifications/              → Seed + queries
-    greeting.ts                 → Saludo dinámico Caracas tz
+    db/social-feed.ts           → POSTS_STORE + COMMENTS_STORE + toggleCommentLike
+    db/messages.ts              → CONVERSATIONS_STORE + MESSAGES_STORE (seed in-memory)
+    db/asesor-analytics.ts      → Motor de métricas + comisiones + oportunidades + badges
+    notifications/              → seed (feed por rol) + queries (Supabase-aware)
+    reports/report-builder.ts   → 9 tipos de reporte
+    reports/period.ts           → selector de período (presets + rango custom)
+    greeting.ts                 → Saludo dinámico America/Caracas tz
     exif.ts                     → JPEG EXIF GPS parser + reverse geocode
 supabase/migrations/
   0001_init.sql                 → Schema base + RLS
