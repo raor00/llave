@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { capturarInmueble } from "./captacion-action";
 import { NumberStepper } from "@/components/ui/number-stepper";
+import { uploadTourFile } from "@/lib/tours/upload-client";
 
 const AMENITY_OPTIONS = [
   "planta electrica", "agua 24/7", "piscina", "gimnasio", "balcón",
@@ -20,16 +21,8 @@ export function CaptacionForm() {
   const [photos, setPhotos] = useState<Preview[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [amenities, setAmenities] = useState<Set<string>>(new Set());
+  const [tourFile, setTourFile] = useState<File | null>(null);
   const photoInputRef = useRef<HTMLInputElement>(null);
-  const [hasLidar, setHasLidar] = useState(false);
-
-  useEffect(() => {
-    if (typeof navigator !== "undefined") {
-      const ua = navigator.userAgent;
-      setHasLidar(/iPhone|iPad/.test(ua) && /OS 1[5-9]_/.test(ua));
-    }
-  }, []);
-
   useEffect(() => {
     return () => {
       for (const p of photos) URL.revokeObjectURL(p.url);
@@ -91,15 +84,26 @@ export function CaptacionForm() {
     const fd = new FormData(e.currentTarget);
     fd.set("amenities", JSON.stringify([...amenities]));
     fd.set("photo_count", String(photos.length));
-    fd.set("has_3d", "0");
-    const res = await capturarInmueble(fd);
-    setSubmitting(false);
-    if (res.ok) {
-      toast.success(`Inmueble publicado: ${res.title}`);
-      router.push(`/inmueble/${res.id}`);
-    } else {
-      toast.error(res.error ?? "No se pudo publicar.");
+    try {
+      if (tourFile) {
+        toast.loading("Subiendo tour 3D…", { id: "tour-upload" });
+        const uploaded = await uploadTourFile({ file: tourFile });
+        fd.set("tour_3d_url", uploaded.url);
+        toast.success("Tour 3D subido", { id: "tour-upload" });
+      }
+      const res = await capturarInmueble(fd);
+      setSubmitting(false);
+      if (res.ok) {
+        toast.success(`Inmueble publicado: ${res.title}`);
+        router.push(`/inmueble/${res.id}`);
+      } else {
+        toast.error(res.error ?? "No se pudo publicar.");
+      }
+    } catch (err) {
+      setSubmitting(false);
+      toast.error(err instanceof Error ? err.message : "No se pudo subir el tour 3D.");
     }
+    return;
   }
 
   return (
@@ -112,9 +116,7 @@ export function CaptacionForm() {
             <div>
               <h2 className="font-display text-xl font-semibold">Fotos del inmueble</h2>
               <p className="text-sm text-[color:var(--color-fg-muted)] mt-1">
-                {hasLidar
-                  ? "Detectamos un dispositivo iOS reciente. Si tienes iPhone Pro / iPad Pro, puedes capturar también el tour 3D abajo."
-                  : "Toma las fotos directo desde la cámara del dispositivo, o sube archivos existentes."}
+                Toma las fotos directo desde la cámara del dispositivo, o sube archivos existentes.
               </p>
             </div>
             <span className="chip">{photos.length} foto{photos.length === 1 ? "" : "s"}</span>
@@ -176,66 +178,76 @@ export function CaptacionForm() {
           )}
         </section>
 
-        {/* TOUR 3D DEMO — la captura nativa vive en el roadmap; aquí explicamos el flujo. */}
+        {/* TOUR 3D */}
         <section className="card p-6 bg-gradient-to-br from-[color:var(--color-brand-50)] to-white border-[color:var(--color-brand-100)]">
           <div className="flex items-start justify-between gap-3 mb-4">
             <div>
-              <span className="chip mb-2">Demo · Captura LiDAR Llave</span>
+              <span className="chip mb-2">Tour 3D web</span>
               <h2 className="font-display text-xl font-semibold">Escaneo 3D del inmueble</h2>
               <p className="text-sm text-[color:var(--color-fg-muted)] mt-1 max-w-2xl">
-                Con un dispositivo que tenga sensor <strong>LiDAR</strong> (iPhone Pro, iPad Pro) escaneas
-                cada ambiente, Llave lo procesa en la nube y lo embebe como tour 3D en la publicación.
-                El inquilino recorre el inmueble desde el navegador antes de visitarlo.
+                En web no podemos usar el LiDAR del iPhone directamente. El flujo actual es escanear en
+                Polycam, recortar/optimizar allá, subir el archivo o copiar el link público y pegarlo acá.
               </p>
             </div>
-            <span className={`chip ${hasLidar ? "" : "chip-muted"} shrink-0`}>
-              {hasLidar ? "Tu dispositivo es compatible" : "Demo informativa"}
-            </span>
+            <span className="chip chip-muted shrink-0">Flujo web</span>
           </div>
 
           <div className="grid sm:grid-cols-4 gap-3 mt-2">
             <StepCard
               n={1}
-              title="Escaneo LiDAR"
-              body="Apuntas cada ambiente; el sensor mide profundidad real."
+              title="Escanea en Polycam"
+              body="Usa LiDAR o Photo Mode desde la app nativa; Safari no expone LiDAR."
             />
             <StepCard
               n={2}
-              title="Procesado Llave"
-              body="La nube genera mesh + Gaussian Splat optimizado para web."
+              title="Recorta"
+              body="Elimina techo/suelo sobrante, pasillos ajenos y geometría que no pertenece al inmueble."
             />
             <StepCard
               n={3}
-              title="Storage seguro"
-              body="El tour se guarda como .ply / .splat en tu cuenta."
+              title="Exporta"
+              body="Preferí GLB optimizado para web. Splat queda para inmuebles premium."
             />
             <StepCard
               n={4}
-              title="Render embebido"
-              body="El inquilino recorre el inmueble desde el detalle, sin instalar nada."
+              title="Pega la URL"
+              body="Llave guarda el link en el inmueble y el detalle elige el viewer correcto."
             />
           </div>
 
-          <div className="mt-5 rounded-lg bg-white border border-[color:var(--color-border)] p-4 text-sm">
-            <div className="font-semibold text-[color:var(--color-fg)] mb-1">¿Por qué no se sube acá?</div>
-            <p className="text-[color:var(--color-fg-muted)] leading-relaxed">
-              iOS Safari no expone el sensor LiDAR a la web — no existe API. La captura requiere una app
-              nativa o un <strong>App Clip de Llave</strong> (10 MB, sin instalación, abre con QR o NFC pegado
-              al inmueble). Estamos integrando Apple RoomPlan para que el escaneo vuelva directo a tu
-              publicación sin terceros.
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2 text-xs">
-              <span className="chip chip-muted">Apple RoomPlan</span>
-              <span className="chip chip-muted">Gaussian Splatting</span>
-              <span className="chip chip-muted">Apple App Clip</span>
-              <span className="chip chip-muted">Three.js + gsplat</span>
+          <div className="mt-5 rounded-lg bg-white border border-[color:var(--color-border)] p-4 text-sm space-y-3">
+            <div>
+              <label className="label">URL del tour 3D</label>
+              <input
+                name="tour_3d_url"
+                placeholder="https://poly.cam/... o https://.../tour.glb"
+                className="input"
+              />
+              <div className="mt-3">
+                <label className="btn btn-outline cursor-pointer inline-flex">
+                  Importar archivo 3D
+                  <input
+                    type="file"
+                    accept=".glb,.gltf,.usdz,.ply,.splat,model/gltf-binary,model/vnd.usdz+zip"
+                    className="hidden"
+                    onChange={(e) => setTourFile(e.target.files?.[0] ?? null)}
+                  />
+                </label>
+                {tourFile ? (
+                  <span className="ml-3 text-xs text-[color:var(--color-fg-muted)]">
+                    {tourFile.name} · {(tourFile.size / 1024 / 1024).toFixed(1)} MB
+                  </span>
+                ) : null}
+              </div>
+              <p className="mt-1 text-xs text-[color:var(--color-fg-soft)]">
+                Podés pegar un link de Polycam/archivo público o importar un archivo. Para iPhone, preferí .glb/.gltf para vista inline; .usdz sirve mejor para AR Quick Look.
+              </p>
+            </div>
+            <div className="rounded-lg bg-[color:var(--color-brand-50)] p-3 text-xs text-[color:var(--color-brand-700)]">
+              Ruta recomendada hoy: Polycam → Crop/Edit → Export GLB → subir a Storage/CDN → pegar URL acá.
+              Cuando exista App Clip de Llave, este paso se reemplaza por upload automático al inmueble correcto.
             </div>
           </div>
-
-          <p className="text-[11px] text-[color:var(--color-fg-soft)] mt-4">
-            Inmuebles publicados ahora se publican sin tour 3D. Los tours del Loft Hackathon y el penthouse de
-            Altamira son ejemplos reales capturados con Polycam para mostrar el resultado final.
-          </p>
         </section>
 
         {/* DATOS */}

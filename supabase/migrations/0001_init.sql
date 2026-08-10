@@ -90,6 +90,7 @@ create table if not exists public.properties (
   gallery_urls text[] default '{}',
   spline_scene_url text,
   tour_3d_url text,
+  splat_url text,
 
   search_tsv tsvector,
   created_at timestamptz not null default now(),

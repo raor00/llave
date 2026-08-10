@@ -25,6 +25,28 @@ const VALID_TYPES: PropertyType[] = [
   "habitacion",
 ];
 
+
+function normalizeOptionalTourUrl(value: FormDataEntryValue | null): string | null {
+  const raw = String(value ?? "").trim();
+  if (!raw) return null;
+  if (raw.startsWith("/")) return raw;
+  try {
+    const url = new URL(raw);
+    if (!["http:", "https:"].includes(url.protocol)) return null;
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
+
+function classifyTourUrl(url: string): "tour" | "splat" | null {
+  const lower = url.toLowerCase().split("?")[0];
+  if (/^https?:\/\/(www\.)?poly\.cam\//i.test(url)) return "tour";
+  if (/\.(glb|gltf|usdz|ply)$/.test(lower)) return "tour";
+  if (/\.splat$/.test(lower)) return "splat";
+  return null;
+}
+
 function revalidateProperty(id: string) {
   revalidatePath("/asesor/inmuebles");
   revalidatePath("/propietario/inmuebles");
@@ -94,6 +116,12 @@ export async function updatePropertyAction(
     .map((r) => r.trim())
     .filter(Boolean);
 
+  const tourUrl = normalizeOptionalTourUrl(formData.get("tour_3d_url"));
+  const tourUrlKind = tourUrl ? classifyTourUrl(tourUrl) : null;
+  if (tourUrl && !tourUrlKind) {
+    return { ok: false, error: "El tour 3D debe ser un link Polycam o un archivo .glb, .gltf, .usdz, .ply o .splat." };
+  }
+
   const updated = await updateProperty(id, {
     title,
     description,
@@ -109,6 +137,8 @@ export async function updatePropertyAction(
     amenities,
     rules,
     status,
+    tour_3d_url: tourUrlKind === "tour" ? tourUrl : null,
+    splat_url: tourUrlKind === "splat" ? tourUrl : null,
   });
 
   if (!updated) return { ok: false, error: "No se pudo actualizar el inmueble." };

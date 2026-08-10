@@ -198,8 +198,8 @@ export async function insertProperty(p: Partial<Property> & { owner_id: string; 
       cover_url: p.cover_url ?? null,
       gallery_urls: p.gallery_urls ?? [],
       spline_scene_url: null,
-      tour_3d_url: null,
-      splat_url: null,
+      tour_3d_url: p.tour_3d_url ?? null,
+      splat_url: p.splat_url ?? null,
       created_at: new Date().toISOString(),
     };
     DEMO_PROPERTIES.unshift(created);
@@ -250,6 +250,8 @@ export async function updateProperty(
       | "amenities"
       | "rules"
       | "status"
+      | "tour_3d_url"
+      | "splat_url"
     >
   >
 ): Promise<Property | null> {

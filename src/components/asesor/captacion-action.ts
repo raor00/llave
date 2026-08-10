@@ -4,6 +4,28 @@ import { revalidatePath } from "next/cache";
 import { insertProperty } from "@/lib/db/queries";
 import { DEMO_OWNER } from "@/lib/db/seed-data";
 
+
+function normalizeOptionalTourUrl(value: FormDataEntryValue | null): string | null {
+  const raw = String(value ?? "").trim();
+  if (!raw) return null;
+  if (raw.startsWith("/")) return raw;
+  try {
+    const url = new URL(raw);
+    if (!["http:", "https:"].includes(url.protocol)) return null;
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
+
+function classifyTourUrl(url: string): "tour" | "splat" | null {
+  const lower = url.toLowerCase().split("?")[0];
+  if (/^https?:\/\/(www\.)?poly\.cam\//i.test(url)) return "tour";
+  if (/\.(glb|gltf|usdz|ply)$/.test(lower)) return "tour";
+  if (/\.splat$/.test(lower)) return "splat";
+  return null;
+}
+
 const DEFAULT_COVERS = [
   "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200",
   "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200",
@@ -20,6 +42,11 @@ export async function capturarInmueble(form: FormData): Promise<
     if (photoCount === 0) return { ok: false, error: "Subí al menos 1 foto" };
 
     const amenities = JSON.parse(String(form.get("amenities") ?? "[]")) as string[];
+    const tourUrl = normalizeOptionalTourUrl(form.get("tour_3d_url"));
+    const tourUrlKind = tourUrl ? classifyTourUrl(tourUrl) : null;
+    if (tourUrl && !tourUrlKind) {
+      return { ok: false, error: "El tour 3D debe ser un link Polycam o un archivo .glb, .gltf, .usdz, .ply o .splat" };
+    }
     const cover = DEFAULT_COVERS[Math.floor(Math.random() * DEFAULT_COVERS.length)];
     const gallery = Array.from({ length: Math.min(photoCount, 4) }, () =>
       DEFAULT_COVERS[Math.floor(Math.random() * DEFAULT_COVERS.length)]
@@ -46,6 +73,8 @@ export async function capturarInmueble(form: FormData): Promise<
       amenities,
       cover_url: cover,
       gallery_urls: gallery,
+      tour_3d_url: tourUrlKind === "tour" ? tourUrl : null,
+      splat_url: tourUrlKind === "splat" ? tourUrl : null,
     });
 
     revalidatePath("/buscar");

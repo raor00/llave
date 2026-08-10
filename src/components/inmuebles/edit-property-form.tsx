@@ -11,6 +11,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { updatePropertyAction } from "@/app/_actions/properties";
 import { NumberStepper } from "@/components/ui/number-stepper";
+import { uploadTourFile } from "@/lib/tours/upload-client";
 import type { Property } from "@/lib/types";
 
 const AMENITY_OPTIONS = [
@@ -30,6 +31,7 @@ const STATUS_LABELS: Record<Property["status"], string> = {
 export function EditPropertyForm({ property }: { property: Property }) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
+  const [tourFile, setTourFile] = useState<File | null>(null);
   const [amenities, setAmenities] = useState<Set<string>>(
     new Set(property.amenities)
   );
@@ -55,15 +57,27 @@ export function EditPropertyForm({ property }: { property: Property }) {
     const fd = new FormData(e.currentTarget);
     fd.set("id", property.id);
     fd.set("amenities", JSON.stringify([...amenities]));
-    const res = await updatePropertyAction(fd);
-    setSubmitting(false);
-    if (res.ok) {
-      toast.success("Inmueble actualizado");
-      router.push("/asesor/inmuebles");
-      router.refresh();
-    } else {
-      toast.error(res.error);
+    try {
+      if (tourFile) {
+        toast.loading("Subiendo tour 3D…", { id: "tour-upload" });
+        const uploaded = await uploadTourFile({ file: tourFile, propertyId: property.id });
+        fd.set("tour_3d_url", uploaded.url);
+        toast.success("Tour 3D subido", { id: "tour-upload" });
+      }
+      const res = await updatePropertyAction(fd);
+      setSubmitting(false);
+      if (res.ok) {
+        toast.success("Inmueble actualizado");
+        router.push("/asesor/inmuebles");
+        router.refresh();
+      } else {
+        toast.error(res.error);
+      }
+    } catch (err) {
+      setSubmitting(false);
+      toast.error(err instanceof Error ? err.message : "No se pudo subir el tour 3D.");
     }
+    return;
   }
 
   return (
@@ -190,6 +204,35 @@ export function EditPropertyForm({ property }: { property: Property }) {
             placeholder="No mascotas&#10;No fumar"
             className="input"
           />
+        </div>
+
+        <div>
+          <label className="label">URL del tour 3D</label>
+          <input
+            name="tour_3d_url"
+            defaultValue={property.splat_url ?? property.tour_3d_url ?? ""}
+            placeholder="https://poly.cam/... o https://.../tour.glb"
+            className="input"
+          />
+          <div className="mt-3">
+            <label className="btn btn-outline cursor-pointer inline-flex">
+              Importar archivo 3D
+              <input
+                type="file"
+                accept=".glb,.gltf,.usdz,.ply,.splat,model/gltf-binary,model/vnd.usdz+zip"
+                className="hidden"
+                onChange={(e) => setTourFile(e.target.files?.[0] ?? null)}
+              />
+            </label>
+            {tourFile ? (
+              <span className="ml-3 text-xs text-[color:var(--color-fg-muted)]">
+                {tourFile.name} · {(tourFile.size / 1024 / 1024).toFixed(1)} MB
+              </span>
+            ) : null}
+          </div>
+          <p className="mt-1 text-xs text-[color:var(--color-fg-soft)]">
+            Soporta Polycam, .glb, .gltf, .usdz, .ply y .splat. Para iPhone, preferí .glb/.gltf para vista inline; .usdz es mejor como AR Quick Look.
+          </p>
         </div>
       </section>
 
